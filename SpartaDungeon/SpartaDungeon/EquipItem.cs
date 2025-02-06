@@ -15,6 +15,7 @@ namespace SpartaDungeon
         Boots
     }
     internal class EquipItem
+
     {
         public string Name { get; }
         public EquipType Type { get; }

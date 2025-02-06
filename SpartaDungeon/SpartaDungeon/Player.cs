@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SpartaDungeon
 {
-    internal class Player
+    public class Player
     {
         public int level = 1;
         public string name = "Rtan";
