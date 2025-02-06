@@ -13,7 +13,7 @@ namespace SpartaDungeon
         Weapon,
         SubWeapon,
         Head,
-        Armor,
+        Amor,
         Boots
     }
     internal class EquipItem
@@ -38,7 +38,7 @@ namespace SpartaDungeon
             Def = def;
             MaxHp = maxHp;
             Cost = cost;
-            ItemCount = 1;
+            ItemCount = 0;
             isEquip = false;
         }
         public void DisplayEquipItem()
@@ -51,16 +51,19 @@ namespace SpartaDungeon
         }
         public void DisplayinventoryItem()
         {
-            Console.Write($"   {Name,-8}|");
+            Console.Write($"   {Name,-8}|소지수{ItemCount,-5}|");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
             if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
             Console.WriteLine($"{Description}");
         }
-
-        public void AddEquipItem_toInventory()
+        public void DisplayShopItem()
         {
-
+            Console.Write($"   {Name,-8}|{Cost,5}|소지수{ItemCount,-5}");
+            if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
+            if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
+            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
+            Console.WriteLine($"{Description}");
         }
     }
 
