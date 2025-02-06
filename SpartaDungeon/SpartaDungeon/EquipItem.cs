@@ -35,27 +35,27 @@ namespace SpartaDungeon
             Def = def;
             MaxHp = maxHp;
             Cost = cost;
-            ItemCount = 0;
+            ItemCount = 1;
             isEquip = false;
         }
         public void DisplayEquipItem()
         {
-            Console.Write($"[E]{Name,5}|");
-            if (Atk != 0) Console.Write($"{Atk,3:+0;-0;0}|");
-            if (Atk != 0) Console.Write($"{Def,3:+0;-0;0}|");
-            if (Atk != 0) Console.Write($"{MaxHp,3:+0;-0;0}|");
+            Console.Write($"[E]{Name,-8}|");
+            if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
+            if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
+            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
             Console.WriteLine($"{Description}");
         }
         public void DisplayinventoryItem()
         {
-            Console.Write($"[E]{Name,5}|");
-            if (Atk != 0) Console.Write($"{Atk,3:+0;-0;0}|");
-            if (Atk != 0) Console.Write($"{Def,3:+0;-0;0}|");
-            if (Atk != 0) Console.Write($"{MaxHp,3:+0;-0;0}|");
+            Console.Write($"   {Name,-8}|");
+            if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
+            if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
+            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
             Console.WriteLine($"{Description}");
         }
 
-        public void AddEquipItem_toInventory(List<EquipItem> inventory)
+        public void AddEquipItem_toInventory()
         {
 
         }
