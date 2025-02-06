@@ -119,8 +119,8 @@
                     index++; 
                     if (index == input)
                     {
-                        if(equipItemList.FindIndex(EquipItem=>EquipItem.Type  == equipItemList[i].Type&&EquipItem.isEquip) != -1)
-                        {
+                        if(equipItemList.Any(EquipItem=>EquipItem.Type  == equipItemList[i].Type&&EquipItem.isEquip)) //선택 아이템의 장착타입과 같은 장착타입을 가지고 장착중인 장비가 존재한다면
+                        {                                                                                               //먼저 장착된 아이템 해제 = 소지수++ 및 장착여부 false
                             equipItemList[equipItemList.FindIndex(EquipItem => EquipItem.Type == equipItemList[i].Type && EquipItem.isEquip)].ItemCount++;
                             equipItemList[equipItemList.FindIndex(EquipItem => EquipItem.Type == equipItemList[i].Type && EquipItem.isEquip)].isEquip = false;
                         }
