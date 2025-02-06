@@ -61,7 +61,75 @@
         }
         public void EquipScreen()
         {
+            Console.Clear();
+            Console.WriteLine("인벤토리 -  장착관리");
+            Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[장비 아이템 목록]");
 
+            int index=0;
+            for (int i = 0; i < equipItemList.Count; i++)
+            {
+                if (equipItemList[i].isEquip)
+                {
+                    index++; Console.Write($"{index}.");
+                    equipItemList[i].DisplayEquipItem(); 
+                }
+            }
+            Console.WriteLine();
+            for (int i = 0; i < equipItemList.Count; i++)
+            {
+                if (equipItemList[i].ItemCount > 0)
+                {
+                    index++; Console.Write($"{index}.");
+                    equipItemList[i].DisplayinventoryItem();
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("0.나가기");
+            Console.WriteLine();
+
+            int input = Utility.GetInput(0, index);
+            switch (input)
+            {
+                case 0: /*MainScreen*/break;
+                default: Equip(input); break;
+            }
+        }
+        public void Equip(int input)
+        {
+            int index = 0;
+            for (int i = 0; i < equipItemList.Count; i++)
+            {
+                if (equipItemList[i].isEquip)
+                {
+                    index++;
+                    if (index == input)
+                    {
+                        equipItemList[i].isEquip = false;
+                        equipItemList[i].ItemCount++;
+                    }
+                }
+            }
+            for (int i = 0; i < equipItemList.Count; i++)
+            {
+                if (equipItemList[i].ItemCount > 0)
+                {
+                    index++; 
+                    if (index == input)
+                    {
+                        if(equipItemList.FindIndex(EquipItem=>EquipItem.Type  == equipItemList[i].Type&&EquipItem.isEquip) != -1)
+                        {
+                            equipItemList[equipItemList.FindIndex(EquipItem => EquipItem.Type == equipItemList[i].Type && EquipItem.isEquip)].ItemCount++;
+                            equipItemList[equipItemList.FindIndex(EquipItem => EquipItem.Type == equipItemList[i].Type && EquipItem.isEquip)].isEquip = false;
+                        }
+                        equipItemList[i].ItemCount--;
+                        equipItemList[i].isEquip = true;
+                    }
+                }
+            }
+            EquipScreen();
         }
 
     }

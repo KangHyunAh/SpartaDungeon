@@ -35,7 +35,7 @@ namespace SpartaDungeon
             Def = def;
             MaxHp = maxHp;
             Cost = cost;
-            ItemCount = 0;
+            ItemCount = 1;
             isEquip = false;
         }
         public void DisplayEquipItem()
