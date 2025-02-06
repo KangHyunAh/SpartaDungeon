@@ -29,8 +29,8 @@ namespace SpartaDungeon
             }
             Console.WriteLine();
             Console.WriteLine("내정보");
-            Console.WriteLine($"Lv. {player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"Hp {player.Hp}/{player.MaxHp}");
+            Console.WriteLine($"Lv. {player.level} {player.name} ({player.chad})");
+            Console.WriteLine($"Hp {player.healthPoint}");
             Console.WriteLine();
             Console.WriteLine("0. 공격");
             int input = Utility.GetInput(0, 0);
@@ -47,9 +47,9 @@ namespace SpartaDungeon
             Console.WriteLine();
             foreach (Monster monster in monsters)
             {
-                Console.WriteLine($"{player.Name} 의 공격!");
-                monster.Health -= (int)Math.Ceiling(random.NextDouble() * player.Atk / 10 + player.Atk - player.Atk / 10);
-                Console.WriteLine($"{monster.Name} 을(를) 맞췄습니다. [데미지 : {player.Atk}]");
+                Console.WriteLine($"{player.name} 의 공격!");
+                monster.Health -= (int)Math.Ceiling(random.NextDouble() * player.strikePower / 10 + player.strikePower - player.strikePower / 10);
+                Console.WriteLine($"{monster.Name} 을(를) 맞췄습니다. [데미지 : {player.strikePower}]");
             }
             Console.WriteLine();
             Console.WriteLine("0. 다음");
@@ -66,14 +66,14 @@ namespace SpartaDungeon
             Console.WriteLine();
             Console.WriteLine("Battle!!");
             Console.WriteLine();
-            int playerHp = player.Hp;
+            int playerHp = player.healthPoint;
             foreach (Monster monster in monsters)
             {
                 if (monster.Health > 0)
                 {
                     Console.WriteLine($"{monster.Name} 의 공격!");
-                    player.Hp -= monster.Atk;
-                    Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {monster.Atk}][Hp {playerHp} => {player.Hp}");
+                    player.healthPoint -= monster.Atk;
+                    Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {monster.Atk}][Hp {playerHp} => {player.healthPoint}");
                 }
             }
             Console.WriteLine();
@@ -91,7 +91,7 @@ namespace SpartaDungeon
             Console.WriteLine();
             Console.WriteLine("Battle!! - Result");
             Console.WriteLine();
-            if (player.Hp < 0)
+            if (player.healthPoint < 0)
                 Console.WriteLine("Victory");
             else
                 Console.WriteLine("You Lose");

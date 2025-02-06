@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,37 +10,29 @@ namespace SpartaDungeon
 {
     public class Player
     {
-        public int Level { get; }
-        public string Name { get; set; }
-        public string Job { get; set; }
-        public int Atk { get; set; }
-        public int EquipAtk { get; set; }
-        public int TotailAtk { get; set; }
+        public int level = 1;
+        public string name = "Rtan";
+        public string chad = "전사";
+        public int strikePower = 10;
+        public int defensivePower = 5;
+        public int healthPoint = 100;
+        public int gold = 1500;
 
-        public int Def { get; }
-        public int EquipDef { get; set; }
-        public int TotalDef { get; set; }
-
-        public int Gold { get; set; }
-        public int Hp { get; set; }
-        public int MaxHp { get; }
-
-        public bool IsDead {  get; set; }
-
-        public Player()
+        public void CharacterInformation() 
         {
-            Level = 1;
-            Name = string.Empty;
-            Job = "전사";
-            Atk = 10;
-            EquipAtk = 0;
-            TotailAtk = Atk + EquipAtk;
-            Def = 5;
-            EquipDef = 0;
-            TotalDef = Def + EquipDef;
-            Gold = 1500;
-            Hp = 100;
-            MaxHp = 100;
+            Console.WriteLine("캐릭터의 정보를 표시합니다.");
+            Console.WriteLine("");
+
+            Console.WriteLine("Lv. "+level);
+            Console.WriteLine("Chad : "+ chad);
+            Console.WriteLine("공격력 : " + strikePower);
+            Console.WriteLine("방어력 : " + defensivePower);
+            Console.WriteLine("체력 : " + healthPoint);
+            Console.WriteLine("소유 골드 : " + gold + " G");
+
+            Console.WriteLine("0. 나가기");
+            Utility.GetInput(0, 0);
         }
+
     }
 }
