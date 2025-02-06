@@ -5,10 +5,19 @@
         static void Main(string[] args)
         {
             GameManager gm = new GameManager();
-
-            gm.InventoryScreen();
+            gm.MainScreen();
         }
+    }
+    class GameManager
+    {
+        public GameManager()
+        {
 
+        }
+        public void MainScreen()
+        {
+
+        }
     }
 }
 
