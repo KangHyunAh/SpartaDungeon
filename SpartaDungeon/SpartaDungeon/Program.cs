@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography;
 
 namespace SpartaDungeon
 {
@@ -7,17 +8,27 @@ namespace SpartaDungeon
         static void Main(string[] args)
         {
             GameManager gm = new GameManager();
+
+            Console.WriteLine("테스트용 메세지입니다 1.인벤토리   2.상점    0.끝내기");
+            switch (Utility.GetInput(0, 2))
+            {
+                case 0:break;
+                case 1: gm.InventoryScreen(); break;
+                case 2: gm.ShopScreen();break;
+            }
             
-            gm.InventoryScreen();
 
         }
     }
 
     class GameManager
     {
+        Player player = new Player();
         List<EquipItem> equipItemList;
         public GameManager()        //  tring name, EquipType type, int atk, int def, int maxHp, string discription, int cost
         {
+            
+
             equipItemList = new List<EquipItem>
             {
             new EquipItem("수련자의 갑옷", EquipType.Amor, 0,2,50, "수련에 도움을 주는 갑옷입니다. ", 1000),
@@ -95,33 +106,34 @@ namespace SpartaDungeon
             int input = Utility.GetInput(0, index);
             switch (input)
             {
-                case 0: /*MainScreen*/break;
+                case 0: InventoryScreen();  break;
                 default: Equip(input); break;
             }
-        }
-        public void Equip(int input)
-        {
+
+
+            void Equip(int input)
+            {
             int index = 0;
             for (int i = 0; i < equipItemList.Count; i++)
             {
-                if (equipItemList[i].isEquip)
+                if (equipItemList[i].isEquip)       //장착중인 아이템을 선택했을경우. 장착해제 소지수++,장착여부(isEquip)false
                 {
                     index++;
                     if (index == input)
                     {
-                        equipItemList[i].isEquip = false;
                         equipItemList[i].ItemCount++;
+                        equipItemList[i].isEquip = false;
                     }
                 }
             }
-            for (int i = 0; i < equipItemList.Count; i++)
+            for (int i = 0; i < equipItemList.Count; i++)   //장착중이 아닌 아이템을 선택했을경우. 장착
             {
                 if (equipItemList[i].ItemCount > 0)
                 {
-                    index++; 
+                    index++;
                     if (index == input)
-                    {
-                        if(equipItemList.Any(EquipItem=>EquipItem.Type  == equipItemList[i].Type&&EquipItem.isEquip)) //선택 아이템의 장착타입과 같은 장착타입을 가지고 장착중인 장비가 존재한다면
+                    {                                                                                                       //장비타입(부위)별 중복장착 방지
+                        if (equipItemList.Any(EquipItem => EquipItem.Type == equipItemList[i].Type && EquipItem.isEquip)) //선택 아이템의 장착타입과 같은 장착타입을 가지고 장착중인 장비가 존재한다면
                         {                                                                                               //먼저 장착된 아이템 해제 = 소지수++ 및 장착여부 false
                             equipItemList[equipItemList.FindIndex(EquipItem => EquipItem.Type == equipItemList[i].Type && EquipItem.isEquip)].ItemCount++;
                             equipItemList[equipItemList.FindIndex(EquipItem => EquipItem.Type == equipItemList[i].Type && EquipItem.isEquip)].isEquip = false;
@@ -132,27 +144,64 @@ namespace SpartaDungeon
                 }
             }
             EquipScreen();
-        }
+            }
 
-        public void SHopScreen()
+
+
+        }
+        
+
+        public void ShopScreen()
         {
             Console.Clear();
             Console.WriteLine("상점");
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
             Console.WriteLine();
             Console.WriteLine("[보유 골드]");
-            Console.WriteLine($"/player.Gold G");
+            Console.WriteLine($"{player.gold} G");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
             for (int i = 0; i < equipItemList.Count; i++)
             {
+                Console.Write($"{i+1,-2}.");
                 equipItemList[i].DisplayShopItem();
             }
+
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
             Console.WriteLine();
+
+            int input = Utility.GetInput(0, equipItemList.Count);
+            switch (input)
+            {
+                case 0: /*MainScreen()*/ break;
+                default: buyItem(input-1); break;
+            }
+            void buyItem(int input)
+            {
+                if (equipItemList[input].Cost > player.gold)
+                {
+                    Console.WriteLine("소지금이 부족합니다.");
+                    Console.WriteLine($"필요 :{equipItemList[input].Cost,-5}G  현재 소지금 :{player.gold,6}G");
+                }
+                else
+                {
+                    player.gold -= equipItemList[input].Cost;
+                    equipItemList[input].ItemCount++;
+                    Console.WriteLine($"아이템을 구매하였습니다.  -{equipItemList[input].Cost}G");
+                    Console.WriteLine($"현재 소지금 :{player.gold,-6}G");
+                    Console.WriteLine();
+                    
+                }
+                Console.WriteLine("(아무키입력)");
+                Console.ReadLine();
+                ShopScreen();
+            }
+
+
         }
+
 
 
     }

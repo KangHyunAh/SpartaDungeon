@@ -104,11 +104,11 @@ namespace SpartaDungeon
                 switch (Type)
                 {
                     case PotionType.Health:
-                        player.Heal(EffectAmount);
+                       // player.Heal(EffectAmount);
                         Console.WriteLine($"{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
                         break;
                     case PotionType.Mana:
-                        player.RestoreMana(EffectAmount);
+                       // player.RestoreMana(EffectAmount);
                         Console.WriteLine($"{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
                         break;
                 }
