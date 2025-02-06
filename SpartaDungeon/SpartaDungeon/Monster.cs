@@ -20,5 +20,9 @@ namespace SpartaDungeon
             Health = health;
             Atk = atk;
         }
+        public Monster Spawn()
+        {
+            return new Monster(Lv, Name, Health, Atk);
+        }
     }
 }

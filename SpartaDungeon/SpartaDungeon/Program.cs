@@ -5,7 +5,6 @@
         static void Main(string[] args)
         {
             GameManager gm = new GameManager();
-
         }
     }
 
@@ -15,6 +14,7 @@
         {
 
         }
+
     }
 }
 

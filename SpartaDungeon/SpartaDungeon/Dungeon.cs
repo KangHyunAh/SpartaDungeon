@@ -23,13 +23,10 @@ namespace SpartaDungeon
             Console.WriteLine();
             Console.WriteLine("Battle!!");
             Console.WriteLine();
-
-            for (int i = 0; i < random.Next(1, monsters.Count+DungeonLv); i++)
+            for (int i = 0; i < 5; i++)
             {
-                monsters.Add(monsterList[random.Next(0,monsterList.Count)]);
-                monsters[i].Lv += DungeonLv;
-                monsters[i].Atk += DungeonLv;
-                monsters[i].Health += DungeonLv * 10;
+                Monster monster = monsterList[random.Next(0, monsterList.Count)];
+                monsters.Add(monster.Spawn());
             }
 
             for(int i = 0; i < monsters.Count; i++)
@@ -43,6 +40,7 @@ namespace SpartaDungeon
             Console.WriteLine($"Hp. {player.healthPoint}");
             Console.WriteLine();
             Console.WriteLine("0. 다음");
+            Console.WriteLine();
             int input = Utility.GetInput(0, 0);
             if (input == 0)
                 ReadyBattle(player, monsters);
@@ -74,21 +72,27 @@ namespace SpartaDungeon
         {
             Console.Clear();
             
-
             Console.WriteLine();
             Console.WriteLine("Battle!!");
             Console.WriteLine();
 
             Console.WriteLine($"{player.name} 의 공격!");
-            monsters[target].Health -= (int)Math.Ceiling(random.NextDouble() * (player.strikePower / 10 + player.strikePower - player.strikePower / 10));
-            Console.WriteLine($"{monsters[target].Name} 을(를) 맞췄습니다. [데미지 : {player.strikePower}]");
+            int damage = (int)Math.Ceiling(random.NextDouble() * (player.strikePower / 10) + player.strikePower - player.strikePower / 10);
+            monsters[target].Health -= damage;
+            Console.WriteLine($"{monsters[target].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
 
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
             int input = Utility.GetInput(0, 0);
             if (input == 0)
-                MonsterAttack(player, monsters);
+            {
+                int livemonsters = monsters.Count(m => m.Health > 0);
+                if (!(player.healthPoint > 0 && livemonsters > 0))
+                    BattleResult(player, monsters);
+                else
+                    MonsterAttack(player, monsters);
+            }
         }
 
         public void MonsterAttack(Player player, List<Monster> monsters)
@@ -114,13 +118,8 @@ namespace SpartaDungeon
             int input = Utility.GetInput(0, 0);
             if (input == 0)
             {
-                int livemonsters = monsters.Count;
-                foreach (Monster monster in monsters)
-                {
-                    if(monster.Health <= 0)
-                        livemonsters--;
-                }
-                if (!(player.healthPoint > 0 && livemonsters <= 0))
+                int livemonsters = monsters.Count(m => m.Health > 0);
+                if (!(player.healthPoint > 0 && livemonsters > 0))
                     BattleResult(player, monsters);
                 else
                     ReadyBattle(player, monsters);
@@ -136,7 +135,7 @@ namespace SpartaDungeon
             Console.WriteLine();
             Console.WriteLine("Battle!! - Result");
             Console.WriteLine();
-            if (player.healthPoint < 0)
+            if (player.healthPoint > 0)
             {
                 Console.WriteLine("Victory");
 
@@ -144,11 +143,13 @@ namespace SpartaDungeon
             }
             else
                 Console.WriteLine("You Lose");
+
             monsters.Clear();
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
             int input = Utility.GetInput(0, 0);
+                
 
         }
     }
