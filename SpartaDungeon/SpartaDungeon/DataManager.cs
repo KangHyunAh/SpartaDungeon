@@ -11,7 +11,8 @@ namespace SpartaDungeon
     internal class DataManager
     {
         private const string folderPath = "./Save";            // 세이브파일이 존재할 폴더의 위치
-        private const string filePath = "./Save/Data.json";     // 세이브파일의 위치
+        private const string filePath = "./Save/Data.json";     // 플레이어 정보 세이브파일의 위치
+        private const string itemfilePath = "./Save/ItemData.json";     // 아이템 정보 세이브파일의 위치
 
         // 캐릭터 생성
         public Player CreateCharacter()
@@ -54,7 +55,7 @@ namespace SpartaDungeon
         }
 
         // 저장
-        public void SaveData(Player user)
+        public void SaveData(Player user, List<EquipItem> items)
         {
             // 폴더 주소 설정
             DirectoryInfo folder = new DirectoryInfo(folderPath);
@@ -62,6 +63,8 @@ namespace SpartaDungeon
             // 폴더가 존재하지 않는다면 생성
             if (!folder.Exists)
                 folder.Create();
+
+            // 플레이어 정보 저장
             try
             {
                 // 데이터 직렬화 후 스트링으로 반환
@@ -72,10 +75,26 @@ namespace SpartaDungeon
             // 오류 발생 시
             catch { Console.WriteLine("플레이어 데이터를 저장하는 도중 오류가 발생했습니다."); }
 
+
+            Dictionary<string, int[]> itemDict = new Dictionary<string, int[]>();
+
+            // 아이템 이름과 보유갯수, 장착여부
+            foreach (var item in items)
+            {
+                itemDict.Add(item.Name, [item.ItemCount, Convert.ToInt32(item.isEquip)]);
+            }
+
+            // 아이템 정보 저장
+            try
+            {
+                string ItemDataString = JsonConvert.SerializeObject(itemDict);
+                File.WriteAllText(itemfilePath, ItemDataString);
+            }
+            catch { Console.WriteLine("아이템 데이터를 저장하는 도중 오류가 발생했습니다."); }
         }
 
         // 불러오기
-        public Player LoadData()
+        public Player LoadData(ref List<EquipItem> items)
         {
             Player loadCharacterData = new Player();
 
@@ -95,7 +114,7 @@ namespace SpartaDungeon
                 switch (selectNumber)
                 {
                     case 1:
-                        DataParsing(ref loadCharacterData);
+                        DataParsing(ref loadCharacterData, ref items);
                         return loadCharacterData;
                     case 2:
                         loadCharacterData = CreateCharacter();
@@ -111,8 +130,8 @@ namespace SpartaDungeon
             return loadCharacterData;
         }
 
-        // 저장 돼있는 데이터 파싱
-        public void DataParsing(ref Player user)
+        // 데이터 불러오기, 불러온 데이터 파싱
+        public void DataParsing(ref Player user, ref List<EquipItem> items)
         {
             string data = string.Empty;
 
@@ -137,6 +156,7 @@ namespace SpartaDungeon
                 user.level = int.Parse(playerData["level"].ToString());
                 user.strikePower = int.Parse(playerData["strikePower"].ToString());
                 user.defensivePower = int.Parse(playerData["defensivePower"].ToString());
+                user.maxhealthPoint = int.Parse(playerData["maxhealthPoint"].ToString());
                 user.healthPoint = int.Parse(playerData["healthPoint"].ToString());
                 user.gold = int.Parse(playerData["gold"].ToString());
             }
@@ -145,7 +165,44 @@ namespace SpartaDungeon
             { 
                 Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다.");
                 Console.WriteLine($"캐릭터 생성으로 이동합니다.");
+                Thread.Sleep(1000);
                 user = CreateCharacter();
+            }
+
+            try
+            {
+                data = File.ReadAllText(itemfilePath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다. {e}");
+                Console.WriteLine($"캐릭터 생성으로 이동합니다.");
+                Thread.Sleep(1000);
+                user = CreateCharacter();
+            }
+
+            JObject itemData = JObject.Parse(data);
+
+            Dictionary<string, int[]> itemDict = itemData.ToObject<Dictionary<string, int[]>>();
+
+            int num = 0;
+
+            foreach(KeyValuePair<string, int[]> item in itemDict)
+            {
+                if(item.Key == items[num].Name)
+                {
+                    items[num].ItemCount = item.Value[0];
+                    bool temp = Convert.ToBoolean(item.Value[1]);
+                    if(temp)
+                    {
+                        user.equipStrikePower += items[num].Atk;
+                        user.equipDefensivePower += items[num].Def;
+                        user.equipMaxhealthPoint += items[num].MaxHp;
+                    }
+                    items[num].isEquip = temp;
+                }
+
+                num++;
             }
         }
     }
