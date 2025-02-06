@@ -21,6 +21,4 @@ namespace SpartaDungeon
             Atk = atk;
         }
     }
-
-    
 }

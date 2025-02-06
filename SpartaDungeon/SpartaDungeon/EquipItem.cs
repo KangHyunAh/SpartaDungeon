@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace SpartaDungeon
 {
-
-
-
     public enum EquipType
     {
         Weapon,
