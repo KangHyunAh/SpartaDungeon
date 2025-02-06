@@ -4,7 +4,17 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            GameManager gm = new GameManager();
+
+        }
+    }
+
+    class GameManager
+    {
+        public GameManager()
+        {
+
         }
     }
 }
+
