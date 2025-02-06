@@ -13,7 +13,7 @@ namespace SpartaDungeon
         Weapon,
         SubWeapon,
         Head,
-        Armor,
+        Amor,
         Boots
     }
     internal class EquipItem
