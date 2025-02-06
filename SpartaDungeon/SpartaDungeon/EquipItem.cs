@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpartaDungeon
 {
-    internal class EquipItem
+    public class EquipItem
     {
     }
 }
