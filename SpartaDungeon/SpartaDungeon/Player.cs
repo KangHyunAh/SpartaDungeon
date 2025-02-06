@@ -24,6 +24,7 @@ namespace SpartaDungeon
             Console.WriteLine("");
 
             Console.WriteLine("Lv. "+level);
+            Console.WriteLine("이름 : " + name);
             Console.WriteLine("Chad : "+ chad);
             Console.WriteLine("공격력 : " + strikePower);
             Console.WriteLine("방어력 : " + defensivePower);
@@ -31,7 +32,10 @@ namespace SpartaDungeon
             Console.WriteLine("소유 골드 : " + gold + " G");
 
             Console.WriteLine("0. 나가기");
-            Utility.GetInput(0, 0);
+            if(Utility.GetInput(0, 0) == 0)
+            {
+                return;
+            }
         }
 
     }
