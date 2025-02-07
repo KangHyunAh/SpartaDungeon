@@ -169,6 +169,8 @@ namespace SpartaDungeon
                 user.maxhealthPoint = int.Parse(playerData["maxhealthPoint"].ToString());
                 user.healthPoint = int.Parse(playerData["healthPoint"].ToString());
                 user.gold = int.Parse(playerData["gold"].ToString());
+                user.exp = int.Parse(playerData["exp"].ToString());
+                user.maxExp = int.Parse(playerData["maxExp"].ToString());
             }
             // 오류 발생 시 캐릭터 생성으로 이동
             catch
