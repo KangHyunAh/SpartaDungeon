@@ -30,10 +30,10 @@ namespace SpartaDungeon
             Console.WriteLine("Lv. "+ level);
             Console.WriteLine("이름 : " + name);
             Console.WriteLine("Chad : "+ chad);
-            Console.WriteLine("공격력 : " + strikePower +" + "+ equipStrikePower);
-            Console.WriteLine("방어력 : " + defensivePower+" + " + equipDefensivePower);
+            Console.WriteLine("공격력 : " + (strikePower+equipStrikePower) + "(" + strikePower +" + "+ equipStrikePower + ")");
+            Console.WriteLine("방어력 : " + (defensivePower+equipDefensivePower) + "(" + defensivePower+" + " + equipDefensivePower+")");
             Console.WriteLine("체력 : " + healthPoint);
-            Console.WriteLine("최대 체력 : " + healthPoint+ " + " + equipMaxhealthPoint);
+            Console.WriteLine("최대 체력 : " + (healthPoint + equipMaxhealthPoint) + "(" + healthPoint + " + " + equipMaxhealthPoint + ")");
             Console.WriteLine("소유 골드 : " + gold + " G");
 
             Console.WriteLine("0. 나가기");
@@ -58,20 +58,47 @@ namespace SpartaDungeon
             }
             else
             {
-                if ((gold - 100) < 0) //골드 소모 + 최대체력으로 회복, 부족하면 함수 이탈
-                {
-                    gold = gold - 100;
-                    healthPoint = maxhealthPoint;
-                    Console.WriteLine("현재 골드 : " + gold + " G");
-                    Console.WriteLine("현재 체력 : " + healthPoint);
-                    return;
-                }
-                else
+                if ((gold - 100) < 0) //골드 부족
                 {
                     Console.WriteLine("골드가 부족합니다.");
-                    return;
+                    Console.WriteLine("0. 나가기");
+                    if (Utility.GetInput(0, 0) == 0)
+                    {
+                        Console.WriteLine("창을 닫습니다.");
+                        return;
+                    }
+                }
+                else //골드 소모 + 최대체력(+장비)로 회복
+                {
+                    gold = gold - 100;
+                    healthPoint = maxhealthPoint + equipMaxhealthPoint;
+                    Console.WriteLine("현재 골드 : " + gold + " G");
+                    Console.WriteLine("현재 체력 : " + healthPoint + equipMaxhealthPoint);
+                    Console.WriteLine("0. 나가기");
+                    if (Utility.GetInput(0, 0) == 0)
+                    {
+                        Console.WriteLine("창을 닫습니다.");
+                        return;
+                    }
                 }
             }
         }
+
+        public void ReleaseEquipMaxHealthPoint( ) //최대체력 관여 장비를 해제했을 때 관련 수치 조정
+        {
+            if (equipMaxhealthPoint > 0 && healthPoint >= maxhealthPoint)
+                //최대체력 증가 장비가 존재하고, 현재 체력이 기존 최대 체력과 같거나 컸을 때
+            {
+                healthPoint = maxhealthPoint;
+                equipMaxhealthPoint = 0;
+                return;
+            }
+            else 
+            {
+                return;            
+            }
+        }
+
+
     }
 }
