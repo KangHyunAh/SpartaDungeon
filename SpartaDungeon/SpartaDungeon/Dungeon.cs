@@ -194,6 +194,7 @@ namespace SpartaDungeon
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
                 Console.WriteLine($"획득 경험치 {expSum}");
                 Console.WriteLine($"획득 골드 : {goldSum} G");
+                player.ControlLevel();
             }
             else
                 Console.WriteLine("You Lose");
