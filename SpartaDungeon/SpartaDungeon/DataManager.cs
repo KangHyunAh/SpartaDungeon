@@ -45,13 +45,19 @@ namespace SpartaDungeon
                     {
                         // 저장 선택 시 저장 후 Player 클래스 리턴
                         case 1:
-                            user.name = name;
-                            return user;
+                            break;
                         // 다시 설정을 선택 할 시 반복문 처음으로 이동
                         case 2:
                             continue;
                     }
                 }
+                Console.Clear();
+                user.ChadSelect();
+                user.name = name;
+
+                SkillManager.SkillInit(user.chad, user);
+
+                return user;
             }
         }
 
@@ -121,7 +127,7 @@ namespace SpartaDungeon
                 switch (selectNumber)
                 {
                     case 1:
-                        DataParsing(loadCharacterData,gm);
+                        DataParsing(loadCharacterData, gm);
                         return loadCharacterData;
                     case 2:
                         loadCharacterData = CreateCharacter();
@@ -138,7 +144,7 @@ namespace SpartaDungeon
         }
 
         // 데이터 불러오기, 불러온 데이터 파싱
-        public void DataParsing(Player user,GameManager gm)
+        public void DataParsing(Player user, GameManager gm)
         {
             string data = string.Empty;
 
@@ -169,6 +175,9 @@ namespace SpartaDungeon
                 user.maxhealthPoint = int.Parse(playerData["maxhealthPoint"].ToString());
                 user.healthPoint = int.Parse(playerData["healthPoint"].ToString());
                 user.gold = int.Parse(playerData["gold"].ToString());
+                user.exp = int.Parse(playerData["exp"].ToString());
+                user.maxExp = int.Parse(playerData["maxExp"].ToString());
+                user.dungeonLevel = int.Parse(playerData["dungeonLevel"].ToString());
             }
             // 오류 발생 시 캐릭터 생성으로 이동
             catch
@@ -205,7 +214,7 @@ namespace SpartaDungeon
                 string name = item.Key;
 
                 // 포션이라면 갯수 불러온 후 다음 루프로 이동
-                if(name.Contains("HP") || name.Contains("MP"))
+                if (name.Contains("HP") || name.Contains("MP"))
                 {
                     tempConsumable = gm.consumableItemsList.Where(i => i.Name == item.Key).OfType<ConsumableItem>().FirstOrDefault();
                     tempConsumable.ItemCount = item.Value[0];
