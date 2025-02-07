@@ -45,11 +45,12 @@ namespace SpartaDungeon
             Console.WriteLine("");
 
             Console.WriteLine("Lv. "+ level);
+            Console.WriteLine("경험치 : " + exp +" / "+maxExp);
             Console.WriteLine("이름 : " + name);
             Console.WriteLine("Chad : "+ chad);
             Console.WriteLine("공격력 : " + (strikePower+equipStrikePower) + "(" + strikePower +" + "+ equipStrikePower + ")");
             Console.WriteLine("방어력 : " + (defensivePower+equipDefensivePower) + "(" + defensivePower+" + " + equipDefensivePower+")");
-            Console.WriteLine("체력 : " + healthPoint+ "/" + maxhealthPoint + "( +" +equipMaxhealthPoint+")");
+            Console.WriteLine("체력 : " + healthPoint+ " / " + maxhealthPoint + "( +" +equipMaxhealthPoint+")");
             Console.WriteLine("소유 골드 : " + gold + " G");
 
             Console.WriteLine("0. 나가기");
@@ -63,7 +64,8 @@ namespace SpartaDungeon
         public void Rest() 
         {
             Console.WriteLine("휴식을 선택하셨습니다.");
-            Console.WriteLine("100골드를 소모하고 체력을 최대치만큼 회복합니다.");
+            Console.WriteLine("여관에 입장하셨습니다.");
+            Console.WriteLine("여관에서는 100골드를 소모하고 체력을 최대치만큼 회복합니다.");
             Console.WriteLine("실행하시겠습니까?");
             Console.WriteLine("1. 실행");
             Console.WriteLine("0. 나가기");
