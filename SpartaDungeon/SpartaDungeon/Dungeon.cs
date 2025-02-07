@@ -61,8 +61,8 @@ namespace SpartaDungeon
             ScreenText("스킬 선택");
             for(int i = 0; i < player.skills.Count; i++)
             {
-                Console.WriteLine($"{player.skills[i].Name}");
-                Console.WriteLine($"{player.skills[i].Description}") ;
+                Console.WriteLine($"{i+1}.{player.skills[i].Name}");
+                Console.WriteLine($"  {player.skills[i].Description}") ;
                 Console.WriteLine();
             }
             //Console.WriteLine(player.chad);
