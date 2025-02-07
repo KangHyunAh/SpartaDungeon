@@ -22,24 +22,27 @@ namespace SpartaDungeon
         public int healthPoint = 100;
         public int gold = 1500;
         public int exp = 0;
-        public int maxExp = 1000;
+        public int maxExp = 50;
 
-        public void ControlLevel()
+        public void ControlLevel()//경험치 양 판단 뒤 레벨 올리기
         {
-            if(exp >= maxExp) //경험치가 최대치를 넘거나 동일해졌을 때
+            if (exp >= maxExp) //경험치가 최대치를 넘거나 동일해졌을 때
             {
                 exp = exp - maxExp;
-                maxExp =  (int)(1.1 * maxExp);
+                maxExp = (int)(1.1 * maxExp);
                 strikePower = (int)(1.5 * strikePower);
                 defensivePower = (int)(1.5 * defensivePower);
                 maxhealthPoint = (int)(1.2 * maxhealthPoint);
                 level++;
-                return;
+                Console.WriteLine("레벨 업!");
+                if (exp >= maxExp) 
+                {
+                    this.ControlLevel();
+                }
             }
-            else { return; }
         }
 
-        public void CharacterInformation() 
+        public void CharacterInformation()//상태창 
         {
             Console.WriteLine("캐릭터의 정보를 표시합니다.");
             Console.WriteLine("");
