@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static SpartaDungeon.ConsumableItem;
+using SpartaDungeon;
+using MyPotionSystem = SpartaDungeon.PotionNamespace;
+using Player = SpartaDungeon.Player;
 
 
 namespace SpartaDungeon
@@ -77,57 +79,97 @@ namespace SpartaDungeon
         Mana,
     }
 
-    internal class ConsumableItem : IConsumable
+    namespace PotionNamespace
     {
 
-        public interface IConsumable
-        {
-            void Use(Player player);
-        }
-        public string Name { get; }
-        public PotionType Type { get; }
-        public string Description { get; }
-        public int EffectAmount { get; }
-        public int Cost { get; }
-        public int ItemCount { get; set; }
 
-        public ConsumableItem(string name, PotionType type, int effectAmount, string description, int cost)
+        internal class ConsumableItem
         {
-            Name = name;
-            Type = type;
-            Description = description;
-            EffectAmount = effectAmount;
-            Cost = cost;
-            ItemCount = 1;
-        }
 
-        public void Use(Player player)
-        {
-            if (ItemCount > 0)
+
+            public string Name { get; }
+            public PotionType Type { get; }
+            public string Description { get; }
+            public int EffectAmount { get; }
+            public int Cost { get; }
+            public int ItemCount { get; set; }
+
+            public ConsumableItem(string name, PotionType type, int effectAmount, string description, int cost)
             {
-                switch (Type)
+                Name = name;
+                Type = type;
+                Description = description;
+                EffectAmount = effectAmount;
+                Cost = cost;
+                ItemCount = 1;
+            }
+
+            public void Use(Player player)
+            {
+                if (ItemCount > 0)
                 {
-                    case PotionType.Health:
-                       // player.Heal(EffectAmount);
-                        Console.WriteLine($"{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
-                        break;
-                    case PotionType.Mana:
-                       // player.RestoreMana(EffectAmount);
-                        Console.WriteLine($"{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
-                        break;
+                    switch (Type)
+                    {
+                        case PotionType.Health:
+                            player.Heal(EffectAmount);
+                            Console.WriteLine($"{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
+                            break;
+                        case PotionType.Mana:
+                            player.RestoreMana(EffectAmount);
+                            Console.WriteLine($"{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
+                            break;
+                    }
+                    ItemCount--;
                 }
-                ItemCount--;
+
+                else
+                {
+                    Console.WriteLine("포션이 부족합니다!");
+                }
             }
 
-            else
+            public void DisplayItem()
             {
-                Console.WriteLine("포션이 부족합니다!");
+                Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} | 개수: {ItemCount}");
+            }
+        }
+        internal class Player
+        {
+            public int Health { get; private set; } = 100;
+            public int Mana { get; private set; } = 50;
+
+            public void Heal(int amount)
+            {
+                Health += amount;
+                if (Health > 100) Health = 100;
+            }
+
+            public void RestoreMana(int amount)
+            {
+                Mana += amount;
+                if (Mana > 50) Mana = 50;
+            }
+
+            public void ShowStatus()
+            {
+                Console.WriteLine($"체력: {Health}, 마나: {Mana}");
             }
         }
 
-        public void DisplayItem()
+        class PotionTest
         {
-            Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} | 개수: {ItemCount}");
+            public static void RunTest()
+            {
+                Player player = new Player();
+                ConsumableItem healthPotion = new ConsumableItem("체력포션", PotionType.Health, 30, "체력을 회복하는 포션", 50);
+                ConsumableItem manaPotion = new ConsumableItem("마나포션", PotionType.Mana, 20, "마나를 회복하는 포션", 40);
+
+                player.ShowStatus();
+                healthPotion.Use(player);
+                player.ShowStatus();
+                manaPotion.Use(player);
+                player.ShowStatus();
+            }
         }
     }
 }
