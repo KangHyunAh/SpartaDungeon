@@ -22,7 +22,7 @@ namespace SpartaDungeon
 
     {
         public string Name { get; }
-        public EquipType Type { get; }
+        public int Type { get; }
         public string Description { get; }
         public int Atk { get; }
         public int Def { get; }
@@ -35,7 +35,7 @@ namespace SpartaDungeon
         public EquipItem(string name, EquipType type, int atk, int def, int maxHp, string discription, int cost)
         {
             Name = name;
-            Type = type;
+            Type = (int)type;
             Description = discription;
             Atk = atk;
             Def = def;
@@ -102,7 +102,7 @@ namespace SpartaDungeon
                 Description = description;
                 EffectAmount = effectAmount;
                 Cost = cost;
-                ItemCount = 1;
+                ItemCount = 0;
             }
 
             public void Use(Player player)
