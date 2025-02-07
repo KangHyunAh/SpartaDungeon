@@ -33,12 +33,12 @@ namespace SpartaDungeon
 
             if(!(DungeonLv%3 == 0))
             {
-                MonsterSpawn(monsterList, random.Next(0, 5));
+                MonsterSpawn(monsterList, random.Next(1, 5));
             }
             else
             {
                 MonsterSpawn(bossMonsterList, 1);
-                MonsterSpawn(monsterList,random.Next(0,5));
+                MonsterSpawn(monsterList,random.Next(1,5));
             }
 
             for (int i = 0; i < monsters.Count; i++)
