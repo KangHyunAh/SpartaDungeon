@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Numerics;
 using System.Security.Cryptography;
+using SpartaDungeon.PotionNamespace;
 
 namespace SpartaDungeon
 {
@@ -20,6 +21,7 @@ namespace SpartaDungeon
     {
         public Player player = new Player();
         public List<EquipItem> equipItemList;
+        public List<ConsumableItem> consumableItemsList;
         public GameManager()        //게임매니저 생성자
         {
             equipItemList = new List<EquipItem>     //  string 이름, EquipType 장착부위, int 공격력, int 방어력, int 쵀대채력, string 설명, int 가격
@@ -40,6 +42,13 @@ namespace SpartaDungeon
             new EquipItem("강철방패", EquipType.SubWeapon, 0,5,0, "강철로 만들어진 튼튼한 방패입니다. ", 1500),
             new EquipItem("타워 실드", EquipType.Weapon, 0,10,0, "몸전체를 가릴수있는 커다란 방패입니다. ", 2500),
             };
+            consumableItemsList = new List<ConsumableItem>
+            {
+                new ConsumableItem("하급 HP회복 포션",PotionType.Health,50,"소량의 HP를 회복시켜주는 약이다",200),
+                new ConsumableItem("중급 HP회복 포션",PotionType.Health,100,"적당한 HP를 회복시켜주는 약이다",500),
+                new ConsumableItem("상급 HP회복 포션",PotionType.Health,200,"많은양의 HP를 회복시켜주는 약이다",1000)
+            };
+            
         }
         public void InventoryScreen()
         {
