@@ -56,7 +56,7 @@ namespace SpartaDungeon
         }
 
         // 저장
-        public void SaveData(Player user, GameManager gm)
+        public void SaveData(GameManager gm)
         {
             // 폴더 주소 설정
             DirectoryInfo folder = new DirectoryInfo(folderPath);
@@ -69,7 +69,7 @@ namespace SpartaDungeon
             try
             {
                 // 데이터 직렬화 후 스트링으로 반환
-                string playerDataString = JsonConvert.SerializeObject(user);
+                string playerDataString = JsonConvert.SerializeObject(gm.player);
                 // 파일에 스트링 저장
                 File.WriteAllText(filePath, playerDataString);
             }
