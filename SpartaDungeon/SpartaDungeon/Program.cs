@@ -14,6 +14,8 @@ namespace SpartaDungeon
             StartScene start = new StartScene();
             gm.player = new DataManager().LoadData(gm);
             start.Lobby(gm);
+            
+            gm.QuestManager.ShowAllQuests();
         }
     }
 
@@ -33,8 +35,12 @@ namespace SpartaDungeon
         public List<EquipItem> equipItemList;
         public List<ConsumableItem> consumableItemsList;
 
+        public QuestManager QuestManager;
+
         public GameManager()        //게임매니저 생성자
         {
+            QuestManager = new QuestManager();
+
             equipItemList = new List<EquipItem>     //  string 이름, EquipType 장착부위, int 공격력, int 방어력, int 쵀대채력, string 설명, int 가격
             {
             new EquipItem("수련자의 갑옷", EquipType.Amor, 0,1,50, "수련에 도움을 주는 갑옷입니다. ", 800),
@@ -61,7 +67,7 @@ namespace SpartaDungeon
                 new ConsumableItem("상급 HP회복 포션",PotionType.Health,200,"많은양의 HP를 회복시켜주는 약이다",1000),
                 //new ConsumableItem("하급 MP회복 포션",PotionType.Mana,20,"소량의 MP를 회복시켜주는 약이다",200),
                 //new ConsumableItem("중급 MP회복 포션",PotionType.Mana,50,"적당한 MP를 회복시켜주는 약이다",500),
-                //new ConsumableItem("상급 MP회복 포션",PotionType.Mana,100,"많은양의 MP를 회복시켜주는 약이다",1000)
+                //new ConsumableItem("상급 MP회복 포션",PotionType.Mana,100,"많은양의 MP를 회복시켜는 약이다",1000)
 
             };
             
@@ -79,6 +85,9 @@ namespace SpartaDungeon
                 new Monster(11,"보스2",11,11,11,11),
                 new Monster(12,"보스3",12,12,12,12),
             };
+
+            QuestManager.AddQuest(new Quest(1, "잡몹 퇴치", "5마리의 잡몹을 잡으세요"));
+            QuestManager.AddQuest(new Quest(2, "보스 퇴치", "보스1을 잡으세요" ));
 
         }
         

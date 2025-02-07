@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpartaDungeon;
-using MyPotionSystem = SpartaDungeon.PotionNamespace;
-using Player = SpartaDungeon.Player;
+using PotionPlayer = SpartaDungeon.PotionNamespace.PotionPlayer;
 
 
 namespace SpartaDungeon
@@ -105,7 +104,7 @@ namespace SpartaDungeon
                 ItemCount = 1;
             }
 
-            public void Use(Player player)
+            public void Use(PotionPlayer player)
             {
                 if (ItemCount > 0)
                 {
@@ -134,7 +133,7 @@ namespace SpartaDungeon
                 Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} | 개수: {ItemCount}");
             }
         }
-        internal class Player
+        internal class PotionPlayer
         {
             public int Health { get; private set; } = 100;
             public int Mana { get; private set; } = 50;
@@ -161,7 +160,7 @@ namespace SpartaDungeon
         {
             public static void RunTest()
             {
-                Player player = new Player();
+                PotionPlayer player = new PotionPlayer();
                 ConsumableItem healthPotion = new ConsumableItem("체력포션", PotionType.Health, 30, "체력을 회복하는 포션", 50);
                 ConsumableItem manaPotion = new ConsumableItem("마나포션", PotionType.Mana, 20, "마나를 회복하는 포션", 40);
 
