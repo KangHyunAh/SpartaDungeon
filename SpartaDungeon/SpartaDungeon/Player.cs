@@ -21,6 +21,23 @@ namespace SpartaDungeon
         public int equipMaxhealthPoint = 0;
         public int healthPoint = 100;
         public int gold = 1500;
+        public int exp = 0;
+        public int maxExp = 1000;
+
+        public void ControlLevel()
+        {
+            if(exp >= maxExp) //경험치가 최대치를 넘거나 동일해졌을 때
+            {
+                exp = exp - maxExp;
+                maxExp =  (int)(1.1 * maxExp);
+                strikePower = (int)(1.5 * strikePower);
+                defensivePower = (int)(1.5 * defensivePower);
+                maxhealthPoint = (int)(1.2 * maxhealthPoint);
+                level++;
+                return;
+            }
+            else { return; }
+        }
 
         public void CharacterInformation() 
         {
