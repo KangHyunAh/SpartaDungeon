@@ -54,6 +54,9 @@ namespace SpartaDungeon
                 Console.Clear();
                 user.ChadSelect();
                 user.name = name;
+
+                SkillManager.SkillInit(user.chad, user);
+
                 return user;
             }
         }

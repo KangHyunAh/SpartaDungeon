@@ -28,6 +28,7 @@ namespace SpartaDungeon
         public int manaPoint = 50;
         public int maxManaPoint = 50;
 
+        public List<Skill> skills = new List<Skill>();
 
         public void ControlLevel()//경험치 양 판단 뒤 레벨 올리기
         {
