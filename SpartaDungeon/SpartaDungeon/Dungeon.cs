@@ -183,7 +183,7 @@ namespace SpartaDungeon
                     }
                 }
 
-                DungeonLv = +1;
+                DungeonLv += 1;
                 Console.WriteLine("Victory");
 
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
