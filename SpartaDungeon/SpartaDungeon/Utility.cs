@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+public enum Text
+{
+    Write,
+    WriteLine
+}
+
 static class Utility
 {
     //입력키 확인
@@ -19,5 +25,23 @@ static class Utility
 
             Console.WriteLine("잘못된 입력입니다. 다시 입력해주세요");
         }
+    }
+
+    // 출력 텍스트 색 변경
+    public static void ColorText(ConsoleColor color, string text, Text type = Text.WriteLine)
+    {
+        Console.ForegroundColor = color;
+        switch (type)
+        {
+            // 줄바꿈 X
+            case Text.Write:
+                Console.Write(text);
+                break;
+            // 줄바꿈 O
+            case Text.WriteLine:
+                Console.WriteLine(text);
+                break;
+        }
+        Console.ResetColor();
     }
 }
