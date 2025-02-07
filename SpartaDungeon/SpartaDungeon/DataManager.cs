@@ -75,7 +75,7 @@ namespace SpartaDungeon
             // 오류 발생 시
             catch { Console.WriteLine("플레이어 데이터를 저장하는 도중 오류가 발생했습니다."); }
 
-            // 키값 : 아이템 이름, 밸류 값 : 아이템 갯수, 장착 여부(정수로 변환)
+
             Dictionary<string, int[]> itemDict = new Dictionary<string, int[]>();
 
             // 아이템 이름과 보유갯수, 장착여부
@@ -143,9 +143,6 @@ namespace SpartaDungeon
             catch (Exception e)
             {
                 Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다. {e}");
-                Console.WriteLine($"캐릭터 생성으로 이동합니다.");
-                Thread.Sleep(1000);
-                user = CreateCharacter();
             }
 
             // 직렬화 된 문자열 직렬화 해제
@@ -186,26 +183,19 @@ namespace SpartaDungeon
 
             JObject itemData = JObject.Parse(data);
 
-            // 불러온 데이터 딕셔너리로 변환
             Dictionary<string, int[]> itemDict = itemData.ToObject<Dictionary<string, int[]>>();
 
-            // 참조할 아이템을 담을 인스턴스
+            int num = 0;
+
             EquipItem tempItem = new EquipItem("", EquipType.Weapon, 1, 1, 1, "", 1);
 
             foreach (KeyValuePair<string, int[]> item in itemDict)
             {
-                // equipItemList 안에서 item의 키값(아이템 이름)과 일치하는 아이템을 찾아 참조 및 값 변경
-                // 일치하는 아이템이 없다면 null 반환
                 tempItem = items.Where(i => i.Name == item.Key).OfType<EquipItem>().FirstOrDefault();
-
-                // 일치하는 아이템 없을 시 다음 루프로
-                if (tempItem == null)
-                    continue;
 
                 tempItem.ItemCount = item.Value[0];
                 tempItem.isEquip = Convert.ToBoolean(item.Value[1]);
 
-                // 장착 중이라면 해당 아이템의 능력치 적용
                 if (tempItem.isEquip)
                 {
                     user.equipStrikePower += tempItem.Atk;
