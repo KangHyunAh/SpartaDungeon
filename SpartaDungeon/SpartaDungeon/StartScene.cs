@@ -37,10 +37,10 @@ namespace SpartaDungeon
                         gm.player.CharacterInformation();
                         break;
                     case 2:
-                        gm.inventoryAndShop.InventoryScreen(gm.player, gm.equipItemList);
+                        gm.inventoryAndShop.InventoryScreen(gm);
                         break;
                     case 3:
-                        gm.inventoryAndShop.ShopScreen(gm.player, gm.equipItemList);
+                        gm.inventoryAndShop.ShopScreen(gm);
                         break;
                     case 4:
                         // 던전 이동 함수
