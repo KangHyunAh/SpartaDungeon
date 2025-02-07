@@ -140,6 +140,8 @@ namespace SpartaDungeon
                 loadCharacterData = CreateCharacter();
             }
 
+            SkillManager.SkillInit(loadCharacterData.name, loadCharacterData);
+
             return loadCharacterData;
         }
 
