@@ -9,7 +9,7 @@ namespace SpartaDungeon
 {
     public class Dungeon
     {
-        public int DungeonLv {  get; set; }
+        public int DungeonLv { get; set; } = 1;
         public int EnterHp { get; set; }
 
         Player player { get; set; }
@@ -17,10 +17,7 @@ namespace SpartaDungeon
 
 
         Random random = new Random();
-        public Dungeon()
-        {
-            DungeonLv = 1;
-        }
+
 
         public void Battle(Player _player, List<Monster> _monsters, List<Monster> monsterList,List<Monster> bossMonsterList)
         {
@@ -71,11 +68,17 @@ namespace SpartaDungeon
             }
 
             Console.WriteLine();
-            Console.WriteLine("대상을 선택해주세요.");
+            //Console.WriteLine("0. 소모아이템.");
+            Console.WriteLine($"1~{monsters.Count}. 대상을 선택해주세요.");
             while(true)
             {
                 int input = Utility.GetInput(1, monsters.Count);
-                if (monsters[input - 1].Health < 0)
+                if(input == 0)
+                {
+                    BattleUseItem();
+                    break;
+                }
+                else if (monsters[input - 1].Health < 0)
                     Console.WriteLine("이미 사망한 대상입니다.");
                 else
                 {
@@ -84,6 +87,10 @@ namespace SpartaDungeon
                 }
             }
 
+        }
+        public void BattleUseItem()
+        {
+            ScreenText("소모아이템");
         }
 
         public void PlayerAttack(int target)
@@ -96,9 +103,24 @@ namespace SpartaDungeon
                 monsternum[i] = monsters[i].Health;
             }
             Console.WriteLine($"{player.name} 의 공격!");
+
             int damage = (int)Math.Ceiling(random.NextDouble() * ((float)(player.strikePower+player.equipStrikePower) * 0.1) + (player.strikePower + player.equipStrikePower) - (float)(player.strikePower + player.equipStrikePower) *0.05);
-            monsters[target].Health -= damage;
-            Console.WriteLine($"{monsters[target].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+            int critical = random.Next(15, 100);
+            if (critical < 15)
+            {
+                damage = (int)((float)damage * 1.6);
+            }
+            int evasion = random.Next(0, 10);
+
+            if(evasion > 0)
+                monsters[target].Health -= damage;
+
+            if (evasion == 0)
+                Console.WriteLine("헛방질");
+            else if (critical < 15)
+                Console.WriteLine($"{monsters[target].Name} 을(를) 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!");
+            else
+                Console.WriteLine($"{monsters[target].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
 
             Console.WriteLine();
 
@@ -138,18 +160,43 @@ namespace SpartaDungeon
                     {
                         Console.WriteLine($"{monster.Name} 의 공격!");
                         int damage = monster.Atk - player.defensivePower;
+
+                        int Critical = random.Next(0, 100);
+                        if (Critical < 15)
+                        {
+                            damage = (int)((float)damage * 1.6);
+                        }
                         damage = Math.Max(0,damage);
-                        player.healthPoint -= damage;
-                        if(damage ==0)
+
+                        int evasion = random.Next(0, 10);
+                        if(evasion > 0)
+                            player.healthPoint -= damage;
+
+                        if (evasion == 0)
+                            Console.WriteLine($"{monster.Name}의 공격을 {player.name}은(는) 회피하였습니다.");
+                        else if (damage == 0)
                             Console.WriteLine($"{monster.Name}의 공격을 {player.name}은(는) 높은 방어력으로 공격을 막아냈습니다.");
                         else
                         {
                             if (player.healthPoint > 0)
+                            {
+                                if (Critical < 15)
+                                {
+                                    Console.WriteLine($"{monster.Name}은 {player.name}에게 공격을 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!\n[Hp {playerHp} => {player.healthPoint}]");
+                                }
+                                else
                                 Console.WriteLine($"{monster.Name}은 {player.name}에게 공격을 맞췄습니다. [데미지 : {damage}][Hp {playerHp} => {player.healthPoint}]");
+
+                            }
                             else
                             {
                                 player.healthPoint = 0;
-                                Console.WriteLine($"{monster.Name}은 {player.name}에게 공격을 맞췄습니다. [데미지 : {damage}][Hp {playerHp} => [Dead]");
+                                if (Critical < 15)
+                                {
+                                    Console.WriteLine($"{monster.Name}은 {player.name}에게 공격을 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!\n[Hp {playerHp} => [Dead]");
+                                }
+                                else
+                                    Console.WriteLine($"{monster.Name}은 {player.name}에게 공격을 맞췄습니다. [데미지 : {damage}][Hp {playerHp} => [Dead]");
 
                             }
                         }
