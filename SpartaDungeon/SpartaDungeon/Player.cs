@@ -23,6 +23,7 @@ namespace SpartaDungeon
         public int gold = 1500;
         public int exp = 0;
         public int maxExp = 50;
+        public int dungeonLevel = 1;
 
         public void ControlLevel()//경험치 양 판단 뒤 레벨 올리기
         {
