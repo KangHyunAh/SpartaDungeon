@@ -162,14 +162,26 @@ namespace SpartaDungeon
 
             if (player.healthPoint > 0)
             {
+                int sum = 0;
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    if (monsters[i].Health <= 0)
+                    {
+                        player.gold += monsters[i].Rewards;
+                        sum += monsters[i].Rewards;
+                    }
+                }
+
                 DungeonLv = +1;
                 Console.WriteLine("Victory");
 
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
+                Console.WriteLine($"획득 골드 : {sum} G");
             }
             else
                 Console.WriteLine("You Lose");
 
+            Console.WriteLine();
             Console.WriteLine($"Lv. {player.level} {player.name}");
             Console.WriteLine($"Hp. {EnterHp} => {player.healthPoint}");
             monsters.Clear();
