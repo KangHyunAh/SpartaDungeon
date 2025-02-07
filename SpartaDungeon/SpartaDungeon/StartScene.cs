@@ -29,13 +29,14 @@ namespace SpartaDungeon
                 Console.WriteLine($"4. 던전 입장({gm.player.dungeonLevel} 층)");
                 Console.WriteLine("5. 퀘스트");
                 Console.WriteLine("6. 휴식하기");
+                Console.WriteLine("7. 게임종료");
 
                 
 
 
                 Console.WriteLine();
 
-                int selectNumber = Utility.GetInput(1, 6);
+                int selectNumber = Utility.GetInput(1, 7);
 
                 switch (selectNumber)
                 {
@@ -57,7 +58,7 @@ namespace SpartaDungeon
                     case 6:
                         gm.player.Rest();
                         break;
-                    case 6:
+                    case 7:
                         return;
                 }
             }
