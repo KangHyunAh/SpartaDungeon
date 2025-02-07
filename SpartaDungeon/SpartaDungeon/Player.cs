@@ -150,6 +150,7 @@ namespace SpartaDungeon
                 case 1: //나이트
                     Console.WriteLine("나이트를 선택하셨습니다.");
                     Console.WriteLine("초기화를 진행합니다.");
+                    chad = "나이트";
                     level = 1;
                     strikePower = 10;
                     defensivePower = 10;
@@ -165,6 +166,7 @@ namespace SpartaDungeon
                 case 2: //검사
                     Console.WriteLine("검사를 선택하셨습니다.");
                     Console.WriteLine("초기화를 진행합니다.");
+                    chad = "검사";
                     level = 1;
                     strikePower = 20;
                     defensivePower = 5;
@@ -180,6 +182,7 @@ namespace SpartaDungeon
                 case 3: //광전사
                     Console.WriteLine("광전사를 선택하셨습니다.");
                     Console.WriteLine("초기화를 진행합니다.");
+                    chad = "광전사";
                     level = 1;
                     strikePower = 10;
                     defensivePower = 5;
