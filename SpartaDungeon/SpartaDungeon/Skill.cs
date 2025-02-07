@@ -76,9 +76,9 @@ namespace SpartaDungeon
 
     public class SkillManager()
     {
-        public static void SkillInit(string chad, Player player)
+        public static void SkillInit(Player player)
         {
-            switch(chad)
+            switch(player.chad)
             {
                 case "나이트":
                     player.skills.Add(new Skill("휩쓸기", "적 전체에 공격력 * 0.3의 데미지를 준다.", SkillType.Attack, 0.3f, 5, 0, 10));
