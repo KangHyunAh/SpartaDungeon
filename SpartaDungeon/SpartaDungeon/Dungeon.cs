@@ -9,7 +9,7 @@ namespace SpartaDungeon
 {
     public class Dungeon
     {
-        public int DungeonLv {  get; set; }
+        public int DungeonLv { get; set; } = 1;
         public int EnterHp { get; set; }
 
         Player player { get; set; }
@@ -17,10 +17,7 @@ namespace SpartaDungeon
 
 
         Random random = new Random();
-        public Dungeon()
-        {
-            DungeonLv = 1;
-        }
+
 
         public void Battle(Player _player, List<Monster> _monsters, List<Monster> monsterList,List<Monster> bossMonsterList)
         {
@@ -71,11 +68,11 @@ namespace SpartaDungeon
             }
 
             Console.WriteLine();
-            Console.WriteLine("0. 소모아이템.");
+            //Console.WriteLine("0. 소모아이템.");
             Console.WriteLine($"1~{monsters.Count}. 대상을 선택해주세요.");
             while(true)
             {
-                int input = Utility.GetInput(0, monsters.Count);
+                int input = Utility.GetInput(1, monsters.Count);
                 if(input == 0)
                 {
                     BattleUseItem();
@@ -163,8 +160,8 @@ namespace SpartaDungeon
                     {
                         Console.WriteLine($"{monster.Name} 의 공격!");
                         int damage = monster.Atk - player.defensivePower;
-                        int Critical = random.Next(0, 100);
 
+                        int Critical = random.Next(0, 100);
                         if (Critical < 15)
                         {
                             damage = (int)((float)damage * 1.6);
@@ -172,11 +169,8 @@ namespace SpartaDungeon
                         damage = Math.Max(0,damage);
 
                         int evasion = random.Next(0, 10);
-
                         if(evasion > 0)
                             player.healthPoint -= damage;
-                        else
-
 
                         if (evasion == 0)
                             Console.WriteLine($"{monster.Name}의 공격을 {player.name}은(는) 회피하였습니다.");
