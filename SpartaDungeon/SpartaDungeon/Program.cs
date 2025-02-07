@@ -69,15 +69,15 @@ namespace SpartaDungeon
 
             monsterList = new List<Monster>
             {
-                new Monster(1,"one",1,1,1),
-                new Monster(2,"two",2,2,2),
-                new Monster(3,"three",3,3,3),
+                new Monster(1,"잡몹1",1,1,1,1),
+                new Monster(2,"잡몹2",2,2,2,2),
+                new Monster(3,"잡몹3",3,3,3,3),
             };
             bossmonsterList = new List<Monster>
             {
-                new Monster(10,"10",10,10,10),
-                new Monster(11,"11",11,11,11),
-                new Monster(11,"11",12,12,12),
+                new Monster(10,"보스1",10,10,10,10),
+                new Monster(11,"보스2",11,11,11,11),
+                new Monster(12,"보스3",12,12,12,12),
             };
 
         }

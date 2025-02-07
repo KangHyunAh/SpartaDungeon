@@ -176,11 +176,9 @@ namespace SpartaDungeon
                 int sum = 0;
                 for (int i = 0; i < monsters.Count; i++)
                 {
-                    if (monsters[i].Health <= 0)
-                    {
-                        player.gold += monsters[i].Rewards;
-                        sum += monsters[i].Rewards;
-                    }
+                    player.gold += monsters[i].Rewards;
+                    sum += monsters[i].Rewards;
+                    player.exp += (monsters[i].Exp+DungeonLv*3);
                 }
 
                 DungeonLv += 1;

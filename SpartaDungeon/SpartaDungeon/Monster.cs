@@ -13,18 +13,20 @@ namespace SpartaDungeon
         public int Health { get; set; }
         public int Atk { get; set; }
         public int Rewards { get; set; }
+        public int Exp { get; set; }
 
-        public Monster(int lv, string name, int health, int atk, int rewards)
+        public Monster(int lv, string name, int health, int atk, int rewards, int exp)
         {
             Lv = lv;
             Name = name;
             Health = health;
             Atk = atk;
             Rewards = rewards;
+            Exp = exp;
         }
         public Monster Spawn()
         {
-            return new Monster(Lv, Name, Health, Atk, Rewards);
+            return new Monster(Lv, Name, Health, Atk, Rewards, Exp);
         }
     }
 }
