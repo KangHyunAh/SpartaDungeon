@@ -28,9 +28,10 @@ namespace SpartaDungeon
                 Console.WriteLine("3. 상점");
                 Console.WriteLine($"4. 던전 입장({gm.player.dungeonLevel} 층)");
                 Console.WriteLine("5. 휴식하기");
+                Console.WriteLine("6. 게임종료");
                 Console.WriteLine();
 
-                int selectNumber = Utility.GetInput(1, 5);
+                int selectNumber = Utility.GetInput(1, 6);
 
                 switch (selectNumber)
                 {
@@ -38,10 +39,10 @@ namespace SpartaDungeon
                         gm.player.CharacterInformation();
                         break;
                     case 2:
-                        gm.inventoryAndShop.InventoryScreen(gm.player, gm.equipItemList);
+                        gm.inventoryAndShop.InventoryScreen(gm);
                         break;
                     case 3:
-                        gm.inventoryAndShop.ShopScreen(gm.player, gm.equipItemList);
+                        gm.inventoryAndShop.ShopScreen(gm);
                         break;
                     case 4:
                         dungeonManager.Battle(gm.player, gm.monsters, gm.monsterList, gm.bossmonsterList);
@@ -49,6 +50,8 @@ namespace SpartaDungeon
                     case 5:
                         gm.player.Rest();
                         break;
+                    case 6:
+                        return;
                 }
             }
         }
