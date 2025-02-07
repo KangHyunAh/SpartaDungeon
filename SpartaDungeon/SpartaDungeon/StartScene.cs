@@ -26,7 +26,7 @@ namespace SpartaDungeon
                 Console.WriteLine("1. 캐릭터 정보");
                 Console.WriteLine("2. 인벤토리");
                 Console.WriteLine("3. 상점");
-                Console.WriteLine($"4. 던전 입장({dungeonManager.DungeonLv} 층)");
+                Console.WriteLine($"4. 던전 입장({gm.player.dungeonLevel} 층)");
                 Console.WriteLine("5. 휴식하기");
                 Console.WriteLine();
 
