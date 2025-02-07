@@ -13,9 +13,7 @@ namespace SpartaDungeon
             
             StartScene start = new StartScene();
             gm.player = new DataManager().LoadData(gm);
-            start.Lobby(gm);
-            
-            gm.QuestManager.ShowAllQuests();
+            start.Lobby(gm);   
         }
     }
 
