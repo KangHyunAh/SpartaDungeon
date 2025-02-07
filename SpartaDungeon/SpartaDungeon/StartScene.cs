@@ -15,7 +15,7 @@ namespace SpartaDungeon
 
             while (true)
             {
-                dataManager.SaveData(user, gm);
+                dataManager.SaveData(gm);
 
                 Console.Clear();
 
