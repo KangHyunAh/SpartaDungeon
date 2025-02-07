@@ -207,7 +207,7 @@ namespace SpartaDungeon
                 {
                     for (int i = 0; i < gm.equipItemList.Count; i++)
                     {
-                        if (gm.equipItemList[i].Type == ItemType - 1 - 100)
+                        if (gm.equipItemList[i].Type == ItemType - 100-1)
                         {
                             index++;
                             Console.Write($"{index,-2}.");
@@ -244,28 +244,40 @@ namespace SpartaDungeon
                     case 104: BuyScreen(input); break;
                     case 105: BuyScreen(input); break;
                     case 106: BuyScreen(input); break;
-                    default: { if (ItemType != 106) BuyItem(input - 1); else BuyConsumItem(input - 1); } break;
+                    default: { if (ItemType != 106) BuyItem(input); else BuyConsumItem(input-1); } break;
                 }
 
                 void BuyItem(int input)
                 {
-                    if (gm.equipItemList[input].Cost > gm.player.gold)
+                    int index = 0;
+                    for(int i = 0; i < gm.equipItemList.Count; i++)
                     {
-                        Console.WriteLine("소지금이 부족합니다.");
-                        Console.WriteLine($"필요 :{gm.equipItemList[input].Cost,-5}G  현재 소지금 :{gm.player.gold,6}G");
-                    }
-                    else
-                    {
-                        gm.player.gold -= gm.equipItemList[input].Cost;
-                        gm.equipItemList[input].ItemCount++;
-                        Console.WriteLine($"아이템을 구매하였습니다.  -{gm.equipItemList[input].Cost}G");
-                        Console.WriteLine($"현재 소지금 :{gm.player.gold,-6}G");
-                        Console.WriteLine();
+                        if (gm.equipItemList[i].Type == ItemType - 100-1)
+                        {
+                            index++;
+                            if(index == input)
+                            {
+                                if (gm.equipItemList[i].Cost > gm.player.gold)
+                                {
+                                    Console.WriteLine("소지금이 부족합니다.");
+                                    Console.WriteLine($"필요 :{gm.equipItemList[i].Cost,-5}G  현재 소지금 :{gm.player.gold,6}G");
+                                }
+                                else
+                                {
+                                    gm.player.gold -= gm.equipItemList[i].Cost;
+                                    gm.equipItemList[i].ItemCount++;
+                                    Console.WriteLine($"아이템을 구매하였습니다.  -{gm.equipItemList[i].Cost}G");
+                                    Console.WriteLine($"현재 소지금 :{gm.player.gold,-6}G");
+                                    Console.WriteLine();
 
+                                }
+                                Console.WriteLine("(아무키입력)");
+                                Console.ReadLine();
+                                BuyScreen(ItemType);
+                            }
+                        }
                     }
-                    Console.WriteLine("(아무키입력)");
-                    Console.ReadLine();
-                    BuyScreen(ItemType);
+                    
                 }
                 void BuyConsumItem(int input)
                 {
@@ -309,7 +321,7 @@ namespace SpartaDungeon
                 {
                     for (int i = 0; i < gm.equipItemList.Count; i++)
                     {
-                        if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == ItemType - 100)
+                        if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == ItemType - 100-1)
                         {
                             index++; Console.Write($"{index,2}");
                             gm.equipItemList[i].DisplayEquipItem();
@@ -362,7 +374,7 @@ namespace SpartaDungeon
                     int index = 0;
                     for (int i = 0; i < gm.equipItemList.Count; i++)
                     {
-                        if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == ItemType - 100)       //장착중인 아이템을 선택했을경우. 장착해제, 판매금(가격/2)받기
+                        if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == ItemType - 100-1)       //장착중인 아이템을 선택했을경우. 장착해제, 판매금(가격/2)받기
                         {
                             index++;
                             if (index == input)

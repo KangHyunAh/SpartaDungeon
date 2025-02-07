@@ -17,13 +17,13 @@ namespace SpartaDungeon
 {
     public class Skill
     {
-        public string Name { get; }
-        public string Description { get; }
-        public SkillType Type { get; }
-        public float SkillPower { get; }
-        public int Count { get; }
-        public int UseHp { get; }
-        public int UseMp { get; }
+        public string Name { get; } // 스킬 이름
+        public string Description { get; } // 스킬 설명
+        public SkillType Type { get; } // 스킬 타입
+        public float SkillPower { get; } // 스킬 효과 (공격 수치 || 회복 수치)
+        public int Count { get; } // 적중시킬 적 수
+        public int UseHp { get; } // 사용할 HP
+        public int UseMp { get; } // 사용할 MP
 
 
         public Skill(string n, string d, SkillType t, float p, int c, int h, int m)
@@ -37,8 +37,10 @@ namespace SpartaDungeon
             UseMp = m;
         }
 
+        // 단일공격일시 매개변수에 index 넣어주기
         public void AttackSkill(List<Monster> monsters, Player player, int index = 0)
         {
+            // 적 전체 공격
             if (Count == 5)
             {
                 for (int i = 0; i < monsters.Count; i++)
@@ -49,13 +51,20 @@ namespace SpartaDungeon
                     }
                 }
             }
+
+            // 일정 수 랜덤 공격
             else if (Count != 5 && Count != 1)
             {
+                // HP가 0이 아닌 적 찾기
                 List<Monster> target = monsters.Where(i => i.Health > 0).OfType<Monster>().ToList();
+
+                // 남은 적이 한마리일 때
                 if (target.Count == 1)
                 {
                     target[0].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                 }
+
+                // 남은 적이 2마리 이상일 때
                 else if (target.Count >= 2)
                 {
                     int rndtargetIndex1 = new Random().Next(0, target.Count);
@@ -72,6 +81,8 @@ namespace SpartaDungeon
                     target[rndtargetIndex2].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                 }
             }
+
+            // 단일 공격
             else
             {
                 monsters[index].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
