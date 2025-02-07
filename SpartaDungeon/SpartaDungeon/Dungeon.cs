@@ -135,7 +135,7 @@ namespace SpartaDungeon
                         Console.WriteLine($"{monster.Name} 의 공격!");
                         player.healthPoint -= monster.Atk;
                         if(player.healthPoint > 0)
-                            Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {monster.Atk}][Hp {playerHp} => {player.healthPoint}");
+                            Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {monster.Atk}][Hp {playerHp} => {player.healthPoint}]");
                         else
                             Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {monster.Atk}][Hp {playerHp} => [Dead]");
                     }
