@@ -9,7 +9,6 @@ namespace SpartaDungeon
 {
     public class Dungeon
     {
-        public int DungeonLv { get; set; } = 1;
         public int EnterHp { get; set; }
 
         Player player { get; set; }
@@ -27,8 +26,7 @@ namespace SpartaDungeon
             player = _player;
             monsters = _monsters;
 
-
-            if(!(DungeonLv%3 == 0))
+            if(!(player.dungeonLevel%3 == 0))
             {
                 MonsterSpawn(monsterList, random.Next(1, 5));
             }
@@ -231,12 +229,12 @@ namespace SpartaDungeon
                 {
                     player.gold += monsters[i].Rewards;
                     goldSum += monsters[i].Rewards;
-                    player.exp += (monsters[i].Exp+DungeonLv*3);
-                    expSum += (monsters[i].Exp + DungeonLv * 3);
+                    player.exp += (monsters[i].Exp+player.dungeonLevel*3);
+                    expSum += (monsters[i].Exp + player.dungeonLevel * 3);
                 }
 
                 player.dungeonLevel += 1;
-                DungeonLv += 1;
+                player.dungeonLevel += 1;
                 Console.WriteLine("Victory");
 
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
@@ -263,8 +261,8 @@ namespace SpartaDungeon
             {
                 Monster monster = monsterList[random.Next(0, monsterList.Count)];
                 monsters.Add(monster.Spawn());
-                monsters[i].Atk += DungeonLv * 5;
-                monsters[i].Health += DungeonLv * 3;
+                monsters[i].Atk += player.dungeonLevel * 5;
+                monsters[i].Health += player.dungeonLevel * 3;
             }
         }
         public void ScreenText(string tag)
