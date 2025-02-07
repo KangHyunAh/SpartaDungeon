@@ -15,7 +15,7 @@ namespace SpartaDungeon
 
             while (true)
             {
-                dataManager.SaveData(user, gm.equipItemList);
+                dataManager.SaveData(user, gm);
 
                 Console.Clear();
 

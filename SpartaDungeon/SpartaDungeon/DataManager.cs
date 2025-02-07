@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using SpartaDungeon.PotionNamespace;
 
 namespace SpartaDungeon
 {
@@ -55,7 +56,7 @@ namespace SpartaDungeon
         }
 
         // 저장
-        public void SaveData(Player user, List<EquipItem> items)
+        public void SaveData(Player user, GameManager gm)
         {
             // 폴더 주소 설정
             DirectoryInfo folder = new DirectoryInfo(folderPath);
@@ -78,10 +79,16 @@ namespace SpartaDungeon
             // 키값 : 아이템 이름, 밸류 값 : 아이템 갯수, 장착 여부(정수로 변환)
             Dictionary<string, int[]> itemDict = new Dictionary<string, int[]>();
 
-            // 아이템 이름과 보유갯수, 장착여부
-            foreach (var item in items)
+            // 장비 아이템 이름과 보유갯수, 장착여부
+            foreach (var item in gm.equipItemList)
             {
                 itemDict.Add(item.Name, [item.ItemCount, Convert.ToInt32(item.isEquip)]);
+            }
+
+            // 소비 아이템 이름과 보유갯수
+            foreach (var item in gm.consumableItemsList)
+            {
+                itemDict.Add(item.Name, [item.ItemCount]);
             }
 
             // 아이템 정보 저장
@@ -94,7 +101,7 @@ namespace SpartaDungeon
         }
 
         // 불러오기
-        public Player LoadData(List<EquipItem> items)
+        public Player LoadData(GameManager gm)
         {
             Player loadCharacterData = new Player();
 
@@ -114,7 +121,7 @@ namespace SpartaDungeon
                 switch (selectNumber)
                 {
                     case 1:
-                        DataParsing(loadCharacterData,items);
+                        DataParsing(loadCharacterData,gm);
                         return loadCharacterData;
                     case 2:
                         loadCharacterData = CreateCharacter();
@@ -131,7 +138,7 @@ namespace SpartaDungeon
         }
 
         // 데이터 불러오기, 불러온 데이터 파싱
-        public void DataParsing(Player user,List<EquipItem> items)
+        public void DataParsing(Player user,GameManager gm)
         {
             string data = string.Empty;
 
@@ -191,12 +198,23 @@ namespace SpartaDungeon
 
             // 참조할 아이템을 담을 인스턴스
             EquipItem tempItem = new EquipItem("", EquipType.Weapon, 1, 1, 1, "", 1);
+            ConsumableItem tempConsumable = new ConsumableItem("", PotionType.Health, 1, "", 1);
 
             foreach (KeyValuePair<string, int[]> item in itemDict)
             {
+                string name = item.Key;
+
+                // 포션이라면 갯수 불러온 후 다음 루프로 이동
+                if(name.Contains("HP") || name.Contains("MP"))
+                {
+                    tempConsumable = gm.consumableItemsList.Where(i => i.Name == item.Key).OfType<ConsumableItem>().FirstOrDefault();
+                    tempConsumable.ItemCount = item.Value[0];
+                    continue;
+                }
+
                 // equipItemList 안에서 item의 키값(아이템 이름)과 일치하는 아이템을 찾아 참조 및 값 변경
                 // 일치하는 아이템이 없다면 null 반환
-                tempItem = items.Where(i => i.Name == item.Key).OfType<EquipItem>().FirstOrDefault();
+                tempItem = gm.equipItemList.Where(i => i.Name == item.Key).OfType<EquipItem>().FirstOrDefault();
 
                 // 일치하는 아이템 없을 시 다음 루프로
                 if (tempItem == null)
