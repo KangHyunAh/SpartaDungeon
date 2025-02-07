@@ -46,13 +46,24 @@ namespace SpartaDungeon
             Console.WriteLine($"Lv. {player.level} {player.name} ({player.chad})");
             Console.WriteLine($"Hp. {player.healthPoint}");
             Console.WriteLine();
-            Console.WriteLine("0. 다음");
+            Console.WriteLine("1. 스킬");
+            Console.WriteLine("2. 기본 공격");
             Console.WriteLine();
-            int input = Utility.GetInput(0, 0);
-            if (input == 0)
+            int input = Utility.GetInput(1, 2);
+            if(input ==1)
+            {
+                SkillBattle();
+            }
+            else if (input == 2)
                 TargetBattle();
         }
+        public void SkillBattle()
+        {
+            switch(player.chad)
+            {
 
+            }
+        }
         public void TargetBattle()
         {
             ScreenText("Battle!!");
