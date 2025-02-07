@@ -12,6 +12,7 @@ namespace SpartaDungeon
         public void Lobby(GameManager gm)
         {
             DataManager dataManager = new DataManager();
+            Dungeon dungeonManager = new Dungeon();
 
             while (true)
             {
@@ -43,7 +44,7 @@ namespace SpartaDungeon
                         gm.inventoryAndShop.ShopScreen(gm.player, gm.equipItemList);
                         break;
                     case 4:
-                        // 던전 이동 함수
+                        dungeonManager.Battle(gm.player, gm.monsters, gm.monsterList, gm.bossmonsterList);
                         break;
                     case 5:
                         gm.player.Rest();
