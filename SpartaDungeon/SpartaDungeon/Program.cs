@@ -10,13 +10,14 @@ namespace SpartaDungeon
         {
             GameManager gm = new GameManager();
             
-
+            StartScene start = new StartScene();
+            start.Lobby(gm.player, gm);
         }
     }
 
     class GameManager
     {
-        Player player = new Player();
+        public Player player = new Player();
         public List<EquipItem> equipItemList;
         public GameManager()        //게임매니저 생성자
         {

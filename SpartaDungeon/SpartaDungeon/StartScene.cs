@@ -40,7 +40,7 @@ namespace SpartaDungeon
                         gm.InventoryScreen();
                         break;
                     case 3:
-                        gm.ShopScreen(); // 미완성
+                        gm.ShopScreen(); 
                         break;
                     case 4:
                         // 던전 이동 함수

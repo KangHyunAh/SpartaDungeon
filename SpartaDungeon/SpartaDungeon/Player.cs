@@ -73,7 +73,7 @@ namespace SpartaDungeon
                     gold = gold - 100;
                     healthPoint = maxhealthPoint + equipMaxhealthPoint;
                     Console.WriteLine("현재 골드 : " + gold + " G");
-                    Console.WriteLine("현재 체력 : " + healthPoint + equipMaxhealthPoint);
+                    Console.WriteLine("현재 체력 : " + (healthPoint + equipMaxhealthPoint));
                     Console.WriteLine("0. 나가기");
                     if (Utility.GetInput(0, 0) == 0)
                     {
