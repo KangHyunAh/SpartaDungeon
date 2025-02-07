@@ -11,6 +11,7 @@ namespace SpartaDungeon
             GameManager gm = new GameManager();
             
             StartScene start = new StartScene();
+            gm.player = new DataManager().LoadData(gm.equipItemList);
             start.Lobby(gm.player, gm);
         }
     }
