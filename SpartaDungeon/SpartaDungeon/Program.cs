@@ -73,7 +73,7 @@ namespace SpartaDungeon
                 new Monster(2,"two",2,2,2),
                 new Monster(3,"three",3,3,3),
             };
-            monsterList = new List<Monster>
+            bossmonsterList = new List<Monster>
             {
                 new Monster(10,"10",10,10,10),
                 new Monster(11,"11",11,11,11),
