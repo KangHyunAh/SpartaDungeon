@@ -153,7 +153,7 @@ namespace SpartaDungeon
                                     Console.WriteLine("1.사용     2.취소");
                                     switch (Utility.GetInput(1, 2))
                                     {
-                                       case 1: /*gm.consumableItemsList[i].Use();*/ break;
+                                       case 1: /*gm.consumableItemsList[i].Use(gm.player);*/ break;
                                         case 2: ConsumableItemInventoryScreen(gm); break;
                                     }
                                     
