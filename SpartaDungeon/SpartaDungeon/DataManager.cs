@@ -18,7 +18,7 @@ namespace SpartaDungeon
         // 캐릭터 생성
         public Player CreateCharacter()
         {
-            Player user = new Player();
+            Player player = new Player();
 
             while (true)
             {
@@ -52,12 +52,12 @@ namespace SpartaDungeon
                     }
                 }
                 Console.Clear();
-                user.ChadSelect();
-                user.name = name;
+                player.ChadSelect();
+                player.name = name;
 
-                SkillManager.SkillInit(user.chad, user);
+                SkillManager.SkillInit(player);
 
-                return user;
+                return player;
             }
         }
 
@@ -140,7 +140,7 @@ namespace SpartaDungeon
                 loadCharacterData = CreateCharacter();
             }
 
-            SkillManager.SkillInit(loadCharacterData.name, loadCharacterData);
+            SkillManager.SkillInit(loadCharacterData);
 
             return loadCharacterData;
         }
