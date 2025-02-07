@@ -186,8 +186,9 @@ namespace SpartaDungeon
             Console.WriteLine($"Hp. {EnterHp} => {player.healthPoint}");
             monsters.Clear();
             Console.WriteLine();
-            Console.WriteLine("0. 다음");
+            Console.WriteLine("0. 메뉴로");
             Console.WriteLine();
+            Utility.GetInput(0, 0);
         }
 
         public void MonsterSpawn(List<Monster> monsterList, int spawnNum)
