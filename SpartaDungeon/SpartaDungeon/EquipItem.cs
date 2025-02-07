@@ -46,29 +46,30 @@ namespace SpartaDungeon
         }
         public void DisplayEquipItem()
         {
-            Console.Write($"[E]{Name,-8}|");
+            Console.WriteLine($"[E]{Name,-8}|{Description}");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
-            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
-            Console.WriteLine($"{Description}");
+            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}");
+            Console.WriteLine();
         }
-        public void DisplayinventoryItem()    //true면 판매가도표시
+        public void DisplayinventoryItem() 
         {
-            Console.Write($"   {Name,-8}|배낭 안 소지수{ItemCount,-2}|");
+            Console.WriteLine($"{Name,-8}| {Description}");
+            Console.Write($"   배낭 안 소지수 {ItemCount,-2}|");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
             if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
-            Console.WriteLine($"{Description}");
+            Console.WriteLine() ;
         }
         public void DisplayShopItem(bool isSale) //true일경우 판매가 표시 false경우 구매가 표시
         {
-            Console.Write($"   {Name,-8}|");
-            Console.Write(!isSale?$"가격 {Cost,5}":$"판매가 {Cost/2,-5}");
-            Console.Write($"|배낭 안 소지수{ItemCount,-2}");
+            Console.WriteLine($"{Name,-8}| {Description}");
+            Console.Write(!isSale?$"    가격 {Cost,5}":$"\t판매가 {Cost/2,-5}");
+            Console.Write($"|배낭 안 소지수{ItemCount,-2}|");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
             if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
-            Console.WriteLine($"{Description}");
+            Console.WriteLine();
         }
         
     }

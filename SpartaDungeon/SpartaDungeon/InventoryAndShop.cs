@@ -90,6 +90,8 @@ namespace SpartaDungeon
                 }
             }
         }
+
+
         public int DisplayInventory(List<EquipItem> equipItemList, bool hasNum, bool isSaleScreen)   //인벤토리 목록 표시하기 (true 앞숫자 O, false 앞숫자 X), 판매창일경우 True
         {
             int index = 0;
@@ -112,6 +114,8 @@ namespace SpartaDungeon
             }
             return index;
         }
+
+
         public void ShopScreen(Player player,List<EquipItem> equipItemList)
         {
             Console.Clear();

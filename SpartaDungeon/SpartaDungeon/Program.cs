@@ -48,7 +48,11 @@ namespace SpartaDungeon
             {
                 new ConsumableItem("하급 HP회복 포션",PotionType.Health,50,"소량의 HP를 회복시켜주는 약이다",200),
                 new ConsumableItem("중급 HP회복 포션",PotionType.Health,100,"적당한 HP를 회복시켜주는 약이다",500),
-                new ConsumableItem("상급 HP회복 포션",PotionType.Health,200,"많은양의 HP를 회복시켜주는 약이다",1000)
+                new ConsumableItem("상급 HP회복 포션",PotionType.Health,200,"많은양의 HP를 회복시켜주는 약이다",1000),
+                //new ConsumableItem("하급 MP회복 포션",PotionType.Mana,20,"소량의 MP를 회복시켜주는 약이다",200),
+                //new ConsumableItem("중급 MP회복 포션",PotionType.Mana,50,"적당한 MP를 회복시켜주는 약이다",500),
+                //new ConsumableItem("상급 MP회복 포션",PotionType.Mana,100,"많은양의 MP를 회복시켜주는 약이다",1000)
+
             };
             
         }
