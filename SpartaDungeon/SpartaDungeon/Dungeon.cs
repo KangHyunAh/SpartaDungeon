@@ -58,9 +58,16 @@ namespace SpartaDungeon
         }
         public void SkillBattle()
         {
-            Console.WriteLine(player.chad);
-            Console.WriteLine(player.skills[0].Name);
-            Console.WriteLine(player.skills[0].Description);
+            ScreenText("스킬 선택");
+            for(int i = 0; i < player.skills.Count; i++)
+            {
+                Console.WriteLine($"{player.skills[i].Name}");
+                Console.WriteLine($"{player.skills[i].Description}") ;
+                Console.WriteLine();
+            }
+            //Console.WriteLine(player.chad);
+            //Console.WriteLine(player.skills[0].Name);
+            //Console.WriteLine(player.skills[0].Description);
             int input = Utility.GetInput(1, 2);
         }
         public void TargetBattle()
@@ -243,7 +250,6 @@ namespace SpartaDungeon
                     expSum += (monsters[i].Exp + player.dungeonLevel * 3);
                 }
 
-                player.dungeonLevel += 1;
                 player.dungeonLevel += 1;
                 Console.WriteLine("Victory");
 
