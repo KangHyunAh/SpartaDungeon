@@ -12,6 +12,7 @@ namespace SpartaDungeon
         public void Lobby(GameManager gm)
         {
             DataManager dataManager = new DataManager();
+            Dungeon dungeonManager = new Dungeon();
 
             while (true)
             {
@@ -25,7 +26,7 @@ namespace SpartaDungeon
                 Console.WriteLine("1. 캐릭터 정보");
                 Console.WriteLine("2. 인벤토리");
                 Console.WriteLine("3. 상점");
-                Console.WriteLine($"4. 던전 입장(현재 층)"); // (현재 층) 안에 현재 층수 표시
+                Console.WriteLine($"4. 던전 입장({gm.player.dungeonLevel} 층)");
                 Console.WriteLine("5. 휴식하기");
                 Console.WriteLine();
 
@@ -43,7 +44,7 @@ namespace SpartaDungeon
                         gm.inventoryAndShop.ShopScreen(gm);
                         break;
                     case 4:
-                        // 던전 이동 함수
+                        dungeonManager.Battle(gm.player, gm.monsters, gm.monsterList, gm.bossmonsterList);
                         break;
                     case 5:
                         gm.player.Rest();

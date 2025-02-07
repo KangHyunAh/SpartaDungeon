@@ -33,12 +33,12 @@ namespace SpartaDungeon
 
             if(!(DungeonLv%3 == 0))
             {
-                MonsterSpawn(monsterList, random.Next(0, 5));
+                MonsterSpawn(monsterList, random.Next(1, 5));
             }
             else
             {
                 MonsterSpawn(bossMonsterList, 1);
-                MonsterSpawn(monsterList,random.Next(0,5));
+                MonsterSpawn(monsterList,random.Next(1,5));
             }
 
             for (int i = 0; i < monsters.Count; i++)
@@ -78,7 +78,10 @@ namespace SpartaDungeon
                 if (monsters[input - 1].Health < 0)
                     Console.WriteLine("이미 사망한 대상입니다.");
                 else
+                {
                     PlayerAttack(input - 1);
+                    break;
+                }
             }
 
         }
@@ -125,19 +128,32 @@ namespace SpartaDungeon
         {
             ScreenText("Battle!!");
 
-            int playerHp = player.healthPoint;
+
             foreach (Monster monster in monsters)
             {
+                int playerHp = player.healthPoint;
                 if (monster.Health > 0)
                 {
                     if(player.healthPoint > 0)
                     {
                         Console.WriteLine($"{monster.Name} 의 공격!");
-                        player.healthPoint -= monster.Atk;
-                        if(player.healthPoint > 0)
-                            Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {monster.Atk}][Hp {playerHp} => {player.healthPoint}]");
+                        int damage = monster.Atk - player.defensivePower;
+                        damage = Math.Max(0,damage);
+                        player.healthPoint -= damage;
+                        if(damage ==0)
+                            Console.WriteLine($"{monster.Name}의 공격을 {player.name}은(는) 높은 방어력으로 공격을 막아냈습니다.");
                         else
-                            Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {monster.Atk}][Hp {playerHp} => [Dead]");
+                        {
+                            if (player.healthPoint > 0)
+                                Console.WriteLine($"{monster.Name}은 {player.name}에게 공격을 맞췄습니다. [데미지 : {damage}][Hp {playerHp} => {player.healthPoint}]");
+                            else
+                            {
+                                player.healthPoint = 0;
+                                Console.WriteLine($"{monster.Name}은 {player.name}에게 공격을 맞췄습니다. [데미지 : {damage}][Hp {playerHp} => [Dead]");
+
+                            }
+                        }
+                        Console.WriteLine();
                     }
                 }
             }
@@ -162,21 +178,23 @@ namespace SpartaDungeon
 
             if (player.healthPoint > 0)
             {
-                int sum = 0;
+                int goldSum = 0;
+                int expSum = 0;
                 for (int i = 0; i < monsters.Count; i++)
                 {
-                    if (monsters[i].Health <= 0)
-                    {
-                        player.gold += monsters[i].Rewards;
-                        sum += monsters[i].Rewards;
-                    }
+                    player.gold += monsters[i].Rewards;
+                    goldSum += monsters[i].Rewards;
+                    player.exp += (monsters[i].Exp+DungeonLv*3);
+                    expSum += (monsters[i].Exp + DungeonLv * 3);
                 }
 
-                DungeonLv = +1;
+                DungeonLv += 1;
                 Console.WriteLine("Victory");
 
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
-                Console.WriteLine($"획득 골드 : {sum} G");
+                Console.WriteLine($"획득 경험치 {expSum}");
+                Console.WriteLine($"획득 골드 : {goldSum} G");
+                player.ControlLevel();
             }
             else
                 Console.WriteLine("You Lose");
