@@ -13,10 +13,9 @@ namespace SpartaDungeon
 
         Player player { get; set; }
         List<Monster> monsters { get; set; }
-
+        SkillManager skill {  get; set; }
 
         Random random = new Random();
-
 
         public void Battle(Player _player, List<Monster> _monsters, List<Monster> monsterList,List<Monster> bossMonsterList)
         {
@@ -46,13 +45,31 @@ namespace SpartaDungeon
             Console.WriteLine($"Lv. {player.level} {player.name} ({player.chad})");
             Console.WriteLine($"Hp. {player.healthPoint}");
             Console.WriteLine();
-            Console.WriteLine("0. 다음");
+            Console.WriteLine("1. 스킬");
+            Console.WriteLine("2. 기본 공격");
             Console.WriteLine();
-            int input = Utility.GetInput(0, 0);
-            if (input == 0)
+            int input = Utility.GetInput(1, 2);
+            if(input ==1)
+            {
+                SkillBattle();
+            }
+            else if (input == 2)
                 TargetBattle();
         }
-
+        public void SkillBattle()
+        {
+            ScreenText("스킬 선택");
+            for(int i = 0; i < player.skills.Count; i++)
+            {
+                Console.WriteLine($"{player.skills[i].Name}");
+                Console.WriteLine($"{player.skills[i].Description}") ;
+                Console.WriteLine();
+            }
+            //Console.WriteLine(player.chad);
+            //Console.WriteLine(player.skills[0].Name);
+            //Console.WriteLine(player.skills[0].Description);
+            int input = Utility.GetInput(1, 2);
+        }
         public void TargetBattle()
         {
             ScreenText("Battle!!");
@@ -233,7 +250,6 @@ namespace SpartaDungeon
                     expSum += (monsters[i].Exp + player.dungeonLevel * 3);
                 }
 
-                player.dungeonLevel += 1;
                 player.dungeonLevel += 1;
                 Console.WriteLine("Victory");
 
