@@ -161,8 +161,8 @@ namespace SpartaDungeon
                 user.gold = int.Parse(playerData["gold"].ToString());
             }
             // 오류 발생 시 캐릭터 생성으로 이동
-            catch 
-            { 
+            catch
+            {
                 Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다.");
                 Console.WriteLine($"캐릭터 생성으로 이동합니다.");
                 Thread.Sleep(1000);
@@ -187,23 +187,24 @@ namespace SpartaDungeon
 
             int num = 0;
 
-            foreach(KeyValuePair<string, int[]> item in itemDict)
-            {
-                if(item.Key == items[num].Name)
-                {
-                    items[num].ItemCount = item.Value[0];
-                    bool temp = Convert.ToBoolean(item.Value[1]);
-                    if(temp)
-                    {
-                        user.equipStrikePower += items[num].Atk;
-                        user.equipDefensivePower += items[num].Def;
-                        user.equipMaxhealthPoint += items[num].MaxHp;
-                    }
-                    items[num].isEquip = temp;
-                }
+            EquipItem tempItem = new EquipItem("", EquipType.Weapon, 1, 1, 1, "", 1);
 
-                num++;
+            foreach (KeyValuePair<string, int[]> item in itemDict)
+            {
+                tempItem = items.Where(i => i.Name == item.Key).OfType<EquipItem>().FirstOrDefault();
+
+                tempItem.ItemCount = item.Value[0];
+                tempItem.isEquip = Convert.ToBoolean(item.Value[1]);
+
+                if (tempItem.isEquip)
+                {
+                    user.equipStrikePower += tempItem.Atk;
+                    user.equipDefensivePower += tempItem.Def;
+                    user.equipMaxhealthPoint += tempItem.MaxHp;
+                }
             }
+
+
         }
     }
 }
