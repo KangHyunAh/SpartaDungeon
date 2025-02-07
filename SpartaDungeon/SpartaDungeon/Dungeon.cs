@@ -58,12 +58,10 @@ namespace SpartaDungeon
         }
         public void SkillBattle()
         {
-            foreach (Skill skill in player.skills )
-            {
-                Console.WriteLine(player.chad);
-                Console.WriteLine(skill.Name);
-                Console.WriteLine(skill.Description);
-            }
+            Console.WriteLine(player.chad);
+            Console.WriteLine(player.skills[0].Name);
+            Console.WriteLine(player.skills[0].Description);
+            int input = Utility.GetInput(1, 2);
         }
         public void TargetBattle()
         {
