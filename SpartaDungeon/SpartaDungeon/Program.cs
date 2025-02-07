@@ -10,7 +10,7 @@ namespace SpartaDungeon
         static void Main(string[] args)     //메인게임진행
         {
             GameManager gm = new GameManager();
-
+            gm.player = new DataManager().LoadData(gm.equipItemList);
             gm.startScene.Lobby(gm);
         }
     }
