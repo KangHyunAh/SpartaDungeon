@@ -78,7 +78,10 @@ namespace SpartaDungeon
                 if (monsters[input - 1].Health < 0)
                     Console.WriteLine("이미 사망한 대상입니다.");
                 else
+                {
                     PlayerAttack(input - 1);
+                    break;
+                }
             }
 
         }
