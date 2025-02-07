@@ -13,10 +13,9 @@ namespace SpartaDungeon
 
         Player player { get; set; }
         List<Monster> monsters { get; set; }
-
+        SkillManager skill {  get; set; }
 
         Random random = new Random();
-
 
         public void Battle(Player _player, List<Monster> _monsters, List<Monster> monsterList,List<Monster> bossMonsterList)
         {
@@ -59,9 +58,11 @@ namespace SpartaDungeon
         }
         public void SkillBattle()
         {
-            switch(player.chad)
+            foreach (Skill skill in player.skills )
             {
-
+                Console.WriteLine(player.chad);
+                Console.WriteLine(skill.Name);
+                Console.WriteLine(skill.Description);
             }
         }
         public void TargetBattle()
