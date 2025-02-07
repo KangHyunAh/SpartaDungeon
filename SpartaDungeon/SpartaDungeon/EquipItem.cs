@@ -131,7 +131,7 @@ namespace SpartaDungeon
 
             public void DisplayItem()
             {
-                Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} | 개수: {ItemCount}");
+                Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} |가격: {Cost} |개수: {ItemCount}");
             }
         }
         internal class Player
