@@ -188,6 +188,7 @@ namespace SpartaDungeon
                     expSum += (monsters[i].Exp + DungeonLv * 3);
                 }
 
+                player.dungeonLevel += 1;
                 DungeonLv += 1;
                 Console.WriteLine("Victory");
 
