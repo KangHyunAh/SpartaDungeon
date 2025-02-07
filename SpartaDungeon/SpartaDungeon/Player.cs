@@ -120,7 +120,77 @@ namespace SpartaDungeon
                 return;            
             }
         }
+   
+        public void ChadSelect() 
+        {
+            Console.WriteLine("직업을 선택합니다.");
+            Console.WriteLine("1. 나이트");
+            Console.WriteLine("방어 특화 직업으로, 동료를 지키는 든든한 기사입니다.");
+            Console.WriteLine("2. 검사");
+            Console.WriteLine("공격 특화 직업으로, 강력한 검으로 적을 처단합니다.");
+            Console.WriteLine("3. 광전사");
+            Console.WriteLine("체력 특화 직업으로, 수많은 적을 한번에 공격할 수 있습니다.");
+            Console.WriteLine("해당 숫자를 입력해 선택해주세요.");
+            Console.WriteLine("*주의");
+            Console.WriteLine("직업 선택 시 레벨, 경험치, 스탯이 초기화됩니다.");
+            Console.WriteLine("1. 나이트 \n2. 검사 \n3.광전사 \n0. 나가기");
 
+            if (Utility.GetInput(0, 3) == 0)
+            {
+                Console.WriteLine("창을 닫습니다.");
+                return;
+            }
+            else if (Utility.GetInput(0, 3) == 1)
+            {
+                Console.WriteLine("나이트를 선택하셨습니다.");
+                Console.WriteLine("초기화를 진행합니다.");
 
+                int level = 1;
+                string chad = "나이트";
+                int strikePower = 10;
+                int defensivePower = 10;
+                int maxhealthPoint = 100;
+                int healthPoint = 100;
+                int exp = 0;
+                int maxExp = 50;
+
+                Console.WriteLine("당신의 직업은 나이트입니다.");
+                return ;
+            }
+            else if (Utility.GetInput(0, 3) == 2)
+            {
+                Console.WriteLine("검사를 선택하셨습니다.");
+                Console.WriteLine("초기화를 진행합니다.");
+
+                int level = 1;
+                string chad = "검사";
+                int strikePower = 20;
+                int defensivePower = 5;
+                int maxhealthPoint = 100;
+                int healthPoint = 100;
+                int exp = 0;
+                int maxExp = 50;
+
+                Console.WriteLine("당신의 직업은 검사입니다.");
+                return;
+            }
+            else if (Utility.GetInput(0, 3) == 3)
+            {
+                Console.WriteLine("광전사를 선택하셨습니다.");
+                Console.WriteLine("초기화를 진행합니다.");
+
+                int level = 1;
+                string chad = "광전사";
+                int strikePower = 10;
+                int defensivePower = 5;
+                int maxhealthPoint = 200;
+                int healthPoint = 200;
+                int exp = 0;
+                int maxExp = 50;
+
+                Console.WriteLine("당신의 직업은 광전사입니다.");
+                return;
+            }
+        }
     }
 }
