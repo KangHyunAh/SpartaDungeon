@@ -128,7 +128,7 @@ namespace SpartaDungeon
                 {
                     case 1:
                         DataParsing(loadCharacterData, gm);
-                        return loadCharacterData;
+                        break;
                     case 2:
                         loadCharacterData = CreateCharacter();
                         break;
