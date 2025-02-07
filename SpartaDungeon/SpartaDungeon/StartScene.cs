@@ -9,7 +9,7 @@ namespace SpartaDungeon
 {
     internal class StartScene
     {
-        public void Lobby(Player user, GameManager gm)
+        public void Lobby(GameManager gm)
         {
             DataManager dataManager = new DataManager();
 
@@ -34,19 +34,19 @@ namespace SpartaDungeon
                 switch (selectNumber)
                 {
                     case 1:
-                        user.CharacterInformation();
+                        gm.player.CharacterInformation();
                         break;
                     case 2:
-                        gm.InventoryScreen();
+                        gm.inventoryAndShop.InventoryScreen(gm.player, gm.equipItemList);
                         break;
                     case 3:
-                        gm.ShopScreen(); 
+                        gm.inventoryAndShop.ShopScreen(gm.player, gm.equipItemList);
                         break;
                     case 4:
                         // 던전 이동 함수
                         break;
                     case 5:
-                        user.Rest();
+                        gm.player.Rest();
                         break;
                 }
             }
