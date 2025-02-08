@@ -14,19 +14,23 @@ namespace SpartaDungeon
         public int Atk { get; set; }
         public int Rewards { get; set; }
         public int Exp { get; set; }
-
-        public Monster(int lv, string name, int health, int atk, int rewards, int exp)
+        public string MonsterType { get; set; }
+        
+        public Monster(int lv, string name, int health, int atk, int rewards, int exp, string monstertype)
         {
-            Lv = lv;
+            int random = new Random().Next(0, 10);
+            Lv = lv + random;
             Name = name;
-            Health = health;
-            Atk = atk;
+            Health = health + random * 10;
+            health = Math.Max(health, 0);
+            Atk = atk + random*2;
             Rewards = rewards;
             Exp = exp;
+            MonsterType = monstertype;
         }
         public Monster Spawn()
         {
-            return new Monster(Lv, Name, Health, Atk, Rewards, Exp);
+            return new Monster(Lv, Name, Health, Atk, Rewards, Exp, MonsterType);
         }
     }
 }

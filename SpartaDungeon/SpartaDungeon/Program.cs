@@ -73,15 +73,14 @@ namespace SpartaDungeon
 
             monsterList = new List<Monster>
             {
-                new Monster(1,"잡몹1",1,1,1,1),
-                new Monster(2,"잡몹2",2,2,2,2),
-                new Monster(3,"잡몹3",3,3,3,3),
+                new Monster(1,"나이트의 흔적",1,10,1,1,"나이트"),
+                new Monster(1,"검사의 흔적",1,10,1,1,"검사"),
+                new Monster(1,"광전사의 흔적",1,10,1,1,"광전사"),
+                new Monster(1,"미믹",1,1,1,1,"보너스")
             };
             bossmonsterList = new List<Monster>
             {
-                new Monster(10,"보스1",10,10,10,10),
-                new Monster(11,"보스2",11,11,11,11),
-                new Monster(12,"보스3",12,12,12,12),
+                new Monster(10,"영웅의 기억",10,100,10,10,"보스"),
             };
 
             QuestManager.AddQuest(new Quest(1, "잡몹 퇴치", "5마리의 잡몹을 잡으세요"));
