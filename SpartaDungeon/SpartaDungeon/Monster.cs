@@ -27,6 +27,17 @@ namespace SpartaDungeon
             Rewards = rewards;
             Exp = exp;
             MonsterType = monstertype;
+            if(monstertype == "이벤트")
+            {
+                Lv = lv;
+                Name = name;
+                Health = health;
+                health = Math.Max(health, 0);
+                Atk = atk;
+                Rewards = rewards;
+                Exp = exp;
+                MonsterType = monstertype;
+            }
         }
         public Monster Spawn()
         {

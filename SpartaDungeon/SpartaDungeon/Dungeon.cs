@@ -408,7 +408,7 @@ namespace SpartaDungeon
             for (int i = 0; i < spawnNum; i++)
             {
                 Monster monster = monsterList[random.Next(0, monsterList.Count)];
-                if (monsterList[i].MonsterType != "보너스")
+                if (monsterList[i].MonsterType != "이벤트")
                 {
                     monsters.Add(monster.Spawn());
                     monsters[i].Atk += player.dungeonLevel * 5;
