@@ -445,6 +445,22 @@ namespace SpartaDungeon
                 Console.WriteLine($"획득 경험치 {expSum}");
                 Console.WriteLine($"획득 골드 : {goldSum} G");
 
+                foreach (var monster in gm.monsters)
+                {
+                    if (monster.MonsterType == "보스")
+                    {
+                        List<EquipItem> bossdrop = new List<EquipItem>();
+                        foreach (EquipItem item in gm.equipItemList)
+                        {
+                            if (item.IsBossItem)
+                                bossdrop.Add(item);
+                        }
+                        int dropnum = random.Next(0, bossdrop.Count);
+                        bossdrop[dropnum].ItemCount += 1;
+                        Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 {bossdrop[dropnum].Name}을 획득하였습니다.");
+                    }
+                }
+
                 gm.player.ControlLevel();
             }
             else
@@ -460,11 +476,19 @@ namespace SpartaDungeon
 
             Console.WriteLine();
             Console.WriteLine("0. 메뉴로");
-            Console.WriteLine("1. 다음층으로");
-            Console.WriteLine();
-            int input = Utility.GetInput(0, 1);
-            if (input == 1)
-                Battle(gm);
+            if (gm.player.healthPoint > 0)
+            {
+                Console.WriteLine("1. 다음층으로");
+                Console.WriteLine();
+                int input = Utility.GetInput(0, 1);
+                if (input == 1)
+                    Battle(gm);
+            }
+            else
+            {
+                Console.WriteLine();
+                int input = Utility.GetInput(0, 0);
+            }
 
         }
 
