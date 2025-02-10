@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace SpartaDungeon
         {
             while (true)
             {
-                ScreenText("Battle!!");
+                ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
                 Console.WriteLine("[몬스터 정보]");
                 Console.WriteLine();
 
@@ -431,7 +432,7 @@ namespace SpartaDungeon
                     expSum += (gm.monsters[i].Exp + gm.player.dungeonLevel * 3);
                 }
 
-                gm.player.dungeonLevel += 1;
+                
                 Utility.ColorText(ConsoleColor.Yellow, "Victory");
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {gm.monsters.Count}마리를 잡았습니다.");
@@ -444,8 +445,17 @@ namespace SpartaDungeon
 
                 Console.WriteLine($"획득 경험치 {expSum}");
                 Console.WriteLine($"획득 골드 : {goldSum} G");
+                if (gm.player.dungeonLevel % 3 == 0)
+                {
+                    List<EquipItem> bossdrop = gm.equipItemList.Where(x => x.IsBossItem == true).ToList();
+                    int dropnum = random.Next(0, bossdrop.Count);
+                    bossdrop[dropnum].ItemCount += 1;
+                    Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 {bossdrop[dropnum].Name}을 획득하였습니다.");
+                    bossdrop.Clear();
 
+                }
                 gm.player.ControlLevel();
+                gm.player.dungeonLevel += 1;
             }
             else
                 Console.WriteLine("You Lose");
@@ -460,13 +470,23 @@ namespace SpartaDungeon
 
             Console.WriteLine();
             Console.WriteLine("0. 메뉴로");
-            Console.WriteLine("1. 다음층으로");
-            Console.WriteLine();
-            int input = Utility.GetInput(0, 1);
-            if (input == 1)
-                Battle(gm);
+            if (gm.player.healthPoint > 0)
+            {
+                Console.WriteLine("1. 다음층으로");
+                Console.WriteLine();
+                int input = Utility.GetInput(0, 1);
+                if (input == 1)
+                    Battle(gm);
+            }
+            else
+            {
+                Console.WriteLine();
+                int input = Utility.GetInput(0, 0);
+            }
 
         }
+
+        
 
         public void MonsterSpawn(List<Monster> monsterList, int spawnNum)
         {

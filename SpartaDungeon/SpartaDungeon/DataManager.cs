@@ -84,7 +84,7 @@ namespace SpartaDungeon
                 playerDataString = JsonConvert.SerializeObject(gm.player);
             }
             // 오류 발생 시
-            catch { Console.WriteLine("플레이어 데이터를 저장하는 도중 오류가 발생했습니다."); return; }
+            catch { Utility.ColorText(ConsoleColor.Red, "플레이어 데이터를 저장하는 중 오류가 발생했습니다."); return; }
 
             // 키값 : 아이템 이름, 밸류 값 : 아이템 갯수, 장착 여부(정수로 변환)
             Dictionary<string, int[]> itemDict = new Dictionary<string, int[]>();
@@ -108,7 +108,7 @@ namespace SpartaDungeon
             {
                 ItemDataString = JsonConvert.SerializeObject(itemDict);
             }
-            catch { Console.WriteLine("아이템 데이터를 저장하는 도중 오류가 발생했습니다."); return; }
+            catch { Utility.ColorText(ConsoleColor.Red, "아이템 데이터를 저장하는 중 오류가 발생했습니다."); return; }
 
             // 직렬화 한 데이터들을 담을 배열
             JArray jsonArr = new JArray();
@@ -121,6 +121,7 @@ namespace SpartaDungeon
             jsonArr.Add(playerJson);
             jsonArr.Add(itemJson);
 
+            // 암호화(인코딩)
             byte[] bytes = Encoding.UTF8.GetBytes(jsonArr.ToString());
             string encodingJson = Convert.ToBase64String(bytes);
 
@@ -142,7 +143,7 @@ namespace SpartaDungeon
                 Console.WriteLine();
                 Console.WriteLine("1. 불러오기");
                 Console.WriteLine("2. 처음부터 시작");
-                Console.Write(">> ");
+                Console.WriteLine();
 
                 int selectNumber = Utility.GetInput(1, 2);
 
@@ -179,12 +180,13 @@ namespace SpartaDungeon
             }
             catch (Exception e)
             {
-                Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다. {e.Message}");
+                Utility.ColorText(ConsoleColor.Red, $"세이브 데이터를 불러오는 중 오류가 발생했습니다. {e.Message}");
                 Console.WriteLine($"캐릭터 생성으로 이동합니다.");
                 Thread.Sleep(1000);
                 user = CreateCharacter();
             }
 
+            // 암호화 된 데이터 디코딩
             byte[] bytes = Convert.FromBase64String(data);
             string decoding = Encoding.UTF8.GetString(bytes);
 
@@ -215,7 +217,7 @@ namespace SpartaDungeon
             // 오류 발생 시 캐릭터 생성으로 이동
             catch
             {
-                Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다.");
+                Utility.ColorText(ConsoleColor.Red, $"세이브 데이터를 불러오는 중 오류가 발생했습니다.");
                 Console.WriteLine($"캐릭터 생성으로 이동합니다.");
                 Thread.Sleep(1000);
                 user = CreateCharacter();

@@ -9,46 +9,95 @@ namespace SpartaDungeon
     public class QuestManager
     {
         private Dictionary<int, Quest> quests = new Dictionary<int, Quest>();
-        private List<int> acceptedQuests = new List<int>();
+        private HashSet<int> acceptedQuests = new HashSet<int>();
+        private HashSet<int> completedQuests = new HashSet<int>();
 
         public void AddQuest( Quest quest)
         {
             if (!quests.ContainsKey(quest.Id))
             {
                 quests.Add(quest.Id, quest);
-                Console.WriteLine("$퀘스트 '{quest.Title}'추가됨.");
+                Console.WriteLine($"퀘스트 '{quest.Title}'추가됨.");
             }
         }
 
-        public void CompleteQuest(int questId)
+        public void UpdateQuestProgress(int questId, Monster monster)
         {
             if(quests.TryGetValue(questId, out Quest quest))
             {
-                quest.CompleteQuest();
+                quest.UpdateProgress(monster);
+
+                if (quest.IsCompleted)
+                {
+                    Player player = new Player();
+                    quest.Reward(player);
+                }
             }
             else
             {
-                Console.WriteLine("해당 ID의 퀘스트를 찾을 수 없음");
+                Console.WriteLine("퀘스트를 찾을 수 없습니다");
             }
         }
+
 
         public void ShowAllQuests()
         {
             foreach (var quest in quests.Values)
             {
-                Console.WriteLine($"[{(quest.IsCompleted ? "완료" : "진행 중")}] {quest.Title} - {quest.Description}");
+                string status;
+                if (completedQuests.Contains(quest.Id))
+                    status = "완료";
+                else if (acceptedQuests.Contains(quest.Id))
+                    status = "진행 중";
+                else
+                    status = "미수락";
+                
+                Console.WriteLine($"[{status}] {quest.Id}: {quest.Title} - {quest.Description}");
             }
         }
 
         public bool AcceptQuest(int questId)
         {
-            if (quests.TryGetValue(questId, out Quest quest) && !acceptedQuests.Contains(questId))
+            if (quests.TryGetValue(questId, out Quest quest))
             {
-                acceptedQuests.Add(questId);
-                Console.WriteLine($"[퀘스트 수락] {quest.Title}");
+                if (!acceptedQuests.Contains(questId))
+                {
+                    acceptedQuests.Add(questId);
+                    Console.WriteLine($"[퀘스트 수락] {quest.Title}");
+                    return true;
+                }
+
+                else
+                {
+                    Console.WriteLine("이미 수락했거나 완료한 퀘스트 입니다");
+                }
+            }
+           
+            return false;
+        }
+
+        public bool CompleteQuest(int questId, Player player)
+        {
+            if(acceptedQuests.Contains(questId) && !completedQuests.Contains(questId))
+            {
+                completedQuests.Add(questId);
+                acceptedQuests.Remove(questId);
+
+                Quest quest = quests[questId];
+
+                player.gold += quest.RewardGold;
+                player.exp += quest.RewardExp;
+
+                Console.WriteLine($"[퀘스트 완료] {quests[questId].Title} 퀘스트를 완료했습니다!");
+                Console.WriteLine($"보상: {quest.RewardGold} 골드, {quest.RewardExp} 경험치 획득!");
                 return true;
             }
-            return false;
+
+            else
+            {
+                Console.WriteLine("퀘스트를 완료할 수 없습니다. (수락하지 않았거나 이미 완료한 퀘스트)");
+                return false;
+            }
         }
     }
 }
