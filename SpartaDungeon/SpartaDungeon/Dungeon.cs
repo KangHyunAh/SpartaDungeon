@@ -450,15 +450,11 @@ namespace SpartaDungeon
                 {
                     if (monster.MonsterType == "보스")
                     {
-                        List<EquipItem> bossdrop = new List<EquipItem>();
-                        foreach (EquipItem item in gm.equipItemList)
-                        {
-                            if (item.IsBossItem)
-                                bossdrop.Add(item);
-                        }
+                        List<EquipItem> bossdrop = gm.equipItemList.Where(x => x.IsBossItem == true).ToList();
                         int dropnum = random.Next(0, bossdrop.Count);
                         bossdrop[dropnum].ItemCount += 1;
                         Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 {bossdrop[dropnum].Name}을 획득하였습니다.");
+                        bossdrop.Clear();
                     }
                 }
 
