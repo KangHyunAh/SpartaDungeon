@@ -80,7 +80,6 @@ namespace SpartaDungeon
             Console.WriteLine("체력 : " + healthPoint+ " / " + (maxhealthPoint + equipMaxhealthPoint) + "(" + maxhealthPoint + "+ " +equipMaxhealthPoint+")");
             Console.WriteLine("마나 : " + manaPoint + " / " + maxManaPoint+")");
             Console.WriteLine("소유 골드 : " + gold + " G");
-            //DisplayHpMpBar();
             Console.WriteLine("0. 나가기");
             if(Utility.GetInput(0, 0) == 0)
             {
