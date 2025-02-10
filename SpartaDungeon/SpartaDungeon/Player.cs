@@ -47,22 +47,23 @@ namespace SpartaDungeon
                 }
             }
         }
-        public void DisplayHpMpBar()    //체력,마나 막대 표시
+        public void DisplayHpBar()    //체력,마나 막대 표시
         {
-            Console.Write($"HP {healthPoint,4}/{(maxhealthPoint+equipMaxhealthPoint),4} ");
+            Console.Write($"HP {healthPoint,4}/{(maxhealthPoint+equipMaxhealthPoint),4}({maxhealthPoint}+{equipMaxhealthPoint})\n");
             for (int i = 0; i < 10; i++)
             {
                 if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Green, "■",Text.Write);
                 else Console.Write("□");
             }
-            Console.WriteLine();
-            Console.Write($"MP {manaPoint,4}/{maxManaPoint,4} ");
+        }
+        public void DisplayMpBar()    //체력,마나 막대 표시
+        {
+            Console.Write($"MP {manaPoint,4}/{maxManaPoint,4} \n");
             for (int i = 0; i < 10; i++)
             {
-                if (i < (float)manaPoint / maxManaPoint  * 10) Utility.ColorText(ConsoleColor.Blue, "■",Text.Write);
+                if (i < (float)manaPoint / maxManaPoint * 10) Utility.ColorText(ConsoleColor.Blue, "■", Text.Write);
                 else Console.Write("□");
             }
-            Console.WriteLine();
         }
 
         public void CharacterInformation()//상태창 
@@ -70,15 +71,14 @@ namespace SpartaDungeon
             Console.Clear();
             Console.WriteLine("캐릭터의 정보를 표시합니다.");
             Console.WriteLine("");
-
             Console.WriteLine("Lv. "+ level);
-            Console.WriteLine("경험치 : " + exp +" / "+maxExp);
             Console.WriteLine("이름 : " + name);
             Console.WriteLine("직업 : "+ chad);
             Console.WriteLine("공격력 : " + (strikePower+equipStrikePower) + "(" + strikePower +" + "+ equipStrikePower + ")");
             Console.WriteLine("방어력 : " + (defensivePower+equipDefensivePower) + "(" + defensivePower+" + " + equipDefensivePower +")");
-            Console.WriteLine("체력 : " + healthPoint+ " / " + (maxhealthPoint + equipMaxhealthPoint) + "(" + maxhealthPoint + "+ " +equipMaxhealthPoint+")");
-            Console.WriteLine("마나 : " + manaPoint + " / " + maxManaPoint);
+            DisplayHpBar(); Console.WriteLine();
+            DisplayMpBar(); Console.WriteLine();
+            Console.WriteLine("경험치 : " + exp + " / " + maxExp);
             Console.WriteLine("소유 골드 : " + gold + " G");
             Console.WriteLine("0. 나가기");
             if(Utility.GetInput(0, 0) == 0)
