@@ -54,13 +54,25 @@ namespace SpartaDungeon
                 Console.WriteLine();
                 int input = Utility.GetInput(0, 3);
                 if (input == 0)
+                {
                     gm.monsters.Clear();
+                    break;
+                }
                 else if (input == 1)
+                {
                     SkillChoiceBattle();
+                    break;
+                }
                 else if (input == 2)
+                {
                     TargetBattle();
+                    break;
+                }
                 else
+                {
                     gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                    break;
+                }
             }
             
         }
@@ -450,8 +462,8 @@ namespace SpartaDungeon
                 Monster monster = monsterList[random.Next(0, monsterList.Count)];
                 gm.monsters.Add(monster.Spawn());
                 gm.monsters[i].Lv += gm.player.dungeonLevel;
-                gm.monsters[i].Atk += gm.player.dungeonLevel * 5;
-                gm.monsters[i].Health += gm.player.dungeonLevel * 3;
+                gm.monsters[i].Atk += gm.player.dungeonLevel * 3;
+                gm.monsters[i].Health += gm.player.dungeonLevel * 5;
             }
         }
         public void ScreenText(string tag)

@@ -36,6 +36,8 @@ namespace SpartaDungeon
                 Lv = lv + random;
                 Health = health + random * 3;
                 health = Math.Max(health, 0);
+                Rewards += Lv * 100;
+                Exp += Lv * 5;
                 Atk = atk + random ;
             }
         }
