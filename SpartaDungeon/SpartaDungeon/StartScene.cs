@@ -72,7 +72,8 @@ namespace SpartaDungeon
                 Console.WriteLine("====[퀘스트 목록]====");
                 gm.QuestManager.ShowAllQuests();
                 Console.WriteLine();
-                Console.WriteLine("퀘스트를 수락하려면 ID를 입력하세요.(0 입력시 돌아가기)");
+                Console.WriteLine("퀘스트를 수락하려면 ID를 입력하세요.");
+                Console.WriteLine("0. 나가기");
 
                 int questID = Utility.GetInput(0, 99);
                 if (questID == 0)
