@@ -12,8 +12,8 @@ namespace SpartaDungeon
     internal class DataManager
     {
         private const string folderPath = "./Save";            // 세이브파일이 존재할 폴더의 위치
-        private const string filePath = "./Save/Data.json";     // 플레이어 정보 세이브파일의 위치
-        private const string itemfilePath = "./Save/ItemData.json";     // 아이템 정보 세이브파일의 위치
+        private const string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
+
 
         // 캐릭터 생성
         public Player CreateCharacter()
@@ -43,7 +43,7 @@ namespace SpartaDungeon
 
                     switch (selectNum)
                     {
-                        // 저장 선택 시 저장 후 Player 클래스 리턴
+                        // 저장 선택 시 직업 선택으로 이동
                         case 1:
                             break;
                         // 다시 설정을 선택 할 시 반복문 처음으로 이동
@@ -52,9 +52,12 @@ namespace SpartaDungeon
                     }
                 }
                 Console.Clear();
+
+                // 직업 선택 및 name변수에 저장한 이름 저장
                 player.ChadSelect();
                 player.name = name;
 
+                // 직업에 맞는 스킬 생성
                 SkillManager.SkillInit(player);
 
                 return player;
@@ -71,13 +74,13 @@ namespace SpartaDungeon
             if (!folder.Exists)
                 folder.Create();
 
+            string playerDataString = string.Empty;
+
             // 플레이어 정보 저장
             try
             {
                 // 데이터 직렬화 후 스트링으로 반환
-                string playerDataString = JsonConvert.SerializeObject(gm.player);
-                // 파일에 스트링 저장
-                File.WriteAllText(filePath, playerDataString);
+                playerDataString = JsonConvert.SerializeObject(gm.player);
             }
             // 오류 발생 시
             catch { Console.WriteLine("플레이어 데이터를 저장하는 도중 오류가 발생했습니다."); return; }
@@ -97,13 +100,28 @@ namespace SpartaDungeon
                 itemDict.Add(item.Name, [item.ItemCount]);
             }
 
+            string ItemDataString = string.Empty;
+
             // 아이템 정보 저장
             try
             {
-                string ItemDataString = JsonConvert.SerializeObject(itemDict);
-                File.WriteAllText(itemfilePath, ItemDataString);
+                ItemDataString = JsonConvert.SerializeObject(itemDict);
             }
             catch { Console.WriteLine("아이템 데이터를 저장하는 도중 오류가 발생했습니다."); return; }
+
+            // 직렬화 한 데이터들을 담을 배열
+            JArray jsonArr = new JArray();
+
+            // 문자열 JObject로 변환
+            JObject playerJson = JObject.Parse(playerDataString);
+            JObject itemJson = JObject.Parse(ItemDataString);
+
+            // 배열에 추가
+            jsonArr.Add(playerJson);
+            jsonArr.Add(itemJson);
+
+            // 문자열로 변환 후 파일 생성
+            File.WriteAllText(filePath, jsonArr.ToString());
         }
 
         // 불러오기
@@ -163,8 +181,12 @@ namespace SpartaDungeon
                 user = CreateCharacter();
             }
 
-            // 직렬화 된 문자열 직렬화 해제
-            JObject playerData = JObject.Parse(data);
+            // 문자열 JArray로 변환
+            JArray jsonArr = JArray.Parse(data);
+
+            // 배열에 있는 데이터 JObject로 변환하여 변수에 하나씩 넣어주기
+            JObject playerData = (JObject)jsonArr[0];
+            JObject itemData = (JObject)jsonArr[1];
 
             // 데이터 적용
             try
@@ -180,6 +202,8 @@ namespace SpartaDungeon
                 user.exp = int.Parse(playerData["exp"].ToString());
                 user.maxExp = int.Parse(playerData["maxExp"].ToString());
                 user.dungeonLevel = int.Parse(playerData["dungeonLevel"].ToString());
+                user.manaPoint = int.Parse(playerData["manaPoint"].ToString());
+                user.maxManaPoint = int.Parse(playerData["maxManaPoint"].ToString());
             }
             // 오류 발생 시 캐릭터 생성으로 이동
             catch
@@ -190,19 +214,6 @@ namespace SpartaDungeon
                 user = CreateCharacter();
             }
 
-            try
-            {
-                data = File.ReadAllText(itemfilePath);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다. {e}");
-                Console.WriteLine($"캐릭터 생성으로 이동합니다.");
-                Thread.Sleep(1000);
-                user = CreateCharacter();
-            }
-
-            JObject itemData = JObject.Parse(data);
 
             // 불러온 데이터 딕셔너리로 변환
             Dictionary<string, int[]> itemDict = itemData.ToObject<Dictionary<string, int[]>>();
@@ -242,8 +253,6 @@ namespace SpartaDungeon
                     user.equipMaxhealthPoint += tempItem.MaxHp;
                 }
             }
-
-
         }
     }
 }
