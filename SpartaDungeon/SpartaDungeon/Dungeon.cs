@@ -123,9 +123,15 @@ namespace SpartaDungeon
                 {
                     int input = Utility.GetInput(0, monsters.Count);
                     if (input == 0 && useskill == true)
+                    {
                         SkillChoiceBattle();
+                        break;
+                    }
                     else if (input == 0 && useskill == false)
+                    {
                         ReadyBattle();
+                        break;
+                    }
                     else if (monsters[input - 1].Health < 0)
                         Console.WriteLine("이미 사망한 대상입니다.");
                     else if (useskill)
