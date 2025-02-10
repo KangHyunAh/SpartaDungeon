@@ -13,14 +13,16 @@ namespace SpartaDungeon
     public class Dungeon
     {
         private int EnterHp { get; set; }
+        public int ItemLimits {  get; set; }
         GameManager gm { get; set; }
         Random random = new Random();
 
+        //몬스터 스폰
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
-
+            ItemLimits = 2;
             if (!(gm.player.dungeonLevel % 3 == 0))
             {
                 MonsterSpawn(gm.monsterList, random.Next(1, 5));
@@ -49,27 +51,33 @@ namespace SpartaDungeon
                 Console.WriteLine("0. 도망가기");
                 Console.WriteLine("1. 스킬");
                 Console.WriteLine("2. 기본 공격");
-                Console.WriteLine("3. 인벤토리");
+                Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
                 Console.WriteLine();
-                int input = Utility.GetInput(0, 3);
-                if (input == 0)
+                while (true)
                 {
-                    gm.monsters.Clear();
-                    break;
-                }
-                else if (input == 1)
-                {
-                    SkillChoiceBattle();
-                    break;
-                }
-                else if (input == 2)
-                {
-                    TargetBattle();
-                    break;
-                }
-                else
-                {
-                    gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                    int input = Utility.GetInput(0, 3);
+                    if (input == 0)
+                    {
+                        gm.monsters.Clear();
+                        break;
+                    }
+                    else if (input == 1)
+                    {
+                        SkillChoiceBattle();
+                        break;
+                    }
+                    else if (input == 2)
+                    {
+                        TargetBattle();
+                        break;
+                    }
+                    else if (input == 3 && ItemLimits > 0)
+                    {
+                        ItemLimits--;
+                        gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                    }
+                    //else
+                    //    Console.WriteLine("최대치만큼 사용하였습니다.");
                 }
             }
 
