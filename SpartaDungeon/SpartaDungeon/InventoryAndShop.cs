@@ -17,6 +17,8 @@ namespace SpartaDungeon
             Console.WriteLine("인벤토리");
             Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{gm.player.gold} G");
             Console.WriteLine();
             Console.WriteLine("1.장비 아이템");
             Console.WriteLine("2.소비 아이템");
@@ -24,10 +26,11 @@ namespace SpartaDungeon
             Console.WriteLine();
             switch (Utility.GetInput(0, 2))
             {
-                case 0:  break;
+                case 0: break;
                 case 1: EquipScreen(); break;
                 case 2: ConsumableItemInventoryScreen(gm); break;
             }
+
 
             void EquipScreen()
             {
@@ -38,7 +41,7 @@ namespace SpartaDungeon
                 Console.WriteLine("[장비 아이템 목록]");
 
                 int index;
-                index = DisplayInventory(gm.equipItemList, true, false);     //인벤토리 목록 표시하기 (true 앞숫자존재)
+                index = DisplayEquipInventory(gm.equipItemList, true, false);     //인벤토리 목록 표시하기 (true 앞숫자존재)
 
                 Console.WriteLine();
                 Console.WriteLine("0.나가기");
@@ -71,14 +74,24 @@ namespace SpartaDungeon
                         {
                             index++;
                             if (index == input)
-                            {                                                                                                       //장비타입(부위)별 중복장착 방지
-                                if (gm.equipItemList.Any(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)) //선택 아이템의 장착타입과 같은 장착타입을 가지고 장착중인 장비가 존재한다면
-                                {                                                                                               //먼저 장착된 아이템 해제 = 소지수++ 및 장착여부 false
-                                    gm.equipItemList[gm.equipItemList.FindIndex(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)].ItemCount++;
-                                    gm.equipItemList[gm.equipItemList.FindIndex(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)].isEquip = false;
+                            {
+                                if (gm.equipItemList[i].JobLimit.Contains(gm.player.chad))
+                                {
+                                    if (gm.equipItemList.Any(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)) //장비타입(부위)별 중복장착 방지
+                                    {
+                                        gm.equipItemList[gm.equipItemList.FindIndex(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)].ItemCount++;
+                                        gm.equipItemList[gm.equipItemList.FindIndex(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)].isEquip = false;//먼저 장착된 아이템 해제 = 소지수++ 및 장착여부 false
+                                    }
+                                    gm.equipItemList[i].ItemCount--;
+                                    gm.equipItemList[i].isEquip = true;
                                 }
-                                gm.equipItemList[i].ItemCount--;
-                                gm.equipItemList[i].isEquip = true;
+                                else
+                                { 
+                                    Utility.ColorText(ConsoleColor.Red, "해당 장비를 착용할 수 없는 직업입니다."); 
+                                    Console.Write("아무키입력");
+                                    Console.ReadLine();
+                                    EquipScreen();
+                                }
                             }
                         }
                     }
@@ -89,7 +102,7 @@ namespace SpartaDungeon
         }
 
 
-        public int DisplayInventory(List<EquipItem> equipItemList, bool hasNum, bool isSaleScreen)   //인벤토리 목록 표시하기 (true 앞숫자 O, false 앞숫자 X), 판매창일경우 True
+        public int DisplayEquipInventory(List<EquipItem> equipItemList, bool hasNum, bool isSaleScreen)   //인벤토리 목록 표시하기 (true 앞숫자 O, false 앞숫자 X), 판매창일경우 True
         {
             int index = 0;
             for (int i = 0; i < equipItemList.Count; i++)
@@ -100,6 +113,7 @@ namespace SpartaDungeon
                     equipItemList[i].DisplayEquipItem();
                 }
             }
+            Console.WriteLine();
             Console.WriteLine();
             for (int i = 0; i < equipItemList.Count; i++)
             {
@@ -140,7 +154,7 @@ namespace SpartaDungeon
             {
                 case 0:InventoryScreen(gm);break;
                 default:
-                    {
+                {
                         index = 0;
                         for (int i = 0; i < gm.consumableItemsList.Count; i++)
                         {
@@ -153,15 +167,15 @@ namespace SpartaDungeon
                                     Console.WriteLine("1.사용     2.취소");
                                     switch (Utility.GetInput(1, 2))
                                     {
-                                       case 1: /*gm.consumableItemsList[i].Use(gm.player);*/ break;
-                                        case 2: ConsumableItemInventoryScreen(gm); break;
+                                       case 1: { /*gm.consumableItemsList[i].Use(gm.player);*/ConsumableItemInventoryScreen(gm); } break;
+                                       case 2: ConsumableItemInventoryScreen(gm); break;
                                     }
                                     
                                 }
                             }
 
                         }
-                    }
+                }
                     break;
             }
         }
@@ -207,7 +221,7 @@ namespace SpartaDungeon
                 {
                     for (int i = 0; i < gm.equipItemList.Count; i++)
                     {
-                        if (gm.equipItemList[i].Type == ItemType - 100-1)
+                        if ((gm.equipItemList[i].Type == ItemType - 100 - 1) && !gm.equipItemList[i].IsBossItem)
                         {
                             index++;
                             Console.Write($"{index,-2}.");
