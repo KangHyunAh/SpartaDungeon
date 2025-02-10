@@ -47,29 +47,29 @@ namespace SpartaDungeon
                 new EquipItem("청동 도끼", EquipType.Weapon, 10,0,0, "어디선가 사용됐던거 같은 도끼입니다. ",new string []{"나이트","검사","광전사" }, 1500,false),
                 new EquipItem("스파르타의 창", EquipType.Weapon, 20,0,0, "스파르타의 전사들이 사용했다는 전설의 창입니다. ",new string []{"나이트","검사","광전사" }, 2500,false),
                 new EquipItem("기사의 장창", EquipType.Weapon, 10,10,0, "기사들이 사용하는 크고묵직한 창입니다. ",new string []{"나이트"}, 2500,false),
-                new EquipItem("전사의 장검", EquipType.Weapon, 10,10,0, "길어서 다루는데 기술이 필요한 장검입니다. ",new string []{"나이트"}, 2500,false),
-                new EquipItem("광전사의 도끼", EquipType.Weapon, 10,10,0, "오로지 높은 공격력을 위한 도끼입니다. ",new string []{"나이트"}, 2500,false),
+                new EquipItem("전사의 장검", EquipType.Weapon, 15,15,0, "길어서 다루는데 기술이 필요한 장검입니다. ",new string []{"검사"}, 2500,false),
+                new EquipItem("광전사의 도끼", EquipType.Weapon, 20,0,0, "오로지 높은 공격력을 위한 도끼입니다. ",new string []{"광전사"}, 2500,false),
             //보조 목록 EquipType.SubWeapon
                 new EquipItem("나무방패", EquipType.SubWeapon, 0,2,0, "나무로 만들어진 기본적인 방패입니다. ",new string []{"나이트","검사","광전사" }, 500,false),
                 new EquipItem("강철방패", EquipType.SubWeapon, 0,5,0, "강철로 만들어진 튼튼한 방패입니다. ",new string []{"나이트","검사","광전사" }, 1500,false),
                 new EquipItem("타워 실드", EquipType.SubWeapon, 0,20,0, "몸전체를 가릴수있는 크고무거운 방패입니다. ",new string []{"나이트" }, 2500,false),
-                new EquipItem("베테랑 견갑", EquipType.SubWeapon, 0,10,0, "잘다루기만 하면 유용한 어깨 방어구입니다. ",new string []{"나이트" }, 2500,false),
-                new EquipItem("쌍수도끼", EquipType.SubWeapon, 0,10,0, "양손에 들고 찍습니다. 아픕니다. ",new string []{"나이트" }, 2500,false),
+                new EquipItem("베테랑 견갑", EquipType.SubWeapon, 5,10,0, "잘다루기만 하면 유용한 어깨 방어구입니다. ",new string []{"검사" }, 2500,false),
+                new EquipItem("쌍수도끼", EquipType.SubWeapon, 15,0,0, "양손에 들고 찍습니다. 아픕니다. ",new string []{"광전사" }, 2500,false),
             //머리 목록 EquipType.Head
                 new EquipItem("수련자의 헬멧", EquipType.Head, 0,1,0, "수련에 도움을 주는 헬멧입니다. ",new string []{"나이트","검사","광전사" }, 500,false),
                 new EquipItem("무쇠 투구", EquipType.Head, 0,3,0, "강철로 만들어져 튼튼한 투구입니다. ",new string []{"나이트","검사","광전사" }, 1500,false),
                 new EquipItem("스파르타의 투구", EquipType.Head, 0,5,0, "스파르타의 전사들이 사용했다는 전설의 투구입니다. ",new string []{"나이트","검사","광전사" }, 2500,false),
-                new EquipItem("보스1의 투구", EquipType.Head, 0,5,0, "보스1이 사용하던 투구입니다. ",new string []{"나이트","검사","광전사" }, 3000,true),
+                new EquipItem("보스1의 투구", EquipType.Head, 0,10,0, "보스1이 사용하던 투구입니다. ",new string []{"나이트","검사","광전사" }, 3000,true),
             //몸 목록 EquipType.Amor
                 new EquipItem("수련자의 갑옷", EquipType.Amor, 0,1,50, "수련에 도움을 주는 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 800,false),
                 new EquipItem("무쇠갑옷", EquipType.Amor, 0,3,100, "무쇠로 만들어져 튼튼한 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 2000,false),
                 new EquipItem("스파르타의 갑옷", EquipType.Amor, 0,5,200, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 3500,false),
-                new EquipItem("보스1의 갑옷", EquipType.Head, 0,5,0, "보스1이 사용하던 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 4000,true),
+                new EquipItem("보스1의 갑옷", EquipType.Head, 0,10,300, "보스1이 사용하던 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 4000,true),
             //신발 목록 EquipType.Boots
                 new EquipItem("수련자의 부츠", EquipType.Boots, 0,1,0, "수련에 도움을 주는 부츠입니다. ",new string []{"나이트","검사","광전사" }, 500,false),
                 new EquipItem("무쇠 각반", EquipType.Boots, 0,3,0, "무쇠로 만들어진 갑옷하의 입니다. ",new string []{"나이트","검사","광전사" }, 1500,false),
                 new EquipItem("스파르타 각반", EquipType.Boots, 0,5,0, "스파르타의 전사들이 사용했다는 전설의 각반입니다. ",new string []{"나이트","검사","광전사" }, 2500,false),
-                new EquipItem("보스1의 각반", EquipType.Head, 0,5,0, "보스1이 사용하던 각반입니다. ",new string []{"나이트","검사","광전사" }, 3000,true),
+                new EquipItem("보스1의 각반", EquipType.Head, 0,10,0, "보스1이 사용하던 각반입니다. ",new string []{"나이트","검사","광전사" }, 3000,true),
 
             };
 
