@@ -49,21 +49,23 @@ namespace SpartaDungeon
         }
         public void DisplayEquipItem()
         {
-            Console.WriteLine($"[E]{Name,-8} |"+(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]") +$" |{Description}");
+            Console.Write("[E]"); Utility.RealTab($"{Name}", true, 16);Console.Write("|");Utility.RealTab(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]", true, 12);Console.Write($"|{Description}\n");
+            //Console.WriteLine($"[E]{Name,-8} |"+(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]") +$" |{Description}");
             Console.Write("\t");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
-            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}");
+            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
             Console.WriteLine();
         }
         public void DisplayinventoryItem() 
         {
-            Console.WriteLine($"{Name,-8}| {Description}");
-            Console.Write($"   소지 개수 {ItemCount,-2}|");
+            Utility.RealTab($"{Name}", true, 14); Console.Write($"|{Description}\n");
+            Console.Write($"   소지 {ItemCount,-2}개|");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
             if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
             Console.WriteLine() ;
+            Console.WriteLine();
         }
         public void DisplayShopItem(bool isSale) //true일경우 판매가 표시 false경우 구매가 표시
         {
