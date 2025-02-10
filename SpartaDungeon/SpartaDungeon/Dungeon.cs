@@ -78,10 +78,15 @@ namespace SpartaDungeon
         public void SkillChoiceBattle()
         {
             ScreenText("스킬 선택");
-            for(int i = 0; i < gm.player.skills.Count; i++)
+            for (int i = 0; i < gm.player.skills.Count; i++)
             {
-                Console.WriteLine($"{i+1}.{gm.player.skills[i].Name} [Hp소모 : {gm.player.skills[i].UseHp} / Mp소모 : {gm.player.skills[i].UseMp}]");
-                Console.WriteLine($"  {gm.player.skills[i].Description}") ;
+                Console.Write($"{i + 1}.{gm.player.skills[i].Name}");
+                if (gm.player.skills[i].UseHp > 0)
+                    Console.Write($" [Hp소모 : {gm.player.skills[i].UseHp}]");
+                if (gm.player.skills[i].UseMp > 0)
+                    Console.Write($" [Mp소모 : {gm.player.skills[i].UseMp}]");
+                Console.WriteLine();
+                Console.WriteLine($"  {gm.player.skills[i].Description}");
                 Console.WriteLine();
             }
 
