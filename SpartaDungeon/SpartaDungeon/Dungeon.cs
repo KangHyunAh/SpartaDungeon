@@ -12,7 +12,6 @@ namespace SpartaDungeon
     public class Dungeon
     {
         public int EnterHp { get; set; }
-
         GameManager gm{ get; set; }
         Random random = new Random();
 
