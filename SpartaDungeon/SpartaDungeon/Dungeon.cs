@@ -76,58 +76,55 @@ namespace SpartaDungeon
                 Console.WriteLine("2. 기본 공격");
                 Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
                 Console.WriteLine();
-                while (true)
+
+                int input = Utility.GetInput(0, 3);
+                if (input == 0)
                 {
-                    int input = Utility.GetInput(0, 3);
-                    if (input == 0)
-                    {
-                        gm.monsters.Clear();
-                        break;
-                    }
-                    else if (input == 1)
-                    {
-                        SkillChoiceBattle();
-                        break;
-                    }
-                    else if (input == 2)
-                    {
-                        TargetBattle();
-                        break;
-                    }
-                    else if (input == 3 && ItemLimits > 0)
-                    {
-                        ItemLimits--;
-                        gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
-                    }
-                    //else
-                    //    Console.WriteLine("최대치만큼 사용하였습니다.");
+                    gm.monsters.Clear();
+                    break;
                 }
+                else if (input == 1)
+                {
+                    SkillChoiceBattle();
+                }
+                else if (input == 2)
+                {
+                    TargetBattle();
+                    break;
+                }
+                else if (input == 3 && ItemLimits > 0)
+                {
+                    ItemLimits--;
+                    gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                }
+                //else
+                //    Console.WriteLine("최대치만큼 사용하였습니다.");
             }
 
         }
 
         public void SkillChoiceBattle()
         {
-            ScreenText("스킬 선택");
-            for (int i = 0; i < gm.player.skills.Count; i++)
-            {
-                Console.Write($"{i + 1}.{gm.player.skills[i].Name}");
-                if (gm.player.skills[i].UseHp > 0)
-                    Console.Write($" [Hp소모 : {gm.player.skills[i].UseHp}]");
-                if (gm.player.skills[i].UseMp > 0)
-                    Console.Write($" [Mp소모 : {gm.player.skills[i].UseMp}]");
-                Console.WriteLine();
-                Console.WriteLine($"  {gm.player.skills[i].Description}");
-                Console.WriteLine();
-            }
-
-            Console.WriteLine("0. 뒤로");
             while (true)
             {
+                ScreenText("스킬 선택");
+                for (int i = 0; i < gm.player.skills.Count; i++)
+                {
+                    Console.Write($"{i + 1}.{gm.player.skills[i].Name}");
+                    if (gm.player.skills[i].UseHp > 0)
+                        Console.Write($" [Hp소모 : {gm.player.skills[i].UseHp}]");
+                    if (gm.player.skills[i].UseMp > 0)
+                        Console.Write($" [Mp소모 : {gm.player.skills[i].UseMp}]");
+                    Console.WriteLine();
+                    Console.WriteLine($"  {gm.player.skills[i].Description}");
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine("0. 뒤로");
                 int input = Utility.GetInput(0, 2);
+                
                 if (input == 0)
                 {
-                    ReadyBattle();
                     break;
                 }
                 else if (gm.player.skills[input - 1].Type == SkillType.Attack && gm.player.skills[input - 1].UseMp <= gm.player.manaPoint && gm.player.skills[input - 1].UseHp <= gm.player.healthPoint)
@@ -143,6 +140,7 @@ namespace SpartaDungeon
                 else
                     Console.WriteLine("필요한 코스트가 부족합니다.");
             }
+            
         }
 
         public void TargetBattle(bool useskill = false, int skillnum = 0)
@@ -162,7 +160,7 @@ namespace SpartaDungeon
 
                 int input = Utility.GetInput(0, 1);
                 if (input == 0)
-                    SkillChoiceBattle();
+                    ;
                 else
                     PlayerSkillAttack(skillnum - 1, 0);
             }
@@ -172,7 +170,7 @@ namespace SpartaDungeon
                 Console.WriteLine("1. 무작위 공격");
                 int input = Utility.GetInput(0, 1);
                 if (input == 0)
-                    SkillChoiceBattle();
+                    ;
                 else
                     PlayerSkillAttack(skillnum - 1, 0);
             }

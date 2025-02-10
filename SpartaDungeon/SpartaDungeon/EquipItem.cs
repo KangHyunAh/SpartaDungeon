@@ -50,7 +50,6 @@ namespace SpartaDungeon
         public void DisplayEquipItem()
         {
             Console.Write("[E]"); Utility.RealTab($"{Name}", true, 16);Console.Write("|");Utility.RealTab(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]", true, 12);Console.Write($"|{Description}\n");
-            //Console.WriteLine($"[E]{Name,-8} |"+(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]") +$" |{Description}");
             Console.Write("\t");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
