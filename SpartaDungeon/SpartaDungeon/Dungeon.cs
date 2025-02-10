@@ -428,7 +428,7 @@ namespace SpartaDungeon
 
             Console.WriteLine();
             Console.WriteLine("0. 메뉴로");
-            Console.WriteLine("1. 재전투");
+            Console.WriteLine("1. 다음층으로");
             Console.WriteLine();
             int input = Utility.GetInput(0, 1);
             if (input == 1)

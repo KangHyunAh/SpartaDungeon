@@ -69,7 +69,7 @@ namespace SpartaDungeon
                 {
                     target[0].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                 }
-
+                // 남은 적이 2마리 이상일 때
                 else if( target.Count >= 2)
                 {
                     
