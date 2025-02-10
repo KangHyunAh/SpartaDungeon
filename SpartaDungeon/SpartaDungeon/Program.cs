@@ -77,6 +77,7 @@ namespace SpartaDungeon
                 new Monster(1,"검사의 흔적",1,10,1,1,"검사"),
                 new Monster(1,"광전사의 흔적",1,10,1,1,"광전사"),
                 new Monster(1,"미믹",1,1,1000,1000,"이벤트")
+
             };
             bossmonsterList = new List<Monster>
             {
