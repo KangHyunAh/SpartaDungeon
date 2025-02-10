@@ -18,6 +18,7 @@ namespace SpartaDungeon
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
+            EnterHp = gm.player.healthPoint;
 
             if (!(gm.player.dungeonLevel%3 == 0))
             {
@@ -93,7 +94,8 @@ namespace SpartaDungeon
                 Console.WriteLine("1. 전체기");
                 
                 int input = Utility.GetInput(0,1);
-                if(input == 0) { }
+                if(input == 0)
+                    SkillChoiceBattle();
                 else
                     PlayerSkillAttack(skillnum - 1, 0);
             }
@@ -102,14 +104,18 @@ namespace SpartaDungeon
                 Console.WriteLine("0. 뒤로");
                 Console.WriteLine("1. 무작위 공격");
                 int input = Utility.GetInput(0, 1);
-                if(input == 0) { }
+                if (input == 0)
+                    SkillChoiceBattle();
                 else
                     PlayerSkillAttack(skillnum - 1, 0);
             }
             else
             {
                 Console.WriteLine("0. 뒤로");
-                Console.WriteLine($"1~{gm.monsters.Count}. 대상을 선택해주세요.");
+                if(gm.monsterList.Count == 1)
+                    Console.WriteLine($"1. 대상을 선택해주세요.");
+                else
+                    Console.WriteLine($"1~{gm.monsters.Count}. 대상을 선택해주세요.");
                 while (true)
                 {
                     int input = Utility.GetInput(0, gm.monsters.Count);
@@ -142,7 +148,7 @@ namespace SpartaDungeon
 
         public void PlayerSkillHeal(int skillnum)
         {
-            ScreenText("Battle!! - 도핑");
+            ScreenText("Battle!! - 스킬선택(비타격)");
             Console.WriteLine($"{gm.player.name}가 {gm.player.skills[skillnum].Name}을(를) 사용!");
             Hpbar();
             Mpbar();
@@ -160,7 +166,7 @@ namespace SpartaDungeon
             Console.WriteLine();
             int input = Utility.GetInput(0, 1);
             if (input == 0)
-            { }
+                SkillChoiceBattle();
             else
                 MonsterAttack();
         }
