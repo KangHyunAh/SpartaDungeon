@@ -197,14 +197,10 @@ namespace SpartaDungeon
             Hpbar();
             Mpbar();
             Console.WriteLine();
-            Console.WriteLine("0. 뒤로");
-            Console.WriteLine("1. 다음");
+            Console.WriteLine("0. 다음");
             Console.WriteLine();
-            int input = Utility.GetInput(0, 1);
-            if (input == 0)
-                SkillChoiceBattle();
-            else
-                MonsterAttack();
+            int input = Utility.GetInput(0, 0);
+            MonsterAttack();
         }
 
         public void PlayerSkillAttack(int skillnum, int target)
