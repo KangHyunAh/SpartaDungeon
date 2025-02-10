@@ -88,7 +88,7 @@ namespace SpartaDungeon
     {
 
 
-        internal class ConsumableItem
+        public class ConsumableItem
         {
 
 
@@ -138,7 +138,7 @@ namespace SpartaDungeon
                 Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} |가격: {Cost} |개수: {ItemCount}");
             }
         }
-        internal class PotionPlayer
+        public class PotionPlayer
         {
             public int Health { get; private set; } = 100;
             public int Mana { get; private set; } = 50;
