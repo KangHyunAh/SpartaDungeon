@@ -33,32 +33,36 @@ namespace SpartaDungeon
         }
         public void ReadyBattle()
         {
-            ScreenText("Battle!!");
-            Console.WriteLine("[몬스터 정보]");
-            Console.WriteLine();
+            while (true)
+            {
+                ScreenText("Battle!!");
+                Console.WriteLine("[몬스터 정보]");
+                Console.WriteLine();
 
-            MonsterInfo();
+                MonsterInfo();
 
-            Console.WriteLine();
-            Console.WriteLine("[내정보]");
-            Console.WriteLine($"Lv. {gm.player.level} [{gm.player.name}]({gm.player.chad})");
-            Hpbar();
-            Mpbar();
-            Console.WriteLine();
-            Console.WriteLine("0. 도망가기");
-            Console.WriteLine("1. 스킬");
-            Console.WriteLine("2. 기본 공격");
-            Console.WriteLine("3. 인벤토리");
-            Console.WriteLine();
-            int input = Utility.GetInput(0, 3);
-            if (input == 0)
-                gm.monsters.Clear();
-            else if (input == 1)
-                SkillChoiceBattle();
-            else if (input == 2)
-                TargetBattle();
-            else
-                gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                Console.WriteLine();
+                Console.WriteLine("[내정보]");
+                Console.WriteLine($"Lv. {gm.player.level} [{gm.player.name}]({gm.player.chad})");
+                Hpbar();
+                Mpbar();
+                Console.WriteLine();
+                Console.WriteLine("0. 도망가기");
+                Console.WriteLine("1. 스킬");
+                Console.WriteLine("2. 기본 공격");
+                Console.WriteLine("3. 인벤토리");
+                Console.WriteLine();
+                int input = Utility.GetInput(0, 3);
+                if (input == 0)
+                    gm.monsters.Clear();
+                else if (input == 1)
+                    SkillChoiceBattle();
+                else if (input == 2)
+                    TargetBattle();
+                else
+                    gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+            }
+            
         }
 
         public void SkillChoiceBattle()
@@ -491,7 +495,7 @@ namespace SpartaDungeon
             Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
             for (int i = 0; i < viewMp; i++)
             {
-                Utility.ColorText(Console,"■");
+                Utility.ColorText(ConsoleColor.Blue,"■",Text.Write);
             }
             for (int i = 0; i < 10 - viewMp; i++)
             {
