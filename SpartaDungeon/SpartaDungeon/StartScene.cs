@@ -50,7 +50,7 @@ namespace SpartaDungeon
                         gm.inventoryAndShop.ShopScreen(gm);
                         break;
                     case 4:
-                        dungeonManager.Battle(gm.player, gm.monsters, gm.monsterList, gm.bossmonsterList);
+                        dungeonManager.Battle(gm);
                         break;
                     case 5:
                         ShowQuestMenu(gm);
