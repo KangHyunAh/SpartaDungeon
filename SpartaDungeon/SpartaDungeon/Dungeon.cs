@@ -53,11 +53,14 @@ namespace SpartaDungeon
             Hpbar();
             Mpbar();
             Console.WriteLine();
+            Console.WriteLine("0. 로비");
             Console.WriteLine("1. 스킬");
             Console.WriteLine("2. 기본 공격");
             Console.WriteLine();
-            int input = Utility.GetInput(1, 2);
-            if (input == 1)
+            int input = Utility.GetInput(0, 2);
+            if (input == 0)
+            { }
+            else if (input == 1)
                 SkillChoiceBattle();
             else
                 TargetBattle();
@@ -73,8 +76,11 @@ namespace SpartaDungeon
                 Console.WriteLine();
             }
 
-            int input = Utility.GetInput(1, 2);
-            if (player.skills[input - 1].Type == SkillType.Attack)
+            Console.WriteLine("0. 뒤로");
+            int input = Utility.GetInput(0, 2);
+            if (input == 0)
+                ReadyBattle();
+            else if (player.skills[input - 1].Type == SkillType.Attack)
                 TargetBattle(true, input);
             else if (player.skills[input - 1].Type == SkillType.Heal)
                 PlayerSkillHeal(input - 1);
@@ -92,23 +98,35 @@ namespace SpartaDungeon
             Console.WriteLine();
             if (useskill && player.skills[skillnum - 1].Count == 5)
             {
-                Console.WriteLine("0. 전체기");
-                int input = Utility.GetInput(0,0);
-                PlayerSkillAttack(skillnum - 1, 0);
+                Console.WriteLine("0. 뒤로");
+                Console.WriteLine("1. 전체기");
+                
+                int input = Utility.GetInput(0,1);
+                if(input == 0) { }
+                else
+                    PlayerSkillAttack(skillnum - 1, 0);
             }
             else if(useskill && player.skills[skillnum - 1].Count > 1)
             {
-                Console.WriteLine("0. 무작위 공격");
-                int input = Utility.GetInput(0, 0);
-                PlayerSkillAttack(skillnum - 1, 0);
+                Console.WriteLine("0. 뒤로");
+                Console.WriteLine("1. 무작위 공격");
+                int input = Utility.GetInput(0, 1);
+                if(input == 0) { }
+                else
+                    PlayerSkillAttack(skillnum - 1, 0);
             }
             else
             {
+                Console.WriteLine("0. 뒤로");
                 Console.WriteLine($"1~{monsters.Count}. 대상을 선택해주세요.");
                 while (true)
                 {
-                    int input = Utility.GetInput(1, monsters.Count);
-                    if (monsters[input - 1].Health < 0)
+                    int input = Utility.GetInput(0, monsters.Count);
+                    if (input == 0 && useskill == true)
+                        SkillChoiceBattle();
+                    else if (input == 0 && useskill == false)
+                        ReadyBattle();
+                    else if (monsters[input - 1].Health < 0)
                         Console.WriteLine("이미 사망한 대상입니다.");
                     else if (useskill)
                     {
@@ -140,9 +158,13 @@ namespace SpartaDungeon
             Hpbar();
             Mpbar();
             Console.WriteLine();
-            Console.WriteLine("0. 다음");
+            Console.WriteLine("0. 뒤로");
+            Console.WriteLine("1. 다음");
             Console.WriteLine();
-            if (Utility.GetInput(0, 0) == 0)
+            int input = Utility.GetInput(0, 1);
+            if (input == 0)
+            { }
+            else
                 MonsterAttack();
         }
 
@@ -179,11 +201,11 @@ namespace SpartaDungeon
 
             for (int i = 0; i < livemonster.Count; i++)
             {
-                if (monsters[i].Health > 0)
-                    Console.WriteLine($"-[{i + 1}] Lv. {monsters[i].Lv} {monsters[i].Name} Hp : {monsters[i].Health}");
+                if (livemonster[i].Health > 0)
+                    Console.WriteLine($"-[{i + 1}] Lv. {livemonster[i].Lv} {livemonster[i].Name} Hp : {livemonster[i].Health}");
                 else
                 {
-                    Utility.ColorText(ConsoleColor.DarkGray, $"-[{i + 1}] Lv. {monsters[i].Lv} {monsters[i].Name} [Dead]");
+                    Utility.ColorText(ConsoleColor.DarkGray, $"-[{i + 1}] Lv. {livemonster[i].Lv} {livemonster[i].Name} [Dead]");
                 }
             }
             livemonster.Clear();
@@ -399,8 +421,12 @@ namespace SpartaDungeon
 
             Console.WriteLine();
             Console.WriteLine("0. 메뉴로");
+            Console.WriteLine("1. 재전투");
             Console.WriteLine();
-            Utility.GetInput(0, 0);
+            int input = Utility.GetInput(0, 1);
+            if (input == 1)
+                Battle(player, monsters, monsterList, bossmonsterList);
+
         }
 
         public void MonsterSpawn(List<Monster> monsterList, int spawnNum)
@@ -408,14 +434,10 @@ namespace SpartaDungeon
             for (int i = 0; i < spawnNum; i++)
             {
                 Monster monster = monsterList[random.Next(0, monsterList.Count)];
-                if (monsterList[i].MonsterType != "보너스")
-                {
-                    monsters.Add(monster.Spawn());
-                    monsters[i].Atk += player.dungeonLevel * 5;
-                    monsters[i].Health += player.dungeonLevel * 3;
-                }
-                else
-                    monsters.Add(monster.Spawn());
+                monsters.Add(monster.Spawn());
+                monsters[i].Lv += player.dungeonLevel;
+                monsters[i].Atk += player.dungeonLevel * 5;
+                monsters[i].Health += player.dungeonLevel * 3;
             }
         }
         public void ScreenText(string tag)
