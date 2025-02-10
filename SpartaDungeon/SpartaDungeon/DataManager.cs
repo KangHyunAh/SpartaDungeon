@@ -57,8 +57,6 @@ namespace SpartaDungeon
                 player.ChadSelect();
                 player.name = name;
 
-                // 직업에 맞는 스킬 생성
-                SkillManager.SkillInit(player);
 
                 return player;
             }
