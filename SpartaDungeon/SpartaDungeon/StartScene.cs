@@ -16,6 +16,9 @@ namespace SpartaDungeon
 
             while (true)
             {
+                if (gm.player.gold < 100 && gm.player.healthPoint <= 0)
+                    ReviveEvent(gm);
+
                 dataManager.SaveData(gm);
 
                 Console.Clear();
@@ -30,10 +33,6 @@ namespace SpartaDungeon
                 Console.WriteLine("5. 퀘스트");
                 Console.WriteLine("6. 휴식하기");
                 Console.WriteLine("7. 게임종료");
-
-                
-
-
                 Console.WriteLine();
 
                 int selectNumber = Utility.GetInput(1, 7);
@@ -50,7 +49,16 @@ namespace SpartaDungeon
                         gm.inventoryAndShop.ShopScreen(gm);
                         break;
                     case 4:
-                        dungeonManager.Battle(gm);
+                        if (gm.player.healthPoint > 0)
+                            dungeonManager.Battle(gm);
+
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("현재 체력이 0인 상태입니다. 회복 후 입장해주세요.");
+                            Thread.Sleep(1500);
+                            continue;
+                        }
                         break;
                     case 5:
                         ShowQuestMenu(gm);
@@ -92,6 +100,87 @@ namespace SpartaDungeon
                 Console.WriteLine("\n아무키나 누르면 돌아갑니다");
                 Console.ReadKey();
             }
-        } 
+        }
+
+        private void ReviveEvent(GameManager gm)
+        {
+            const int time = 200;
+
+            if (gm.player.healthPoint < 0)
+                gm.player.healthPoint = 0;
+
+            if (gm.player.manaPoint < 0)
+                gm.player.manaPoint = 0;
+
+            int enterHP = gm.player.healthPoint;
+            int enterMP = gm.player.manaPoint;
+
+            int maxHp = gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint;
+            int maxMp = gm.player.maxManaPoint;
+
+            gm.player.healthPoint = gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint;
+            gm.player.manaPoint = gm.player.maxManaPoint;
+
+            Console.Clear();
+
+            Console.WriteLine($"전투에서 패배하였습니다.");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"");
+            Console.WriteLine($"만신창이가 된 몸으로 정신없이 도망쳤다…");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"더 이상 걸을 수 없다.");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"벽에 기대 앉았다.");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"스르르 눈이 감긴다...");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"");
+            Utility.ColorText(ConsoleColor.Yellow, "지나가던 성직자 ", Text.Write); Console.WriteLine($": 저기요! 괜찮으십니까?");
+
+            Thread.Sleep(time);
+            Utility.ColorText(ConsoleColor.Yellow, "지나가던 성직자 ", Text.Write); Console.WriteLine($": 대체 이 안에서 무슨 일이 있었던 겁니까?");
+
+            Thread.Sleep(time);
+            Utility.ColorText(ConsoleColor.Yellow, "지나가던 성직자 ", Text.Write); Console.WriteLine($": 우선 치료해드리겠습니다.");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"");
+            Console.WriteLine($"HP : {enterHP} / {maxHp} => HP : {gm.player.healthPoint} / {maxHp}");
+            Console.WriteLine($"MP : {enterMP} / {maxMp} => MP : {gm.player.manaPoint} / {maxMp}");
+            Console.WriteLine($"");
+
+            Thread.Sleep(time);
+            Utility.ColorText(ConsoleColor.Yellow, "지나가던 성직자 ", Text.Write); Console.WriteLine($": 가장 가까운 마을까지 부축하겠습니다.");
+
+            Thread.Sleep(time);
+            Utility.ColorText(ConsoleColor.Yellow, "지나가던 성직자 ", Text.Write); Console.WriteLine($": 금방 도착할겁니다.");
+
+            Thread.Sleep(time);
+            Utility.ColorText(ConsoleColor.Yellow, "지나가던 성직자 ", Text.Write); Console.WriteLine($": 앞으로는 무리하지 마십시오.");
+
+            Thread.Sleep(time);
+            Utility.ColorText(ConsoleColor.Yellow, "지나가던 성직자 ", Text.Write); Console.WriteLine($": 신의 가호가 당신과 함께하길.");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"");
+            Console.WriteLine($"성직자는 어느새 저 멀리 사라졌다.");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"");
+
+            Thread.Sleep(time);
+            Console.WriteLine($"");
+            Console.WriteLine($"0. 마을로 이동하기");
+            Console.WriteLine($"");
+
+
+            if (Utility.GetInput(0, 0) == 0)
+                return;
+        }
     }
 }
