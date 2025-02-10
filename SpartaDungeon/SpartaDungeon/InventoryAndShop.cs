@@ -168,7 +168,9 @@ namespace SpartaDungeon
                                 if (index == input)
                                 {
                                     Console.WriteLine($"{gm.consumableItemsList[i].Name}을(를) 사용하시겠습니까?");
-                                    gm.player.DisplayHpBar();
+                                    gm.player.DisplayHpBar(); if (gm.consumableItemsList[i].Type == PotionType.Health) Utility.ColorText(ConsoleColor.Green, $"{gm.consumableItemsList[i].EffectAmount:+0;-0;}", Text.Write);
+                                    Console.WriteLine();
+                                    gm.player.DisplayMpBar(); if (gm.consumableItemsList[i].Type == PotionType.Mana) Utility.ColorText(ConsoleColor.Green,$"{gm.consumableItemsList[i].EffectAmount:+0;-0;}",Text.Write);
                                     Console.WriteLine("\n1.사용     2.취소");
                                     switch (Utility.GetInput(1, 2))
                                     {
