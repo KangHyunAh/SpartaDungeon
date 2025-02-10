@@ -168,10 +168,11 @@ namespace SpartaDungeon
                                 if (index == input)
                                 {
                                     Console.WriteLine($"{gm.consumableItemsList[i].Name}을(를) 사용하시겠습니까?");
-                                    Console.WriteLine("1.사용     2.취소");
+                                    gm.player.DisplayHpBar();
+                                    Console.WriteLine("\n1.사용     2.취소");
                                     switch (Utility.GetInput(1, 2))
                                     {
-                                       case 1: {/*gm.consumableItemsList[i].Use(PotionPlayer);*/ ConsumableItemInventoryScreen(gm); } break;
+                                       case 1: {gm.consumableItemsList[i].Use(gm.player); ConsumableItemInventoryScreen(gm); } break;
                                        case 2: ConsumableItemInventoryScreen(gm); break;
                                     }
                                     
@@ -202,7 +203,7 @@ namespace SpartaDungeon
             int input = Utility.GetInput(0, 2);
             switch (input)
             {
-                case 0: break;
+                case 0: gm.startScene.Lobby(gm);  break;
                 case 1: BuyScreen(101); break;
                 case 2: SaleScreen(101); break;
             }

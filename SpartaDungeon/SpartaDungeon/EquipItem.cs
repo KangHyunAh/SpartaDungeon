@@ -111,22 +111,26 @@ namespace SpartaDungeon
                 ItemCount = 0;
             }
 
-            public void Use(PotionPlayer player)
+            public void Use(Player player)
             {
                 if (ItemCount > 0)
                 {
                     switch (Type)
                     {
                         case PotionType.Health:
-                            player.Heal(EffectAmount);
-                            Console.WriteLine($"{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
+                            if (player.healthPoint+EffectAmount > player.maxhealthPoint + player.equipMaxhealthPoint) player.healthPoint = player.maxhealthPoint + player.equipMaxhealthPoint; else player.healthPoint += EffectAmount;
+                            player.DisplayHpBar();
+                            Console.WriteLine($"\n{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
                             break;
                         case PotionType.Mana:
-                            player.RestoreMana(EffectAmount);
-                            Console.WriteLine($"{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
+                            if (player.manaPoint +EffectAmount > player.maxManaPoint) player.manaPoint = player.maxManaPoint; else player.healthPoint += EffectAmount;
+                            player.DisplayMpBar();
+                            Console.WriteLine($"\n{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
                             break;
                     }
                     ItemCount--;
+                    Console.WriteLine("아무키 입력");
+                    Console.ReadLine();
                 }
 
                 else
@@ -163,20 +167,20 @@ namespace SpartaDungeon
             }
         }
 
-        class PotionTest
-        {
-            public static void RunTest()
-            {
-                PotionPlayer player = new PotionPlayer();
-                ConsumableItem healthPotion = new ConsumableItem("체력포션", PotionType.Health, 30, "체력을 회복하는 포션", 50);
-                ConsumableItem manaPotion = new ConsumableItem("마나포션", PotionType.Mana, 20, "마나를 회복하는 포션", 40);
+        //class PotionTest
+        //{
+        //    public static void RunTest()
+        //    {
+        //        PotionPlayer player = new PotionPlayer();
+        //        ConsumableItem healthPotion = new ConsumableItem("체력포션", PotionType.Health, 30, "체력을 회복하는 포션", 50);
+        //        ConsumableItem manaPotion = new ConsumableItem("마나포션", PotionType.Mana, 20, "마나를 회복하는 포션", 40);
 
-                player.ShowStatus();
-                healthPotion.Use(player);
-                player.ShowStatus();
-                manaPotion.Use(player);
-                player.ShowStatus();
-            }
-        }
+        //        player.ShowStatus();
+        //        healthPotion.Use(player);
+        //        player.ShowStatus();
+        //        manaPotion.Use(player);
+        //        player.ShowStatus();
+        //    }
+        //}
     }
 }
