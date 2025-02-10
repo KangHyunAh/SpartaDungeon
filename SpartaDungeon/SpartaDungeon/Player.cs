@@ -67,6 +67,7 @@ namespace SpartaDungeon
 
         public void CharacterInformation()//상태창 
         {
+            Console.Clear();
             Console.WriteLine("캐릭터의 정보를 표시합니다.");
             Console.WriteLine("");
 
@@ -75,24 +76,27 @@ namespace SpartaDungeon
             Console.WriteLine("이름 : " + name);
             Console.WriteLine("Chad : "+ chad);
             Console.WriteLine("공격력 : " + (strikePower+equipStrikePower) + "(" + strikePower +" + "+ equipStrikePower + ")");
-            Console.WriteLine("방어력 : " + (defensivePower+equipDefensivePower) + "(" + defensivePower+" + " + equipDefensivePower+")");
-            Console.WriteLine("체력 : " + healthPoint+ " / " + maxhealthPoint + "( + " +equipMaxhealthPoint+")");
-            Console.WriteLine("마나 : " + manaPoint + " / " + maxManaPoint);
+            Console.WriteLine("방어력 : " + (defensivePower+equipDefensivePower) + "(" + defensivePower+" + " + equipDefensivePower +")");
+            Console.WriteLine("체력 : " + healthPoint+ " / " + (maxhealthPoint + equipMaxhealthPoint) + "(" + maxhealthPoint + "+ " +equipMaxhealthPoint+")");
+            Console.WriteLine("마나 : " + manaPoint + " / " + maxManaPoint+")");
             Console.WriteLine("소유 골드 : " + gold + " G");
             //DisplayHpMpBar();
             Console.WriteLine("0. 나가기");
             if(Utility.GetInput(0, 0) == 0)
             {
                 Console.WriteLine("창을 닫습니다.");
+
                 return;
             }
         }
 
         public void Rest() 
         {
+            Console.Clear();
             Console.WriteLine("휴식을 선택하셨습니다.");
             Console.WriteLine("여관에 입장하셨습니다.");
             Console.WriteLine("여관에서는 100골드를 소모하고 체력과 마나를 최대치만큼 회복합니다.");
+            Console.WriteLine("현재 골드 : " + gold + " G");
             Console.WriteLine("실행하시겠습니까?");
             Console.WriteLine("1. 실행");
             Console.WriteLine("0. 나가기");
@@ -158,7 +162,7 @@ namespace SpartaDungeon
             Console.WriteLine("해당 숫자를 입력해 선택해주세요.");
             Console.WriteLine("*주의");
             Console.WriteLine("직업 선택 시 레벨, 경험치, 스탯이 초기화됩니다.");
-            Console.WriteLine("1. 나이트 \n2. 검사 \n3.광전사 \n0. 나가기");
+            Console.WriteLine("1. 나이트 \n2. 검사 \n3. 광전사 \n0. 나가기");
             switch (Utility.GetInput(0, 3))
             {
                 case 0: //창 닫기
