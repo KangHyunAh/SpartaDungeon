@@ -491,19 +491,11 @@ namespace SpartaDungeon
 
             Console.WriteLine();
             Console.WriteLine("0. 메뉴로");
-            if (gm.player.healthPoint > 0)
-            {
-                Console.WriteLine("1. 다음층으로");
-                Console.WriteLine();
-                int input = Utility.GetInput(0, 1);
-                if (input == 1)
-                    Battle(gm);
-            }
-            else
-            {
-                Console.WriteLine();
-                int input = Utility.GetInput(0, 0);
-            }
+            Console.WriteLine("1. 다음층으로");
+            Console.WriteLine();
+            int input = Utility.GetInput(0, 1);
+            if (input == 1)
+                Battle(gm);
 
         }
 
