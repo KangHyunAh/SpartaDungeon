@@ -93,10 +93,6 @@ namespace SpartaDungeon
                     Console.WriteLine("퀘스트가 수락되었습니다!");
                 }
 
-                else
-                {
-                    Console.WriteLine("해당 ID의 퀘스트를 찾을 수 없습니다.");
-                }
 
                 Console.WriteLine("\n아무키나 누르면 돌아갑니다");
                 Console.ReadKey();

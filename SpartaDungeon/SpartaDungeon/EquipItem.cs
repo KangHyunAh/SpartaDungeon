@@ -152,13 +152,13 @@ namespace SpartaDungeon
             public void Heal(int amount)
             {
                 Health += amount;
-                if (Health > 100) Health = 100;
+                if (Health < 100) Health = 100;
             }
 
             public void RestoreMana(int amount)
             {
                 Mana += amount;
-                if (Mana > 50) Mana = 50;
+                if (Mana < 50) Mana = 50;
             }
 
             public void ShowStatus()
