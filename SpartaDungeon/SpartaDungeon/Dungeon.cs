@@ -488,7 +488,7 @@ namespace SpartaDungeon
         }
         public void Hpbar()
         {
-            int viewHp = (int)((float)gm.player.healthPoint / (gm.player.maxhealthPoint/10));
+            int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint+gm.player.equipMaxhealthPoint)/10));
             viewHp = Math.Min(viewHp, 10);
             Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint}");
             for (int i = 0; i < viewHp; i++)
