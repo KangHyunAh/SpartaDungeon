@@ -13,22 +13,25 @@ namespace SpartaDungeon
     {
         public void InventoryScreen(GameManager gm)
         {
-            Console.Clear();
-            Console.WriteLine("인벤토리");
-            Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
-            Console.WriteLine();
-            Console.WriteLine("[보유 골드]");
-            Console.WriteLine($"{gm.player.gold} G");
-            Console.WriteLine();
-            Console.WriteLine("1.장비 아이템");
-            Console.WriteLine("2.소비 아이템");
-            Console.WriteLine("0.나가기");
-            Console.WriteLine();
-            switch (Utility.GetInput(0, 2))
+            while (true)
             {
-                case 0:; gm.startScene.Lobby(gm); break;
-                case 1: EquipScreen(); break;
-                case 2: ConsumableItemInventoryScreen(gm); break;
+                Console.Clear();
+                Console.WriteLine("인벤토리");
+                Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
+                Console.WriteLine();
+                Console.WriteLine("[보유 골드]");
+                Console.WriteLine($"{gm.player.gold} G");
+                Console.WriteLine();
+                Console.WriteLine("1.장비 아이템");
+                Console.WriteLine("2.소비 아이템");
+                Console.WriteLine("0.나가기");
+                Console.WriteLine();
+                switch (Utility.GetInput(0, 2))
+                {
+                    case 0:; gm.startScene.Lobby(gm); break;
+                    case 1: EquipScreen(); break;
+                    case 2: ConsumableItemInventoryScreen(gm); break;
+                }
             }
 
 
@@ -127,7 +130,7 @@ namespace SpartaDungeon
             return index;
         }
 
-        public void ConsumableItemInventoryScreen(GameManager gm,bool isDungeon =false)
+        public void ConsumableItemInventoryScreen(GameManager gm)
         {
             Console.Clear();
             Console.WriteLine("인벤토리");
@@ -153,7 +156,7 @@ namespace SpartaDungeon
             int input = Utility.GetInput(0,index);
             switch (input)
             {
-                case 0:if (isDungeon) InventoryScreen(gm); else ; break;
+                case 0: break;
                 default:
                 {
                         index = 0;
@@ -168,7 +171,7 @@ namespace SpartaDungeon
                                     Console.WriteLine("1.사용     2.취소");
                                     switch (Utility.GetInput(1, 2))
                                     {
-                                       case 1: {/* gm.consumableItemsList[i].Use(PotionPlayer);*/ ConsumableItemInventoryScreen(gm); } break;
+                                       case 1: {/*gm.consumableItemsList[i].Use(PotionPlayer);*/ ConsumableItemInventoryScreen(gm); } break;
                                        case 2: ConsumableItemInventoryScreen(gm); break;
                                     }
                                     
