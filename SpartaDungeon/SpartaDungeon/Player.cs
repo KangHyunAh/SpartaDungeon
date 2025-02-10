@@ -47,6 +47,23 @@ namespace SpartaDungeon
                 }
             }
         }
+        //public void DisplayHpMpBar()    //체력,마나 막대 표시
+        //{
+        //    Console.Write($"HP {healthPoint,4}/{(maxhealthPoint+equipMaxhealthPoint),4} ");
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Green, "■",Text.Write);
+        //        else Console.Write("□");
+        //    }
+        //    Console.WriteLine();
+        //    Console.Write($"MP {manaPoint,4}/{maxManaPoint,4} ");
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        if (i < (float)manaPoint / maxManaPoint  * 10) Utility.ColorText(ConsoleColor.Blue, "■",Text.Write);
+        //        else Console.Write("□");
+        //    }
+        //    Console.WriteLine();
+        //}
 
         public void CharacterInformation()//상태창 
         {
@@ -63,7 +80,6 @@ namespace SpartaDungeon
             Console.WriteLine("체력 : " + healthPoint+ " / " + (maxhealthPoint + equipMaxhealthPoint) + "(" + maxhealthPoint + "+ " +equipMaxhealthPoint+")");
             Console.WriteLine("마나 : " + manaPoint + " / " + maxManaPoint);
             Console.WriteLine("소유 골드 : " + gold + " G");
-
             Console.WriteLine("0. 나가기");
             if(Utility.GetInput(0, 0) == 0)
             {

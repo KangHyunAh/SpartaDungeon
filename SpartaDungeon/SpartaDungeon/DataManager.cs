@@ -219,7 +219,7 @@ namespace SpartaDungeon
             Dictionary<string, int[]> itemDict = itemData.ToObject<Dictionary<string, int[]>>();
 
             // 참조할 아이템을 담을 인스턴스
-            EquipItem tempItem = new EquipItem("", EquipType.Weapon, 1, 1, 1, "", 1);
+            EquipItem tempItem = new EquipItem("", EquipType.Weapon, 1, 1, 1, "",new string[] { }, 1,false);
             ConsumableItem tempConsumable = new ConsumableItem("", PotionType.Health, 1, "", 1);
 
             foreach (KeyValuePair<string, int[]> item in itemDict)
