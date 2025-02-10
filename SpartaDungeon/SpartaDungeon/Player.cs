@@ -61,7 +61,7 @@ namespace SpartaDungeon
             Console.WriteLine("공격력 : " + (strikePower+equipStrikePower) + "(" + strikePower +" + "+ equipStrikePower + ")");
             Console.WriteLine("방어력 : " + (defensivePower+equipDefensivePower) + "(" + defensivePower+" + " + equipDefensivePower +")");
             Console.WriteLine("체력 : " + healthPoint+ " / " + (maxhealthPoint + equipMaxhealthPoint) + "(" + maxhealthPoint + "+ " +equipMaxhealthPoint+")");
-            Console.WriteLine("마나 : " + manaPoint + " / " + maxManaPoint+")");
+            Console.WriteLine("마나 : " + manaPoint + " / " + maxManaPoint);
             Console.WriteLine("소유 골드 : " + gold + " G");
 
             Console.WriteLine("0. 나가기");
