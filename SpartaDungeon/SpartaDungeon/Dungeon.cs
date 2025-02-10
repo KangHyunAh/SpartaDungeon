@@ -35,7 +35,7 @@ namespace SpartaDungeon
         {
             while (true)
             {
-                ScreenText("Battle!!");
+                ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
                 Console.WriteLine("[몬스터 정보]");
                 Console.WriteLine();
 
