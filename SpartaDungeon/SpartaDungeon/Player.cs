@@ -73,7 +73,7 @@ namespace SpartaDungeon
             Console.WriteLine("");
             Console.WriteLine("Lv. "+ level);
             Console.WriteLine("이름 : " + name);
-            Console.WriteLine("직업 : "+ chad);
+            Console.WriteLine("Chad : "+ chad);
             Console.WriteLine("공격력 : " + (strikePower+equipStrikePower) + "(" + strikePower +" + "+ equipStrikePower + ")");
             Console.WriteLine("방어력 : " + (defensivePower+equipDefensivePower) + "(" + defensivePower+" + " + equipDefensivePower +")");
             DisplayHpBar(); Console.WriteLine();
@@ -166,7 +166,6 @@ namespace SpartaDungeon
             Utility.ColorText(ConsoleColor.DarkRed, "직업 선택 시 레벨, 경험치, 스탯이 초기화됩니다.");
             Console.WriteLine(" ");
             Console.WriteLine("1. 나이트 \n2. 검사 \n3. 광전사 \n0. 나가기");
-            Console.WriteLine("해당 숫자를 입력해 선택해주세요.");
             switch (Utility.GetInput(0, 3))
             {
                 case 0: //창 닫기
