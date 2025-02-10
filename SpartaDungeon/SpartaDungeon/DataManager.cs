@@ -319,6 +319,7 @@ namespace SpartaDungeon
                 // JObject에 담겨있던 카운트와 완료여부 저장
                 tempQuest.CurrentCount = quest.Value.CurrentCount;
                 tempQuest.IsCompleted = quest.Value.IsCompleted;
+                tempQuest.IsAccepted = quest.Value.IsAccepted;
             }
 
             // JArray => HashSet<int> 변환(수락한 퀘스트 목록)
