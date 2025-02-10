@@ -431,7 +431,7 @@ namespace SpartaDungeon
                     expSum += (gm.monsters[i].Exp + gm.player.dungeonLevel * 3);
                 }
 
-                gm.player.dungeonLevel += 1;
+                
                 Utility.ColorText(ConsoleColor.Yellow, "Victory");
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {gm.monsters.Count}마리를 잡았습니다.");
@@ -444,20 +444,17 @@ namespace SpartaDungeon
 
                 Console.WriteLine($"획득 경험치 {expSum}");
                 Console.WriteLine($"획득 골드 : {goldSum} G");
-
-                foreach (var monster in gm.monsters)
+                if (gm.player.dungeonLevel % 3 == 0)
                 {
-                    if (monster.MonsterType == "보스")
-                    {
-                        List<EquipItem> bossdrop = gm.equipItemList.Where(x => x.IsBossItem == true).ToList();
-                        int dropnum = random.Next(0, bossdrop.Count);
-                        bossdrop[dropnum].ItemCount += 1;
-                        Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 {bossdrop[dropnum].Name}을 획득하였습니다.");
-                        bossdrop.Clear();
-                    }
-                }
+                    List<EquipItem> bossdrop = gm.equipItemList.Where(x => x.IsBossItem == true).ToList();
+                    int dropnum = random.Next(0, bossdrop.Count);
+                    bossdrop[dropnum].ItemCount += 1;
+                    Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 {bossdrop[dropnum].Name}을 획득하였습니다.");
+                    bossdrop.Clear();
 
+                }
                 gm.player.ControlLevel();
+                gm.player.dungeonLevel += 1;
             }
             else
                 Console.WriteLine("You Lose");
