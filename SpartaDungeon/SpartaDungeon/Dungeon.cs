@@ -428,7 +428,7 @@ namespace SpartaDungeon
 
             Console.WriteLine();
             Console.WriteLine("0. 메뉴로");
-            Console.WriteLine("1. 재전투");
+            Console.WriteLine("1. 다음층으로");
             Console.WriteLine();
             int input = Utility.GetInput(0, 1);
             if (input == 1)
@@ -475,7 +475,7 @@ namespace SpartaDungeon
             Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint}");
             for (int i = 0; i < viewHp; i++)
             {
-                Console.Write("■");
+                Utility.ColorText(ConsoleColor.Red,"■",Text.Write);
             }
             for (int i = 0; i < 10 - viewHp; i++)
             {
@@ -491,7 +491,7 @@ namespace SpartaDungeon
             Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
             for (int i = 0; i < viewMp; i++)
             {
-                Console.Write("■");
+                Utility.ColorText(Console,"■");
             }
             for (int i = 0; i < 10 - viewMp; i++)
             {

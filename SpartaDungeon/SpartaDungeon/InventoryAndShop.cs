@@ -26,10 +26,11 @@ namespace SpartaDungeon
             Console.WriteLine();
             switch (Utility.GetInput(0, 2))
             {
-                case 0: break;
+                case 0:; gm.startScene.Lobby(gm); break;
                 case 1: EquipScreen(); break;
                 case 2: ConsumableItemInventoryScreen(gm); break;
             }
+
 
 
             void EquipScreen()
@@ -126,7 +127,7 @@ namespace SpartaDungeon
             return index;
         }
 
-        public void ConsumableItemInventoryScreen(GameManager gm)
+        public void ConsumableItemInventoryScreen(GameManager gm,bool isDungeon =false)
         {
             Console.Clear();
             Console.WriteLine("인벤토리");
@@ -152,7 +153,7 @@ namespace SpartaDungeon
             int input = Utility.GetInput(0,index);
             switch (input)
             {
-                case 0:InventoryScreen(gm);break;
+                case 0:if (isDungeon) InventoryScreen(gm); else ; break;
                 default:
                 {
                         index = 0;
@@ -167,7 +168,7 @@ namespace SpartaDungeon
                                     Console.WriteLine("1.사용     2.취소");
                                     switch (Utility.GetInput(1, 2))
                                     {
-                                       case 1: { /*gm.consumableItemsList[i].Use(gm.player);*/ConsumableItemInventoryScreen(gm); } break;
+                                       case 1: {/* gm.consumableItemsList[i].Use(PotionPlayer);*/ ConsumableItemInventoryScreen(gm); } break;
                                        case 2: ConsumableItemInventoryScreen(gm); break;
                                     }
                                     
@@ -176,7 +177,7 @@ namespace SpartaDungeon
 
                         }
                 }
-                    break;
+                break;
             }
         }
 
