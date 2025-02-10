@@ -10,6 +10,7 @@ namespace SpartaDungeon
         static void Main(string[] args)     //메인게임진행
         {
             GameManager gm = new GameManager();
+            QuestManager questManager = new QuestManager();
             
             StartScene start = new StartScene();
             gm.player = new DataManager().LoadData(gm);
@@ -83,8 +84,8 @@ namespace SpartaDungeon
                 new Monster(10,"영웅의 기억",10,100,10,10,"보스"),
             };
 
-            QuestManager.AddQuest(new Quest(1, "잡몹 퇴치", "5마리의 잡몹을 잡으세요"));
-            QuestManager.AddQuest(new Quest(2, "보스 퇴치", "보스1을 잡으세요" ));
+            QuestManager.AddQuest(new Quest(1, "흔적 퇴치", "5마리의 흔적을 잡으세요", 5, 50, 80));
+            QuestManager.AddQuest(new Quest(2, "보스 퇴치", "영웅의 기억을 잡으세요", 1, 200, 300 ));
 
         }
         
