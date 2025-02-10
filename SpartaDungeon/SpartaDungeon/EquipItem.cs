@@ -23,6 +23,7 @@ namespace SpartaDungeon
         public string Name { get; }
         public int Type { get; }
         public string Description { get; }
+        public string[] JobLimit {  get; }
         public int Atk { get; }
         public int Def { get; }
         public int MaxHp { get; }
@@ -30,11 +31,13 @@ namespace SpartaDungeon
         private int _itemCount;
         public int ItemCount { get { return _itemCount; } set { if (value < 0) _itemCount = 0; else _itemCount = value; } }
         public bool isEquip { get; set; }
+        public bool IsBossItem {  get; set; }
 
-        public EquipItem(string name, EquipType type, int atk, int def, int maxHp, string discription, int cost)
+        public EquipItem(string name, EquipType type, int atk, int def, int maxHp, string discription,string[] jobLimit ,int cost,bool isBossItem)
         {
             Name = name;
             Type = (int)type;
+            JobLimit = jobLimit;
             Description = discription;
             Atk = atk;
             Def = def;
@@ -42,29 +45,33 @@ namespace SpartaDungeon
             Cost = cost;
             ItemCount = 0;
             isEquip = false;
+            IsBossItem = isBossItem;
         }
         public void DisplayEquipItem()
         {
-            Console.WriteLine($"[E]{Name,-8}|{Description}");
+            Console.Write("[E]"); Utility.RealTab($"{Name}", true, 16);Console.Write("|");Utility.RealTab(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]", true, 12);Console.Write($"|{Description}\n");
+            //Console.WriteLine($"[E]{Name,-8} |"+(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]") +$" |{Description}");
+            Console.Write("\t");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
-            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}");
+            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
             Console.WriteLine();
         }
         public void DisplayinventoryItem() 
         {
-            Console.WriteLine($"{Name,-8}| {Description}");
-            Console.Write($"   배낭 안 소지수 {ItemCount,-2}|");
+            Utility.RealTab($"{Name}", true, 14); Console.Write($"|{Description}\n");
+            Console.Write($"   소지 {ItemCount,-2}개|");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
             if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
             Console.WriteLine() ;
+            Console.WriteLine();
         }
         public void DisplayShopItem(bool isSale) //true일경우 판매가 표시 false경우 구매가 표시
         {
-            Console.WriteLine($"{Name,-8}| {Description}");
+            Console.WriteLine($"{Name,-8} |" + (JobLimit.Length == 3 ? "[공용]" : $"[{JobLimit[0]}전용]")+$" |{Description}");
             Console.Write(!isSale?$"    가격 {Cost,5}":$"\t판매가 {Cost/2,-5}");
-            Console.Write($"|배낭 안 소지수{ItemCount,-2}|");
+            Console.Write($"|소지 개수 {ItemCount,-2}|");
             if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
             if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
             if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
@@ -83,7 +90,7 @@ namespace SpartaDungeon
     {
 
 
-        internal class ConsumableItem
+        public class ConsumableItem
         {
 
 
@@ -133,7 +140,7 @@ namespace SpartaDungeon
                 Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} |가격: {Cost} |개수: {ItemCount}");
             }
         }
-        internal class PotionPlayer
+        public class PotionPlayer
         {
             public int Health { get; private set; } = 100;
             public int Mana { get; private set; } = 50;
