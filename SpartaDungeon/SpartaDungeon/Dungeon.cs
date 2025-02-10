@@ -87,13 +87,27 @@ namespace SpartaDungeon
             }
 
             Console.WriteLine("0. 뒤로");
-            int input = Utility.GetInput(0, 2);
-            if (input == 0)
-                ReadyBattle();
-            else if (gm.player.skills[input - 1].Type == SkillType.Attack)
-                TargetBattle(true, input);
-            else if (gm.player.skills[input - 1].Type == SkillType.Heal)
-                PlayerSkillHeal(input - 1);
+            while (true)
+            {
+                int input = Utility.GetInput(0, 2);
+                if (input == 0)
+                {
+                    ReadyBattle();
+                    break;
+                }
+                else if (gm.player.skills[input - 1].Type == SkillType.Attack && gm.player.skills[input - 1].UseMp <= gm.player.manaPoint && gm.player.skills[input - 1].UseHp <= gm.player.healthPoint)
+                {
+                    TargetBattle(true, input);
+                    break;
+                }
+                else if (gm.player.skills[input - 1].Type == SkillType.Heal && gm.player.skills[input - 1].UseMp <= gm.player.manaPoint && gm.player.skills[input - 1].UseHp <= gm.player.healthPoint)
+                {
+                    PlayerSkillHeal(input - 1);
+                    break;
+                }
+                else
+                    Console.WriteLine("필요한 코스트가 부족합니다.");
+            }
         }
 
         public void TargetBattle(bool useskill = false, int skillnum = 0)
@@ -166,7 +180,7 @@ namespace SpartaDungeon
 
         public void PlayerSkillHeal(int skillnum)
         {
-            ScreenText("Battle!! - 스킬선택(비타격)");
+            ScreenText("Battle!! - Player의 턴");
             Console.WriteLine($"{gm.player.name}가 {gm.player.skills[skillnum].Name}을(를) 사용!");
             Hpbar();
             Mpbar();
@@ -488,7 +502,7 @@ namespace SpartaDungeon
         }
         public void Hpbar()
         {
-            int viewHp = (int)((float)gm.player.healthPoint / (gm.player.maxhealthPoint/10));
+            int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint+gm.player.equipMaxhealthPoint)/10));
             viewHp = Math.Min(viewHp, 10);
             Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint}");
             for (int i = 0; i < viewHp; i++)

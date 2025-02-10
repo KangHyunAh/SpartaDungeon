@@ -12,7 +12,8 @@ namespace SpartaDungeon
     internal class DataManager
     {
         private const string folderPath = "./Save";            // 세이브파일이 존재할 폴더의 위치
-        private const string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
+        //private const string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
+        private const string filePath = "./Save/testSaveData.json";     // 세이브파일의 위치
 
 
         // 캐릭터 생성
@@ -57,8 +58,8 @@ namespace SpartaDungeon
                 player.ChadSelect();
                 player.name = name;
 
-                // 직업에 맞는 스킬 생성
-                SkillManager.SkillInit(player);
+                if (player.chad == "전사")
+                    continue;
 
                 return player;
             }
@@ -120,8 +121,11 @@ namespace SpartaDungeon
             jsonArr.Add(playerJson);
             jsonArr.Add(itemJson);
 
+            byte[] bytes = Encoding.UTF8.GetBytes(jsonArr.ToString());
+            string encodingJson = Convert.ToBase64String(bytes);
+
             // 문자열로 변환 후 파일 생성
-            File.WriteAllText(filePath, jsonArr.ToString());
+            File.WriteAllText(filePath, encodingJson);
         }
 
         // 불러오기
@@ -175,14 +179,17 @@ namespace SpartaDungeon
             }
             catch (Exception e)
             {
-                Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다. {e}");
+                Console.WriteLine($"세이브 데이터를 불러오는 중 오류가 발생했습니다. {e.Message}");
                 Console.WriteLine($"캐릭터 생성으로 이동합니다.");
                 Thread.Sleep(1000);
                 user = CreateCharacter();
             }
 
+            byte[] bytes = Convert.FromBase64String(data);
+            string decoding = Encoding.UTF8.GetString(bytes);
+
             // 문자열 JArray로 변환
-            JArray jsonArr = JArray.Parse(data);
+            JArray jsonArr = JArray.Parse(decoding);
 
             // 배열에 있는 데이터 JObject로 변환하여 변수에 하나씩 넣어주기
             JObject playerData = (JObject)jsonArr[0];
