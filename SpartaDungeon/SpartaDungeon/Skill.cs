@@ -70,11 +70,13 @@ namespace SpartaDungeon
                     target[0].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                 }
 
+                // 남은 적이 두마리 이상일 때
                 else if( target.Count >= 2)
                 {
                     
                     int rndtargetIndex1 = random.Next(0, target.Count);
                     int rndtargetIndex2;
+                    // index2에 index1과 다른값이 나올때 까지 반복
                     do
                     {
                         rndtargetIndex2 = random.Next(0, target.Count);
@@ -83,23 +85,6 @@ namespace SpartaDungeon
                     target[rndtargetIndex2].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                 }
 
-                //// 남은 적이 2마리 이상일 때
-                //else if (target.Count >= 2)
-                //{
-                //    int rndtargetIndex1 = new Random().Next(0, target.Count);
-
-                //    target[rndtargetIndex1].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
-
-                //    int rndtargetIndex2 = new Random().Next(0, target.Count);
-
-
-                //    while (rndtargetIndex1 != rndtargetIndex2)
-                //    {
-                //        rndtargetIndex2 = new Random().Next(0, target.Count);
-                //    }
-
-                //    target[rndtargetIndex2].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
-                //}
                 target.Clear();
             }
 
