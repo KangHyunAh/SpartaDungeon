@@ -40,7 +40,7 @@ namespace SpartaDungeon
                 defensivePower = (int)(1.5 * defensivePower);
                 maxhealthPoint = (int)(1.2 * maxhealthPoint);
                 level++;
-                Console.WriteLine("레벨 업!");
+                Utility.ColorText(ConsoleColor.Yellow, "레벨 업!");
                 if (exp >= maxExp) 
                 {
                     this.ControlLevel();
@@ -153,17 +153,17 @@ namespace SpartaDungeon
         {
             Console.WriteLine("직업을 선택합니다.");
             Console.WriteLine(" ");
-            Console.WriteLine("1. 나이트");
+            Utility.ColorText(ConsoleColor.Yellow, "1. 나이트");
             Console.WriteLine("방어 특화 직업으로, 동료를 지키는 든든한 기사입니다.");
             Console.WriteLine(" ");
-            Console.WriteLine("2. 검사");
+            Utility.ColorText(ConsoleColor.Yellow, "2. 검사");
             Console.WriteLine("공격 특화 직업으로, 강력한 검으로 적을 처단합니다.");
             Console.WriteLine(" ");
-            Console.WriteLine("3. 광전사");
+            Utility.ColorText(ConsoleColor.Yellow, "3. 광전사");
             Console.WriteLine("체력 특화 직업으로, 수많은 적을 한번에 공격할 수 있습니다.");
             Console.WriteLine(" ");
-            Console.WriteLine("*주의");
-            Console.WriteLine("직업 선택 시 레벨, 경험치, 스탯이 초기화됩니다.");
+            Utility.ColorText(ConsoleColor.DarkRed, "*주의");
+            Utility.ColorText(ConsoleColor.DarkRed, "직업 선택 시 레벨, 경험치, 스탯이 초기화됩니다.");
             Console.WriteLine(" ");
             Console.WriteLine("1. 나이트 \n2. 검사 \n3. 광전사 \n0. 나가기");
             Console.WriteLine("해당 숫자를 입력해 선택해주세요.");
