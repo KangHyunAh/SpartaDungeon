@@ -58,7 +58,7 @@ namespace SpartaDungeon
             else if (input == 2)
                 TargetBattle();
             else
-                gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                gm.inventoryAndShop.ConsumableItemInventoryScreen(gm,true);
         }
 
         public void SkillChoiceBattle()
@@ -491,7 +491,7 @@ namespace SpartaDungeon
             Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
             for (int i = 0; i < viewMp; i++)
             {
-                Utility.ColorText(Console,"■");
+                Utility.ColorText(ConsoleColor.Blue,"■",Text.Write);
             }
             for (int i = 0; i < 10 - viewMp; i++)
             {
