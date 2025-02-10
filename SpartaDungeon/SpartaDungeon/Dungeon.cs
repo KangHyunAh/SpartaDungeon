@@ -45,17 +45,20 @@ namespace SpartaDungeon
             Hpbar();
             Mpbar();
             Console.WriteLine();
-            Console.WriteLine("0. 로비");
+            Console.WriteLine("0. 도망가기");
             Console.WriteLine("1. 스킬");
             Console.WriteLine("2. 기본 공격");
+            Console.WriteLine("3. 인벤토리");
             Console.WriteLine();
-            int input = Utility.GetInput(0, 2);
+            int input = Utility.GetInput(0, 3);
             if (input == 0)
-            { }
+                gm.monsters.Clear();
             else if (input == 1)
                 SkillChoiceBattle();
-            else
+            else if (input == 2)
                 TargetBattle();
+            else
+                gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
         }
 
         public void SkillChoiceBattle()
@@ -392,13 +395,14 @@ namespace SpartaDungeon
                         getAtk += (float)gm.monsters[i].Atk / 10;
                     else
                         getAtk += (float)gm.monsters[i].Atk / 20;
-                    if (getAtk >= 1)
-                        gm.player.strikePower += (int)getAtk;
+                    
                     gm.player.gold += gm.monsters[i].Rewards;
                     goldSum += gm.monsters[i].Rewards;
                     gm.player.exp += (gm.monsters[i].Exp+ gm.player.dungeonLevel*3);
                     expSum += (gm.monsters[i].Exp + gm.player.dungeonLevel * 3);
                 }
+                if (getAtk >= 1)
+                    gm.player.strikePower += (int)getAtk;
 
                 gm.player.dungeonLevel += 1;
                 Utility.ColorText(ConsoleColor.Yellow, "Victory");
