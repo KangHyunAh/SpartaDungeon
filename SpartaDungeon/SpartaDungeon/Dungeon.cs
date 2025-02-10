@@ -71,7 +71,6 @@ namespace SpartaDungeon
                 else
                 {
                     gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
-                    break;
                 }
             }
             

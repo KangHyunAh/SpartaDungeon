@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 public enum Text
@@ -60,7 +61,11 @@ static class Utility
 
     public static void RealTab(string String,bool LeftofRight,int gap)
     {
-
+        Regex regex = new Regex("[가-힣]");
+        MatchCollection koreanNum = regex.Matches(String);
+        if (LeftofRight) Console.Write(String);
+        Console.Write(new string(' ', gap >= String.Length+koreanNum.Count ? (gap - (koreanNum.Count + String.Length)) : 0));
+        if (!LeftofRight) Console.Write(String);
     }
 
 
