@@ -14,7 +14,7 @@ namespace SpartaDungeon
         public int Atk { get; set; }
         public int Rewards { get; set; }
         public int Exp { get; set; }
-        public string MonsterType { get; set; }
+        public string MonsterType { get;}
         
         public Monster(int lv, string name, int health, int atk, int rewards, int exp, string monstertype)
         {

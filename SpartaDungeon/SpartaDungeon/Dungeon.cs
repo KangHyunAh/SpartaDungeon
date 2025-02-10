@@ -11,7 +11,7 @@ namespace SpartaDungeon
 {
     public class Dungeon
     {
-        public int EnterHp { get; set; }
+        private int EnterHp { get; set; }
         GameManager gm{ get; set; }
         Random random = new Random();
 
@@ -115,7 +115,7 @@ namespace SpartaDungeon
             else
             {
                 Console.WriteLine("0. 뒤로");
-                if(gm.monsterList.Count == 1)
+                if(gm.monsters.Count == 1)
                     Console.WriteLine($"1. 대상을 선택해주세요.");
                 else
                     Console.WriteLine($"1~{gm.monsters.Count}. 대상을 선택해주세요.");
@@ -401,15 +401,18 @@ namespace SpartaDungeon
                     gm.player.exp += (gm.monsters[i].Exp+ gm.player.dungeonLevel*3);
                     expSum += (gm.monsters[i].Exp + gm.player.dungeonLevel * 3);
                 }
-                if (getAtk >= 1)
-                    gm.player.strikePower += (int)getAtk;
 
                 gm.player.dungeonLevel += 1;
                 Utility.ColorText(ConsoleColor.Yellow, "Victory");
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {gm.monsters.Count}마리를 잡았습니다.");
-                if((int)getAtk>=1)
+
+                if ((int)getAtk >= 1)
+                {
+                    gm.player.strikePower += (int)getAtk;
                     Console.WriteLine($"몬스터들의 흔적을 읽어 {(int)getAtk}만큼의 힘이 상승했습니다.");
+                }
+
                 Console.WriteLine($"획득 경험치 {expSum}");
                 Console.WriteLine($"획득 골드 : {goldSum} G");
 
