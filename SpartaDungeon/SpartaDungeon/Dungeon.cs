@@ -43,8 +43,6 @@ namespace SpartaDungeon
                 MonsterInfo();
 
                 Console.WriteLine();
-                Console.WriteLine("[내정보]");
-                Console.WriteLine($"Lv. {gm.player.level} [{gm.player.name}]({gm.player.chad})");
                 Hpbar();
                 Mpbar();
                 Console.WriteLine();
@@ -82,7 +80,7 @@ namespace SpartaDungeon
             ScreenText("스킬 선택");
             for(int i = 0; i < gm.player.skills.Count; i++)
             {
-                Console.WriteLine($"{i+1}.{gm.player.skills[i].Name}");
+                Console.WriteLine($"{i+1}.{gm.player.skills[i].Name} [Hp소모 : {gm.player.skills[i].UseHp} / Mp소모 : {gm.player.skills[i].UseMp}]");
                 Console.WriteLine($"  {gm.player.skills[i].Description}") ;
                 Console.WriteLine();
             }
@@ -103,7 +101,7 @@ namespace SpartaDungeon
                 }
                 else if (gm.player.skills[input - 1].Type == SkillType.Heal && gm.player.skills[input - 1].UseMp <= gm.player.manaPoint && gm.player.skills[input - 1].UseHp <= gm.player.healthPoint)
                 {
-                    PlayerSkillHeal(input - 1);
+                    PlayerSkillNonAttack(input - 1);
                     break;
                 }
                 else
@@ -179,7 +177,7 @@ namespace SpartaDungeon
 
         }
 
-        public void PlayerSkillHeal(int skillnum)
+        public void PlayerSkillNonAttack(int skillnum)
         {
             ScreenText("Battle!! - Player의 턴");
             Console.WriteLine($"{gm.player.name}가 {gm.player.skills[skillnum].Name}을(를) 사용!");
