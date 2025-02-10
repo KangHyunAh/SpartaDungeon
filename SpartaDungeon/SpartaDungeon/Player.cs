@@ -47,23 +47,23 @@ namespace SpartaDungeon
                 }
             }
         }
-        //public void DisplayHpMpBar()    //체력,마나 막대 표시
-        //{
-        //    Console.Write($"HP {healthPoint,4}/{(maxhealthPoint+equipMaxhealthPoint),4} ");
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Green, "■",Text.Write);
-        //        else Console.Write("□");
-        //    }
-        //    Console.WriteLine();
-        //    Console.Write($"MP {manaPoint,4}/{maxManaPoint,4} ");
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        if (i < (float)manaPoint / maxManaPoint  * 10) Utility.ColorText(ConsoleColor.Blue, "■",Text.Write);
-        //        else Console.Write("□");
-        //    }
-        //    Console.WriteLine();
-        //}
+        public void DisplayHpMpBar()    //체력,마나 막대 표시
+        {
+            Console.Write($"HP {healthPoint,4}/{(maxhealthPoint+equipMaxhealthPoint),4} ");
+            for (int i = 0; i < 10; i++)
+            {
+                if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Green, "■",Text.Write);
+                else Console.Write("□");
+            }
+            Console.WriteLine();
+            Console.Write($"MP {manaPoint,4}/{maxManaPoint,4} ");
+            for (int i = 0; i < 10; i++)
+            {
+                if (i < (float)manaPoint / maxManaPoint  * 10) Utility.ColorText(ConsoleColor.Blue, "■",Text.Write);
+                else Console.Write("□");
+            }
+            Console.WriteLine();
+        }
 
         public void CharacterInformation()//상태창 
         {
@@ -120,7 +120,7 @@ namespace SpartaDungeon
                 {
                     gold = gold - 100;
                     healthPoint = maxhealthPoint + equipMaxhealthPoint;
-                    manaPoint = maxhealthPoint;
+                    manaPoint = maxManaPoint;
                     Console.WriteLine("현재 골드 : " + gold + " G");
                     Console.WriteLine("현재 체력 : " + (healthPoint));
                     Console.WriteLine("현재 마나 : " + (manaPoint));
