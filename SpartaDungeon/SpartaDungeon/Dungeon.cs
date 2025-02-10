@@ -16,6 +16,28 @@ namespace SpartaDungeon
         GameManager gm{ get; set; }
         Random random = new Random();
 
+        private QuestManager questManager;
+        private Player player;
+
+        public Dungeon(QuestManager questManager, Player player)
+        {
+            this.questManager = questManager;
+            this.player = player;
+        }
+
+        public void EnterDunGeon()
+        {
+            int monsterKills = 3;
+            int questId = 1;
+
+            questManager.UpdateQuestProgress(questId, monsterKills);
+
+            if (questManager.IsQuestCompleted(questId))
+            {
+                questManager.CompleteQuest(questId, player);
+            }
+        }
+
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
