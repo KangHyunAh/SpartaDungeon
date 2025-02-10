@@ -13,7 +13,7 @@ namespace SpartaDungeon
     public class Dungeon
     {
         private int EnterHp { get; set; }
-        GameManager gm{ get; set; }
+        GameManager gm { get; set; }
         Random random = new Random();
 
         internal void Battle(GameManager gm)
@@ -21,14 +21,14 @@ namespace SpartaDungeon
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
 
-            if (!(gm.player.dungeonLevel%3 == 0))
+            if (!(gm.player.dungeonLevel % 3 == 0))
             {
                 MonsterSpawn(gm.monsterList, random.Next(1, 5));
             }
             else
             {
                 MonsterSpawn(gm.bossmonsterList, 1);
-                MonsterSpawn(gm.monsterList,random.Next(1,5));
+                MonsterSpawn(gm.monsterList, random.Next(1, 5));
             }
             ReadyBattle();
         }
@@ -72,7 +72,7 @@ namespace SpartaDungeon
                     gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
                 }
             }
-            
+
         }
 
         public void SkillChoiceBattle()
@@ -128,14 +128,14 @@ namespace SpartaDungeon
             {
                 Console.WriteLine("0. 뒤로");
                 Console.WriteLine("1. 전체기");
-                
-                int input = Utility.GetInput(0,1);
-                if(input == 0)
+
+                int input = Utility.GetInput(0, 1);
+                if (input == 0)
                     SkillChoiceBattle();
                 else
                     PlayerSkillAttack(skillnum - 1, 0);
             }
-            else if(useskill && gm.player.skills[skillnum - 1].Count > 1)
+            else if (useskill && gm.player.skills[skillnum - 1].Count > 1)
             {
                 Console.WriteLine("0. 뒤로");
                 Console.WriteLine("1. 무작위 공격");
@@ -148,7 +148,7 @@ namespace SpartaDungeon
             else
             {
                 Console.WriteLine("0. 뒤로");
-                if(gm.monsters.Count == 1)
+                if (gm.monsters.Count == 1)
                     Console.WriteLine($"1. 대상을 선택해주세요.");
                 else
                     Console.WriteLine($"1~{gm.monsters.Count}. 대상을 선택해주세요.");
@@ -214,7 +214,7 @@ namespace SpartaDungeon
             Console.Write($"{gm.player.name}의 {gm.player.skills[skillnum].Name} 발동!  ");
             if (gm.player.skills[skillnum].UseHp != 0)
                 Console.Write($"[Hp 소모 : {gm.player.skills[skillnum].UseHp}] ");
-            if(gm.player.skills[skillnum].UseMp != 0)
+            if (gm.player.skills[skillnum].UseMp != 0)
                 Console.Write($"[Mp 소모 : {gm.player.skills[skillnum].UseMp}]");
 
             Console.WriteLine();
@@ -257,7 +257,7 @@ namespace SpartaDungeon
             Console.WriteLine();
             if (Utility.GetInput(0, 0) == 0)
             {
-                if(gm.monsters.Count(m => m.Health > 0) != 0)
+                if (gm.monsters.Count(m => m.Health > 0) != 0)
                     MonsterAttack();
                 else
                     BattleResult();
@@ -283,7 +283,7 @@ namespace SpartaDungeon
             }
             int evasion = random.Next(0, 10);
 
-            if(evasion > 0)
+            if (evasion > 0)
                 gm.monsters[target].Health -= damage;
 
             if (evasion == 0)
@@ -297,13 +297,13 @@ namespace SpartaDungeon
 
             for (int i = 0; i < gm.monsters.Count; i++)
             {
-                if (gm.monsters[i].Health <= 0 && monsternum[i] >0)
+                if (gm.monsters[i].Health <= 0 && monsternum[i] > 0)
                 {
                     Console.WriteLine($"Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name}");
                     Console.WriteLine($"HP. {monsternum[i]} => Dead");
                 }
             }
-            
+
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
@@ -327,7 +327,7 @@ namespace SpartaDungeon
                 int playerHp = gm.player.healthPoint;
                 if (monster.Health > 0)
                 {
-                    if(gm.player.healthPoint > 0)
+                    if (gm.player.healthPoint > 0)
                     {
                         Console.WriteLine($"{monster.Name} 의 공격!");
                         int damage = monster.Atk - gm.player.defensivePower;
@@ -337,10 +337,10 @@ namespace SpartaDungeon
                         {
                             damage = (int)((float)damage * 1.6);
                         }
-                        damage = Math.Max(0,damage);
+                        damage = Math.Max(0, damage);
 
                         int evasion = random.Next(0, 10);
-                        if(evasion > 0)
+                        if (evasion > 0)
                             gm.player.healthPoint -= damage;
 
                         if (evasion == 0)
@@ -388,14 +388,14 @@ namespace SpartaDungeon
                                     Thread.Sleep(300);
                                 }
                             }
-                            
+
                         }
                         Console.WriteLine();
                         Console.WriteLine();
                     }
                 }
             }
-            
+
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
@@ -407,7 +407,7 @@ namespace SpartaDungeon
                 else
                     ReadyBattle();
             }
-                
+
 
         }
 
@@ -422,20 +422,20 @@ namespace SpartaDungeon
                 float getAtk = 0;
                 for (int i = 0; i < gm.monsters.Count; i++)
                 {
-                    if(gm.monsters[i].MonsterType == "보스")
+                    if (gm.monsters[i].MonsterType == "보스")
                         getAtk += (float)gm.monsters[i].Atk / 5;
                     else if (gm.monsters[i].MonsterType == gm.player.chad)
                         getAtk += (float)gm.monsters[i].Atk / 10;
                     else
                         getAtk += (float)gm.monsters[i].Atk / 20;
-                    
+
                     gm.player.gold += gm.monsters[i].Rewards;
                     goldSum += gm.monsters[i].Rewards;
-                    gm.player.exp += (gm.monsters[i].Exp+ gm.player.dungeonLevel*3);
+                    gm.player.exp += (gm.monsters[i].Exp + gm.player.dungeonLevel * 3);
                     expSum += (gm.monsters[i].Exp + gm.player.dungeonLevel * 3);
                 }
 
-                
+
                 Utility.ColorText(ConsoleColor.Yellow, "Victory");
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {gm.monsters.Count}마리를 잡았습니다.");
@@ -489,7 +489,7 @@ namespace SpartaDungeon
 
         }
 
-        
+
 
         public void MonsterSpawn(List<Monster> monsterList, int spawnNum)
         {
@@ -525,18 +525,18 @@ namespace SpartaDungeon
         }
         public void Hpbar()
         {
-            int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint+gm.player.equipMaxhealthPoint)/10));
+            int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint) / 10));
             viewHp = Math.Min(viewHp, 10);
-            Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint}");
+            Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint}");
             for (int i = 0; i < viewHp; i++)
             {
-                Utility.ColorText(ConsoleColor.Red,"■",Text.Write);
+                Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
             }
             for (int i = 0; i < 10 - viewHp; i++)
             {
                 Console.Write("□");
             }
-            
+
         }
         public void Mpbar()
         {
@@ -546,7 +546,7 @@ namespace SpartaDungeon
             Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
             for (int i = 0; i < viewMp; i++)
             {
-                Utility.ColorText(ConsoleColor.Blue,"■",Text.Write);
+                Utility.ColorText(ConsoleColor.Blue, "■", Text.Write);
             }
             for (int i = 0; i < 10 - viewMp; i++)
             {
