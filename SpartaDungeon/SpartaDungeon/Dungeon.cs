@@ -18,6 +18,7 @@ namespace SpartaDungeon
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
+            EnterHp = gm.player.healthPoint;
 
             if (!(gm.player.dungeonLevel%3 == 0))
             {
@@ -44,17 +45,20 @@ namespace SpartaDungeon
             Hpbar();
             Mpbar();
             Console.WriteLine();
-            Console.WriteLine("0. 로비");
+            Console.WriteLine("0. 도망가기");
             Console.WriteLine("1. 스킬");
             Console.WriteLine("2. 기본 공격");
+            Console.WriteLine("3. 인벤토리");
             Console.WriteLine();
-            int input = Utility.GetInput(0, 2);
+            int input = Utility.GetInput(0, 3);
             if (input == 0)
-            { }
+                gm.monsters.Clear();
             else if (input == 1)
                 SkillChoiceBattle();
-            else
+            else if (input == 2)
                 TargetBattle();
+            else
+                gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
         }
 
         public void SkillChoiceBattle()
@@ -93,7 +97,8 @@ namespace SpartaDungeon
                 Console.WriteLine("1. 전체기");
                 
                 int input = Utility.GetInput(0,1);
-                if(input == 0) { }
+                if(input == 0)
+                    SkillChoiceBattle();
                 else
                     PlayerSkillAttack(skillnum - 1, 0);
             }
@@ -102,14 +107,18 @@ namespace SpartaDungeon
                 Console.WriteLine("0. 뒤로");
                 Console.WriteLine("1. 무작위 공격");
                 int input = Utility.GetInput(0, 1);
-                if(input == 0) { }
+                if (input == 0)
+                    SkillChoiceBattle();
                 else
                     PlayerSkillAttack(skillnum - 1, 0);
             }
             else
             {
                 Console.WriteLine("0. 뒤로");
-                Console.WriteLine($"1~{gm.monsters.Count}. 대상을 선택해주세요.");
+                if(gm.monsterList.Count == 1)
+                    Console.WriteLine($"1. 대상을 선택해주세요.");
+                else
+                    Console.WriteLine($"1~{gm.monsters.Count}. 대상을 선택해주세요.");
                 while (true)
                 {
                     int input = Utility.GetInput(0, gm.monsters.Count);
@@ -142,7 +151,7 @@ namespace SpartaDungeon
 
         public void PlayerSkillHeal(int skillnum)
         {
-            ScreenText("Battle!! - 도핑");
+            ScreenText("Battle!! - 스킬선택(비타격)");
             Console.WriteLine($"{gm.player.name}가 {gm.player.skills[skillnum].Name}을(를) 사용!");
             Hpbar();
             Mpbar();
@@ -160,7 +169,7 @@ namespace SpartaDungeon
             Console.WriteLine();
             int input = Utility.GetInput(0, 1);
             if (input == 0)
-            { }
+                SkillChoiceBattle();
             else
                 MonsterAttack();
         }
@@ -386,13 +395,14 @@ namespace SpartaDungeon
                         getAtk += (float)gm.monsters[i].Atk / 10;
                     else
                         getAtk += (float)gm.monsters[i].Atk / 20;
-                    if (getAtk >= 1)
-                        gm.player.strikePower += (int)getAtk;
+                    
                     gm.player.gold += gm.monsters[i].Rewards;
                     goldSum += gm.monsters[i].Rewards;
                     gm.player.exp += (gm.monsters[i].Exp+ gm.player.dungeonLevel*3);
                     expSum += (gm.monsters[i].Exp + gm.player.dungeonLevel * 3);
                 }
+                if (getAtk >= 1)
+                    gm.player.strikePower += (int)getAtk;
 
                 gm.player.dungeonLevel += 1;
                 Utility.ColorText(ConsoleColor.Yellow, "Victory");
@@ -418,7 +428,7 @@ namespace SpartaDungeon
 
             Console.WriteLine();
             Console.WriteLine("0. 메뉴로");
-            Console.WriteLine("1. 재전투");
+            Console.WriteLine("1. 다음층으로");
             Console.WriteLine();
             int input = Utility.GetInput(0, 1);
             if (input == 1)
