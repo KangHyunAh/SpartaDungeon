@@ -47,6 +47,17 @@ namespace SpartaDungeon
             isEquip = false;
             IsBossItem = isBossItem;
         }
+
+        public void Equip(GameManager gm)
+        {
+            EquipItem equipedItem = gm.equipItemList.FirstOrDefault(item => item.isEquip == true && item.Type == Type);
+            if(equipedItem == null) { isEquip = true; ItemCount--; }
+            else
+            {
+                equipedItem.isEquip = false;
+                equipedItem.ItemCount ++;
+            }
+        }
         public void DisplayEquipItem()
         {
             Console.Write("[E]"); Utility.RealTabWrite($"{Name}", true, 16); Console.Write("|"); Utility.RealTabWrite(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]", true, 12); Console.Write($"|{Description}\n");

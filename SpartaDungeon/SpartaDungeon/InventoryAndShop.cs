@@ -62,6 +62,10 @@ namespace SpartaDungeon
                                 index++;
                                 Console.Write($"{index,2}.");
                                 gm.equipItemList[i].ShowEquipItemList(gm);
+                                if(i==gm.equipItemList.Count-1 && index == 0)
+                                {
+                                    Utility.ColorText(ConsoleColor.Gray, $"[{(EquipType)(ListItemType - 100 - 1)}] 비어있음");
+                                }
                             }
                         }
                         Console.WriteLine();
@@ -69,8 +73,10 @@ namespace SpartaDungeon
                         {
                             if (gm.equipItemList[i].ItemCount > 0 && gm.equipItemList[i].Type == ListItemType - 100 - 1)
                             {
+                                index++;
                                 displayItemList.Add(gm.equipItemList[i]);
-
+                                Console.Write($"{index,2}.");
+                                gm.equipItemList[i].ShowEquipItemList(gm);
                             }
                         }
                     }
