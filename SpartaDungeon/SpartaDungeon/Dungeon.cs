@@ -22,15 +22,23 @@ namespace SpartaDungeon
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
             ItemLimits = 2;
-            if (!(gm.player.dungeonLevel % 3 == 0))
+            if(gm.monsters.Count < 1)
             {
-                MonsterSpawn(gm.monsterList, random.Next(1, 5));
+                if (!(gm.player.dungeonLevel % 3 == 0))
+                {
+                    MonsterSpawn(gm.monsterList, random.Next(1, 5));
+                }
+                else
+                {
+                    MonsterSpawn(gm.bossmonsterList, 1);
+                    MonsterSpawn(gm.monsterList, random.Next(1, 4));
+                }
             }
             else
-            {
-                MonsterSpawn(gm.bossmonsterList, 1);
-                MonsterSpawn(gm.monsterList, random.Next(1, 4));
-            }
+                foreach (Monster monster in gm.monsters)
+                {
+                    monster.Health = monster.MaxHealth;
+                }
             ReadyBattle();
         }
         public void ReadyBattle()
@@ -56,7 +64,6 @@ namespace SpartaDungeon
                 int input = Utility.GetInput(0, 3);
                 if (input == 0)
                 {
-                    gm.monsters.Clear();
                     return;
                 }
                 else if (input == 1)
