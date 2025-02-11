@@ -8,16 +8,16 @@ namespace SpartaDungeon
 {
     public class QuestManager
     {
-        private Dictionary<int, Quest> quests = new Dictionary<int, Quest>();
-        private List<int> acceptedQuests = new List<int>();
+        public Dictionary<int, Quest> quests = new Dictionary<int, Quest>();
+        public HashSet<int> acceptedQuests = new HashSet<int>();
+        public HashSet<int> completedQuests = new HashSet<int>();
+
+        public QuestManager() { }
 
         public void AddQuest( Quest quest)
         {
-            if (!quests.ContainsKey(quest.Id))
-            {
-                quests.Add(quest.Id, quest);
-                Console.WriteLine("$퀘스트 '{quest.Title}'추가됨.");
-            }
+            quests[quest.Id] = quest;
+
         }
 
         public void CompleteQuest(int questId)
@@ -26,17 +26,21 @@ namespace SpartaDungeon
             {
                 quest.CompleteQuest();
             }
-            else
-            {
-                Console.WriteLine("해당 ID의 퀘스트를 찾을 수 없음");
-            }
+
         }
 
         public void ShowAllQuests()
         {
             foreach (var quest in quests.Values)
             {
-                Console.WriteLine($"[{(quest.IsCompleted ? "완료" : "진행 중")}] {quest.Title} - {quest.Description}");
+                string status;
+                if (completedQuests.Contains(quest.Id))
+                    status = "완료";
+                else if (acceptedQuests.Contains(quest.Id))
+                    status = "진행 중";
+                else
+                    status = "미수락";
+                Console.WriteLine($"[{status}] {quest.Id}: {quest.Title} - {quest.Description}");
             }
         }
 
