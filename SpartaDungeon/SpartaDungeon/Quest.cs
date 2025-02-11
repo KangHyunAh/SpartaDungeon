@@ -28,7 +28,6 @@ namespace SpartaDungeon
             RewardExp = rewardExp;
             CurrentCount = 0;
             IsCompleted = false;
-            IsAccepted = false;
         }
 
         
