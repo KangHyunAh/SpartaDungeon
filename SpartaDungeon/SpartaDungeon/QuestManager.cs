@@ -19,15 +19,16 @@ namespace SpartaDungeon
             quests[quest.Id] = quest;
         }
 
-        public void UpdateQuestProgress(int questId, int progressAmount)
+        public void UpdateQuestProgress(int questId, Monster monster)
         {
-            if(quests.ContainsKey(questId))
+            if(quests.TryGetValue(questId, out Quest quest))
             {
-                Quest quest = quests[questId];
-                if (acceptedQuests.Contains(questId))
+                quest.UpdateProgress(monster);
+
+                if (quest.IsCompleted)
                 {
-                    quest.UpdateProgress(progressAmount);
-                    Console.WriteLine($"퀘스트 '{quest.Title}' 진행 상태 업데이트됨.");
+                    Player player = new Player();
+                    quest.Reward(player);
                 }
             }
         }
@@ -70,11 +71,12 @@ namespace SpartaDungeon
 
         public bool CompleteQuest(int questId, Player player)
         {
-            Quest quest = quests[questId];
-            if (quest.IsCompleted)
+            if(acceptedQuests.Contains(questId) && !completedQuests.Contains(questId))
             {
                 completedQuests.Add(questId);
                 acceptedQuests.Remove(questId);
+
+                Quest quest = quests[questId];
 
                 player.gold += quest.RewardGold;
                 player.exp += quest.RewardExp;
