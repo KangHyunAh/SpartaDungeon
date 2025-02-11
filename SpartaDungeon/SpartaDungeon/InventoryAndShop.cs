@@ -48,7 +48,7 @@ namespace SpartaDungeon
                     Console.WriteLine("인벤토리 -  장착관리");
                     Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
                     Console.WriteLine();
-                    Console.WriteLine("[장비 아이템 목록]");
+                    Console.WriteLine("[장착중]");
 
                     List<EquipItem> displayItemList = new List<EquipItem>();
                     int index = 0;
@@ -59,7 +59,7 @@ namespace SpartaDungeon
                             displayItemList.Add(gm.equipItemList[i]);
                             index++;
                             Console.Write($"  {index,2}.");
-                            gm.equipItemList[i].ShowEquipItemList(gm);
+                            gm.equipItemList[i].ShowEquipItemList(gm,true);
                         }
                         if (i == gm.equipItemList.Count - 1 && index == 0)
                         {
@@ -67,6 +67,7 @@ namespace SpartaDungeon
                         }
                     }
                     Console.WriteLine();
+                    Console.WriteLine("[장비 인벤토리 목록]");
                     for (int i = 0; i < gm.equipItemList.Count; i++)
                     {
                         if (gm.equipItemList[i].ItemCount > 0 && gm.equipItemList[i].Type == ListItemType - 100 - 1)
@@ -209,7 +210,7 @@ namespace SpartaDungeon
                             {
                                 index++;
                                 Console.Write($"{index,-2}.");
-                                gm.equipItemList[i].ShowEquipItemList(gm, true, false);
+                                gm.equipItemList[i].ShowEquipItemList(gm, false, true, false);
                                 Console.WriteLine();
                             }
                         }
@@ -321,7 +322,7 @@ namespace SpartaDungeon
                                 displayItemList.Add(gm.equipItemList[i]);
                                 index++;
                                 Console.Write($"  {index,2}.");
-                                gm.equipItemList[i].ShowEquipItemList(gm,true,true);
+                                gm.equipItemList[i].ShowEquipItemList(gm, true, true, true);
                             }
                             if (i == gm.equipItemList.Count - 1 && index == 0)
                             {
@@ -336,7 +337,7 @@ namespace SpartaDungeon
                                 index++;
                                 displayItemList.Add(gm.equipItemList[i]);
                                 Console.Write($"{index,2}.");
-                                gm.equipItemList[i].ShowEquipItemList(gm,true,true);
+                                gm.equipItemList[i].ShowEquipItemList(gm, false, true, true);
                             }
                         }
                     }
