@@ -486,7 +486,7 @@ namespace SpartaDungeon
                         if(!gm.equipItemList[dropnum].IsBossItem)
                         {
                             gm.equipItemList[dropnum].ItemCount += 1;
-                            Console.WriteLine($"[{gm.equipItemList[dropnum].Type.ToString()}]{gm.equipItemList[dropnum].Name}을 획득하였습니다.");
+                            Console.WriteLine($"{monster.Name}에게서 [{gm.equipItemList[dropnum].Type.ToString()}]{gm.equipItemList[dropnum].Name}을 획득하였습니다.");
                         }
                     }
                 }
