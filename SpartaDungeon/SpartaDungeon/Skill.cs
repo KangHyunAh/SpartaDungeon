@@ -40,7 +40,7 @@ namespace SpartaDungeon
         public void HealSkill(Player player)
         {
             player.healthPoint += (int)(player.maxhealthPoint * SkillPower);
-            player.healthPoint = Math.Min(player.healthPoint, player.maxhealthPoint);
+            player.healthPoint = Math.Min(player.healthPoint, player.maxhealthPoint + player.equipMaxhealthPoint);
             player.manaPoint -= UseMp;
         }
         // 단일공격일시 매개변수에 index 넣어주기
