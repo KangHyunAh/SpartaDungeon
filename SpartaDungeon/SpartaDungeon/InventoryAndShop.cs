@@ -21,7 +21,7 @@ namespace SpartaDungeon
                 Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
                 Console.WriteLine();
                 Console.WriteLine("[보유 골드]");
-                Console.WriteLine($"{gm.player.gold} G");
+                Utility.ColorText(ConsoleColor.White, $"{gm.player.gold} G");
                 Console.WriteLine();
                 Console.WriteLine("1.장비 아이템");
                 Console.WriteLine("2.소비 아이템");
@@ -168,7 +168,7 @@ namespace SpartaDungeon
                 Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
                 Console.WriteLine();
                 Console.WriteLine("[보유 골드]");
-                Console.WriteLine($"{gm.player.gold} G");
+                Utility.ColorText(ConsoleColor.White, $"{gm.player.gold} G");
                 Console.WriteLine();
                 Console.WriteLine("1. 구매하기");
                 Console.WriteLine("2. 판매하기");
