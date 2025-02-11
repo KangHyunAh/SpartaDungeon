@@ -464,6 +464,18 @@ namespace SpartaDungeon
                     bossdrop.Clear();
 
                 }
+                foreach (Monster monster in gm.monsters)
+                {
+                    if (monster.Getitem == 0)
+                    {
+                        int dropnum = random.Next(0, gm.equipItemList.Count);
+                        if(!gm.equipItemList[dropnum].IsBossItem)
+                        {
+                            gm.equipItemList[dropnum].ItemCount += 1;
+                            Console.WriteLine($"[{gm.equipItemList[dropnum].Type.ToString()}]{gm.equipItemList[dropnum].Name}을 획득하였습니다.");
+                        }
+                    }
+                }
                 gm.player.ControlLevel();
                 gm.player.dungeonLevel += 1;
             }
