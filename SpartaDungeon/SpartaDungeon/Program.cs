@@ -25,7 +25,7 @@ namespace SpartaDungeon
         public InventoryAndShop inventoryAndShop = new InventoryAndShop();
         public Player player = new Player();
         public Dungeon dungeon;
-        public QuestManager questManager;
+        public QuestManager questManager = new QuestManager();
 
 
 
