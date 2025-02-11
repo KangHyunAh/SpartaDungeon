@@ -120,7 +120,7 @@ namespace SpartaDungeon
                 Console.WriteLine();
 
                 int input = Utility.GetInput(0, index);
-                if (input == 0) { gm.dungeon.ReadyBattle(); break; }
+                if (input == 0) { if (isDungeon) gm.dungeon.ReadyBattle(); break; }
                 else
                 {
                     index = 0;
@@ -147,10 +147,10 @@ namespace SpartaDungeon
                                 }
                                 Console.WriteLine("\n1.사용     0.취소");
 
-                                if (Utility.GetInput(0, 1)==1)
+                                if (Utility.GetInput(0, 1) == 1)
                                 {
-                                    gm.consumableItemsList[i].Use(gm.player); 
-                                    if (isDungeon) { gm.dungeon.ItemLimits--; gm.dungeon.ReadyBattle();return; } 
+                                    gm.consumableItemsList[i].Use(gm.player);
+                                    if (isDungeon) { gm.dungeon.ItemLimits--; gm.dungeon.ReadyBattle(); return; }
                                 }
                             }
                         }

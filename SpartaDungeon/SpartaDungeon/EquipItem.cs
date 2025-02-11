@@ -124,11 +124,8 @@ namespace SpartaDungeon
             if (isEquip) Console.ResetColor();
             
             //둘째줄
-<<<<<<< Updated upstream
-            if (ItemCount >= 1) Console.Write($"  소지X{ItemCount,2} "); else Utility.ColorText(ConsoleColor.DarkGray, $"  소지X{ItemCount,2} ", Text.Write);
-=======
             if (ItemCount >= 1 && !hideCount) Console.Write($"  소지X{ItemCount,2} "); else Console.Write("          ");
->>>>>>> Stashed changes
+
             if (isShop) 
             {
                 if (!isSale)
