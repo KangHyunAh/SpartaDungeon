@@ -483,13 +483,13 @@ namespace SpartaDungeon
         private byte[] UnLockKeyOrIV(string path)
         {
             byte[] data = File.ReadAllBytes(path);
-            return ProtectedData.Unprotect(data, null, DataProtectionScope.CurrentUser);
+            return ProtectedData.Unprotect(data, null, DataProtectionScope.LocalMachine);
         }
 
         // 저장 시 생성한 Key, IV 암호화
         private void LockKeyOrIV(string path, byte[] data)
         {
-            byte[] lockData = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
+            byte[] lockData = ProtectedData.Protect(data, null, DataProtectionScope.LocalMachine);
             File.WriteAllBytes(path, lockData);
         }
     }
