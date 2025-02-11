@@ -93,58 +93,16 @@ namespace SpartaDungeon
                     }
 
                     Console.WriteLine();
-                    Console.WriteLine("0.나가기");
+                    Console.WriteLine("목록바꾸기");
+                    Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발  106.소모품");
+                    Console.WriteLine("0. 뒤로가기");
                     Console.WriteLine();
 
-                    int input = Utility.GetInput(0, index);
+                    int input = Utility.GetInputPlus(0, index, new int[] {101,102,103,104,105,106});
                     if (input == 0) break;
-                    else Equip(input);
+                    else if (input > 100) ListItemType=input;
+                    else displayItemList[input - 1].Equip(gm);
 
-
-                    void Equip(int input)
-                    {
-                        int index = 0;
-                        for (int i = 0; i < gm.equipItemList.Count; i++)
-                        {
-                            if (gm.equipItemList[i].isEquip)       //장착중인 아이템을 선택했을경우. 장착해제 소지수++,장착여부(isEquip)false
-                            {
-                                index++;
-                                if (index == input)
-                                {
-                                    gm.equipItemList[i].ItemCount++;
-                                    gm.equipItemList[i].isEquip = false;
-                                }
-                            }
-                        }
-                        for (int i = 0; i < gm.equipItemList.Count; i++)   //장착중이 아닌 아이템을 선택했을경우. 장착
-                        {
-                            if (gm.equipItemList[i].ItemCount > 0)
-                            {
-                                index++;
-                                if (index == input)
-                                {
-                                    if (gm.equipItemList[i].JobLimit.Contains(gm.player.chad))
-                                    {
-                                        if (gm.equipItemList.Any(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)) //장비타입(부위)별 중복장착 방지
-                                        {
-                                            gm.equipItemList[gm.equipItemList.FindIndex(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)].ItemCount++;
-                                            gm.equipItemList[gm.equipItemList.FindIndex(EquipItem => EquipItem.Type == gm.equipItemList[i].Type && EquipItem.isEquip)].isEquip = false;//먼저 장착된 아이템 해제 = 소지수++ 및 장착여부 false
-                                        }
-                                        gm.equipItemList[i].ItemCount--;
-                                        gm.equipItemList[i].isEquip = true;
-                                    }
-                                    else
-                                    {
-                                        Utility.ColorText(ConsoleColor.Red, "해당 장비를 착용할 수 없는 직업입니다.");
-                                        Console.Write("아무키입력");
-                                        Console.ReadLine();
-                                        EquipScreen();
-                                    }
-                                }
-                            }
-                        }
-                        UpdateEquipStatus(gm);    //장비에따른 스텟 업데이트
-                    }
                 }
             }
         }
@@ -275,9 +233,6 @@ namespace SpartaDungeon
                 while (true)
                 {
                     Console.Clear();
-                    Console.WriteLine("상점");
-                    Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
-                    Console.WriteLine();
                     Console.WriteLine("[보유 골드]");
                     Console.WriteLine($"{gm.player.gold} G");
                     Console.WriteLine();

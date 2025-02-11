@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,12 +51,51 @@ namespace SpartaDungeon
 
         public void Equip(GameManager gm)
         {
-            EquipItem equipedItem = gm.equipItemList.FirstOrDefault(item => item.isEquip == true && item.Type == Type);
-            if(equipedItem == null) { isEquip = true; ItemCount--; }
+            if (JobLimit.Contains(gm.player.chad))
+            {
+                EquipItem equipedItem = gm.equipItemList.FirstOrDefault(item => item.isEquip == true && item.Type == Type);
+                if (equipedItem == null) { isEquip = true; ItemCount--; }
+                else if (equipedItem == this) { isEquip = false; ItemCount++; }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("장착중인 장비가 있습니다. 해제하고 장착하시겠습니까?");
+
+                    Utility.RealTabWrite($"{equipedItem.Name}", true, 18);
+                    Console.Write("==>");
+                    Utility.RealTabWrite($"{Name}", true, 18); Console.WriteLine();
+
+                    Utility.RealTabWrite($"[atk{equipedItem.Atk,3:+0;-0}]", true, 18); Console.Write("==>"); Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9);
+                    if (equipedItem.Atk > Atk) Utility.ColorText(ConsoleColor.Red, $"{(Atk - equipedItem.Atk),3:+0;-0}", Text.Write);
+                    else if (equipedItem.Atk < Atk) Utility.ColorText(ConsoleColor.Green, $"{(Atk - equipedItem.Atk),3:+0;-0}", Text.Write);
+                    Console.WriteLine();
+                    Utility.RealTabWrite($"[def{equipedItem.Def,3:+0;-0}]", true, 18); Console.Write("==>"); Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 9);
+                    if (equipedItem.Def > Def) Utility.ColorText(ConsoleColor.Red, $"{(Def - equipedItem.Def),3:+0;-0}", Text.Write);
+                    else if (equipedItem.Def < Def) Utility.ColorText(ConsoleColor.Green, $"{(Def - equipedItem.Def),3:+0;-0}", Text.Write);
+                    Console.WriteLine();
+                    Utility.RealTabWrite($"[maxHP{equipedItem.MaxHp,3:+0;-0}]", true, 18); Console.Write("==>"); Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 9);
+                    if (equipedItem.MaxHp > MaxHp) Utility.ColorText(ConsoleColor.Red, $"{(MaxHp - equipedItem.MaxHp),4:+0;-0}", Text.Write);
+                    else if (equipedItem.MaxHp < MaxHp) Utility.ColorText(ConsoleColor.Green, $"{(MaxHp - equipedItem.MaxHp),4:+0;-0}", Text.Write);
+                    Console.WriteLine();
+
+                    Console.WriteLine("1.장착      2.취소");
+
+                    int input = Utility.GetInput(1, 2);
+                    if (input == 1)
+                    {
+                        equipedItem.isEquip = false;
+                        equipedItem.ItemCount++;
+                        isEquip = true;
+                        ItemCount--;
+                    }
+                }
+                gm.inventoryAndShop.UpdateEquipStatus(gm);
+            }
             else
             {
-                equipedItem.isEquip = false;
-                equipedItem.ItemCount ++;
+                Utility.ColorText(ConsoleColor.Red, "해당 장비를 착용할 수 없는 직업입니다.");
+                Console.Write("아무키입력");
+                Console.ReadLine();
             }
         }
         public void DisplayEquipItem()
@@ -92,6 +132,7 @@ namespace SpartaDungeon
         {
             if (isEquip) Console.Write("[E]"); Utility.RealTabWrite($"{Name}", true, 16); Utility.RealTabWrite($"|[{(EquipType)Type}]", true, 7); Console.WriteLine($"|{Description}");//첫줄
             //둘째줄
+            if (ItemCount >= 2) Console.Write($"X{ItemCount,2}");
             if (isShop) Utility.RealTabWrite($"{Cost}G |", true, 16); else if (isSale) Utility.RealTabWrite($"{Cost / 2}G |", true, 16);
             if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 11);    //스텟
             if (Def != 0) Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 11);
@@ -107,17 +148,18 @@ namespace SpartaDungeon
             {
                 deltaAtk = Atk - equipedItem.Atk; deltaDef = Def - equipedItem.Def; deltaMaxHp = MaxHp - equipedItem.MaxHp;
             }
+            Console.Write("능력치 증감");
             if (deltaAtk == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
             else if (deltaAtk > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
             else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
 
-            if (deltaDef == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
-            else if (deltaDef > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaDef,3:+0;-0}] ", Text.Write);
-            else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaDef,3:+0;-0}] ", Text.Write);
+            if (deltaDef == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[def +0] ", Text.Write);
+            else if (deltaDef > 0) Utility.ColorText(ConsoleColor.Cyan, $"[def{deltaDef,3:+0;-0}] ", Text.Write);
+            else Utility.ColorText(ConsoleColor.Red, $"[def{deltaDef,3:+0;-0}] ", Text.Write);
 
-            if (deltaMaxHp == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
-            else if (deltaMaxHp > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaMaxHp,3:+0;-0}] ", Text.Write);
-            else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaMaxHp,3:+0;-0}] ", Text.Write);
+            if (deltaMaxHp == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[maxHP +0] ", Text.Write);
+            else if (deltaMaxHp > 0) Utility.ColorText(ConsoleColor.Cyan, $"[maxHP{deltaMaxHp,3:+0;-0}] ", Text.Write);
+            else Utility.ColorText(ConsoleColor.Red, $"[maxHP{deltaMaxHp,3:+0;-0}] ", Text.Write);
 
             Console.Write("  ");
 
