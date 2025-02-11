@@ -60,12 +60,12 @@ namespace SpartaDungeon
                 new EquipItem("수련자의 갑옷", EquipType.몸, 0,1,50, "수련에 도움을 주는 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 800,false),
                 new EquipItem("무쇠갑옷", EquipType.몸, 0,3,100, "무쇠로 만들어져 튼튼한 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 2000,false),
                 new EquipItem("스파르타의 갑옷", EquipType.몸, 0,5,200, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 3500,false),
-                new EquipItem("보스1의 갑옷", EquipType.머리, 0,10,300, "보스1이 사용하던 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 4000,true),
+                new EquipItem("보스1의 갑옷", EquipType.몸, 0,10,300, "보스1이 사용하던 갑옷입니다. ",new string []{"나이트","검사","광전사" }, 4000,true),
             //신발 목록 EquipType.Boots
                 new EquipItem("수련자의 부츠", EquipType.신발, 0,1,0, "수련에 도움을 주는 부츠입니다. ",new string []{"나이트","검사","광전사" }, 500,false),
                 new EquipItem("무쇠 각반", EquipType.신발, 0,3,0, "무쇠로 만들어진 갑옷하의 입니다. ",new string []{"나이트","검사","광전사" }, 1500,false),
                 new EquipItem("스파르타 각반", EquipType.신발, 0,5,0, "스파르타의 전사들이 사용했다는 전설의 각반입니다. ",new string []{"나이트","검사","광전사" }, 2500,false),
-                new EquipItem("보스1의 각반", EquipType.머리, 0,10,0, "보스1이 사용하던 각반입니다. ",new string []{"나이트","검사","광전사" }, 3000,true),
+                new EquipItem("보스1의 각반", EquipType.신발, 0,10,0, "보스1이 사용하던 각반입니다. ",new string []{"나이트","검사","광전사" }, 3000,true),
 
             };
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace SpartaDungeon
                 Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
                 Console.WriteLine();
                 Console.WriteLine("[보유 골드]");
-                Console.WriteLine($"{gm.player.gold} G");
+                Utility.ColorText(ConsoleColor.White, $"{gm.player.gold} G");
                 Console.WriteLine();
                 Console.WriteLine("1.장비 아이템");
                 Console.WriteLine("2.소비 아이템");
@@ -92,32 +93,7 @@ namespace SpartaDungeon
             }
         }
 
-
-        public int DisplayEquipInventory(List<EquipItem> equipItemList, bool hasNum, bool isSaleScreen)   //인벤토리 목록 표시하기 (true 앞숫자 O, false 앞숫자 X), 판매창일경우 True
-        {
-            int index = 0;
-            for (int i = 0; i < equipItemList.Count; i++)
-            {
-                if (equipItemList[i].isEquip)
-                {
-                    index++; Console.Write(hasNum ? $"{index,2}." : "");
-                    equipItemList[i].DisplayEquipItem();
-                }
-            }
-            Console.WriteLine();
-            Console.WriteLine();
-            for (int i = 0; i < equipItemList.Count; i++)
-            {
-                if (equipItemList[i].ItemCount > 0)
-                {
-                    index++; Console.Write($"{index,2}.");
-                    if (isSaleScreen) equipItemList[i].DisplayShopItem(isSaleScreen); else equipItemList[i].DisplayinventoryItem();
-                }
-            }
-            return index;
-        }
-
-        public void ConsumableItemInventoryScreen(GameManager gm)
+        public void ConsumableItemInventoryScreen(GameManager gm,bool isDungeon = false)
         {
             while (true)
             {
@@ -143,7 +119,7 @@ namespace SpartaDungeon
                 Console.WriteLine();
 
                 int input = Utility.GetInput(0, index);
-                if (input == 0) break;
+                if (input == 0) { if (isDungeon) gm.dungeon.ReadyBattle(); break; }
                 else
                 {
                     index = 0;
@@ -172,7 +148,7 @@ namespace SpartaDungeon
 
                                 switch (Utility.GetInput(0, 1))
                                 {
-                                    case 1: gm.consumableItemsList[i].Use(gm.player); break;
+                                    case 1: gm.consumableItemsList[i].Use(gm.player); if (isDungeon) { gm.dungeon.ItemLimits--; gm.dungeon.ReadyBattle(); } break;
                                     case 0: break;
                                 }
                             }
@@ -192,7 +168,7 @@ namespace SpartaDungeon
                 Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
                 Console.WriteLine();
                 Console.WriteLine("[보유 골드]");
-                Console.WriteLine($"{gm.player.gold} G");
+                Utility.ColorText(ConsoleColor.White, $"{gm.player.gold} G");
                 Console.WriteLine();
                 Console.WriteLine("1. 구매하기");
                 Console.WriteLine("2. 판매하기");
@@ -219,7 +195,7 @@ namespace SpartaDungeon
                 {
                     Console.Clear();
                     Console.WriteLine("[보유 골드]");
-                    Console.WriteLine($"{gm.player.gold} G");
+                    Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold} G");
                     Console.WriteLine();
                     Console.Write("[아이템 목록] ");
                     Console.WriteLine($"[{ItemTypeString[ListItemType - 100 - 1]}]");
@@ -233,7 +209,7 @@ namespace SpartaDungeon
                             {
                                 index++;
                                 Console.Write($"{index,-2}.");
-                                gm.equipItemList[i].DisplayShopItem(false);
+                                gm.equipItemList[i].ShowEquipItemList(gm, true, false);
                                 Console.WriteLine();
                             }
                         }
@@ -245,6 +221,7 @@ namespace SpartaDungeon
                             index++;
                             Console.Write($"{index}.");
                             gm.consumableItemsList[i].DisplayItem();
+                            Console.WriteLine();
                         }
                     }
 
@@ -257,16 +234,8 @@ namespace SpartaDungeon
                     Console.WriteLine();
                     int input = Utility.GetInputPlus(0, index, new int[] { 101, 102, 103, 104, 105, 106 });
                     if (input == 0) break;
-                    switch (input)
-                    {
-                        case 101:
-                        case 102:
-                        case 103:
-                        case 104:
-                        case 105:
-                        case 106: ListItemType = input; break;
-                        default: { if (ListItemType != 106) BuyItem(input); else BuyConsumItem(input - 1); } break;
-                    }
+                    else if (input>100) ListItemType = input;
+                    else { if (ListItemType != 106) BuyItem(input); else BuyConsumItem(input - 1); }
                 }
 
 
@@ -325,7 +294,7 @@ namespace SpartaDungeon
 
             void SaleScreen()
             {
-                int SaleItemType = 101;
+                int ListItemType = 101;
                 string[] ItemTypeString = { "무기", "보조무기", "머리", "몸", "신발", "소모품" };
 
                 while (true)
@@ -335,29 +304,39 @@ namespace SpartaDungeon
                     Console.WriteLine("아이템을 판매합니다. (판매가는 원래 가격의 절반이 됩니다.)");
                     Console.WriteLine();
                     Console.WriteLine("[보유 골드]");
-                    Console.WriteLine($"{gm.player.gold} G");
+                    Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold} G");
                     Console.WriteLine();
                     Console.Write("[인벤토리 목록] ");
-                    Console.WriteLine($"[{ItemTypeString[SaleItemType - 100 - 1]}]");
+                    Console.WriteLine($"[{ItemTypeString[ListItemType - 100 - 1]}]");
 
+                    List<EquipItem> displayItemList = new List<EquipItem>();
+                    List<ConsumableItem> displayConsumList = new List<ConsumableItem>();
                     int index = 0;
-                    if (SaleItemType >= 101 && SaleItemType <= 105)
+                    if (ListItemType != 106)
                     {
                         for (int i = 0; i < gm.equipItemList.Count; i++)
                         {
-                            if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == SaleItemType - 100 - 1)
+                            if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == ListItemType - 100 - 1)
                             {
-                                index++; Console.Write($"{index,2}");
-                                gm.equipItemList[i].DisplayEquipItem();
+                                displayItemList.Add(gm.equipItemList[i]);
+                                index++;
+                                Console.Write($"  {index,2}.");
+                                gm.equipItemList[i].ShowEquipItemList(gm,true,true);
+                            }
+                            if (i == gm.equipItemList.Count - 1 && index == 0)
+                            {
+                                Utility.ColorText(ConsoleColor.DarkGray, $"  [{(EquipType)(ListItemType - 100 - 1)}] 비어있음");
                             }
                         }
                         Console.WriteLine();
                         for (int i = 0; i < gm.equipItemList.Count; i++)
                         {
-                            if (gm.equipItemList[i].ItemCount > 0 && gm.equipItemList[i].Type == SaleItemType - 100 - 1)
+                            if (gm.equipItemList[i].ItemCount > 0 && gm.equipItemList[i].Type == ListItemType - 100 - 1)
                             {
-                                index++; Console.Write($"{index}.");
-                                gm.equipItemList[i].DisplayShopItem(true);
+                                index++;
+                                displayItemList.Add(gm.equipItemList[i]);
+                                Console.Write($"{index,2}.");
+                                gm.equipItemList[i].ShowEquipItemList(gm,true,true);
                             }
                         }
                     }
@@ -365,13 +344,15 @@ namespace SpartaDungeon
                     {
                         for (int i = 0; i < gm.consumableItemsList.Count; i++)
                         {
-                            if (gm.consumableItemsList[i].ItemCount > 0)
+                            if (gm.consumableItemsList[i].ItemCount != 0)
                             {
-                                index++; Console.Write($"{index}.");
+                                index++; displayConsumList.Add(gm.consumableItemsList[i]);
+                                Console.Write($"{index}.");
                                 gm.consumableItemsList[i].DisplayItem();
                             }
                         }
                     }
+                    
 
                     Console.WriteLine();
                     Console.WriteLine("목록바꾸기");
@@ -381,85 +362,41 @@ namespace SpartaDungeon
 
                     int input = Utility.GetInputPlus(0, index, new int[] { 101, 102, 103, 104, 105, 106 });
                     if (input == 0) break;
-                    switch (input)
+                    else if (input > 100) ListItemType = input;
+                    else if (ListItemType != 106)
                     {
-                        case 101:
-                        case 102:
-                        case 103:
-                        case 105:
-                        case 106: SaleItemType = input; SaleScreen(); break;
-                        default: { if (SaleItemType != 106) SaleItem(input); else SaleConsumItem(input); } break;
-                    }
-
-                    void SaleItem(int input)
-                    {
-                        while (true)
+                        if (input == 1 && displayItemList[input - 1].isEquip)
                         {
-                            int index = 0;
-                            for (int i = 0; i < gm.equipItemList.Count; i++)
+                            Console.Clear();
+                            Utility.ColorText(ConsoleColor.Red, "\n장착중인 아이템입니다!", Text.Write);
+                            Console.WriteLine(" 해제하고 판매하시겠습니까?\n");
+                            Console.Write($"{displayItemList[input - 1].Name}   판매가 "); 
+                            Utility.ColorText(ConsoleColor.White, $"{displayItemList[input - 1].Cost / 2}G",Text.Write); 
+                            Console.WriteLine($"    | 소지금 {gm.player.gold}G");
+                            Console.WriteLine("\n1.해제 후 판매      0.취소");
+                            if (Utility.GetInput(0, 1) == 1)
                             {
-                                if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == SaleItemType - 100 - 1)       //장착중인 아이템을 선택했을경우. 장착해제, 판매금(가격/2)받기
-                                {
-                                    index++;
-                                    if (index == input)
-                                    {
-                                        Console.WriteLine($"{gm.equipItemList[i].Name} 판매가 {gm.equipItemList[i].Cost / 2}G");
-                                        Console.WriteLine("장착중인 아이템입니다! 해제하고 판매하시겠습니까?\n");
-                                        Console.WriteLine("1.해제 후 판매      2.취소\n");
-                                        switch (Utility.GetInput(1, 2))
-                                        {
-                                            case 1: { gm.equipItemList[i].isEquip = false; gm.player.gold += gm.equipItemList[i].Cost / 2; UpdateEquipStatus(gm); } break;
-                                            case 2: break;
-                                        }
-                                    }
-                                }
+                                displayItemList[input - 1].isEquip = false; gm.player.gold += (displayItemList[input - 1].Cost / 2);
+                                Console.Write("판매완료  소지금 "); Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold,5}G ", Text.Write); Utility.ColorText(ConsoleColor.Green, $"+{displayItemList[input - 1].Cost / 2}");
+                                Console.Write("아무키입력"); Console.ReadLine();
                             }
-                            for (int i = 0; i < gm.equipItemList.Count; i++)   //장착중이 아닌 아이템을 선택했을경우. 판매
-                            {
-                                if (gm.equipItemList[i].ItemCount > 0 && gm.equipItemList[i].Type == SaleItemType - 100 - 1)
-                                {
-                                    index++;
-                                    if (index == input)
-                                    {
-                                        gm.equipItemList[i].ItemCount--;
-                                        gm.player.gold += gm.equipItemList[i].Cost / 2;
-                                    }
-                                }
-                            }
-                            Console.WriteLine("아이템을 판매하였습니다. (아무키입력)");
-                            Console.ReadLine();
+                            continue;
                         }
-
+                        displayItemList[input - 1].SaleEquipItem(gm);
                     }
+                    else SaleConsumItem(displayConsumList[input - 1]);
                 }
 
 
 
 
-
-
-                void SaleConsumItem(int input)
+                void SaleConsumItem(ConsumableItem consumItem)
                 {
-                    int index = 0;
-                    for (int i = 0; i < gm.consumableItemsList.Count; i++)
-                    {
-                        if (gm.consumableItemsList[i].ItemCount != 0)
-                        {
-                            index++;
-                            if (index == input)
-                            {
-                                Console.Clear();
-                                Console.WriteLine($"{gm.consumableItemsList[i].Name} 이 아이템을 판매하시겠습니까?");
-                                Console.WriteLine($"판매가 {gm.consumableItemsList[i].Cost / 2}G |소지수 {gm.consumableItemsList[i].ItemCount} |소지금 {gm.player.gold}G");
-                                Console.WriteLine("1.판매     2.취소");
-                                switch (Utility.GetInput(1, 2))
-                                {
-                                    case 1: { gm.player.gold += gm.consumableItemsList[i].Cost / 2; gm.consumableItemsList[i].ItemCount--; } break;
-                                    case 2: break;
-                                }
-                            }
-                        }
-                    }
+                    Console.Clear();
+                    Console.WriteLine($"{consumItem.Name} 이 아이템을 판매하시겠습니까?");
+                    Console.WriteLine($"판매가 {consumItem.Cost / 2}G |소지수 {consumItem.ItemCount} |소지금 {gm.player.gold}G");
+                    Console.WriteLine("1.판매     0.취소");
+                    if (Utility.GetInput(0, 1) == 1) { gm.player.gold +=consumItem.Cost / 2; consumItem.ItemCount--; }
                 }
             }
         }
