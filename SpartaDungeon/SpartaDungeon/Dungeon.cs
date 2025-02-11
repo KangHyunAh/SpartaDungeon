@@ -13,7 +13,7 @@ namespace SpartaDungeon
     public class Dungeon
     {
         private int EnterHp { get; set; }
-        public int ItemLimits {  get; set; }
+        public int ItemLimits { get; set; }
         GameManager gm { get; set; }
         Random random = new Random();
 
@@ -35,49 +35,48 @@ namespace SpartaDungeon
         }
         public void ReadyBattle()
         {
+
+            ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
+            Console.WriteLine("[몬스터 정보]");
+            Console.WriteLine();
+
+            MonsterInfo();
+
+            Console.WriteLine();
+            Hpbar();
+            Mpbar();
+            Console.WriteLine();
+            Console.WriteLine("0. 도망가기");
+            Console.WriteLine("1. 스킬");
+            Console.WriteLine("2. 기본 공격");
+            Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
+            Console.WriteLine();
             while (true)
             {
-                ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
-                Console.WriteLine("[몬스터 정보]");
-                Console.WriteLine();
-
-                MonsterInfo();
-
-                Console.WriteLine();
-                Hpbar();
-                Mpbar();
-                Console.WriteLine();
-                Console.WriteLine("0. 도망가기");
-                Console.WriteLine("1. 스킬");
-                Console.WriteLine("2. 기본 공격");
-                Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
-                Console.WriteLine();
-                while (true)
+                int input = Utility.GetInput(0, 3);
+                if (input == 0)
                 {
-                    int input = Utility.GetInput(0, 3);
-                    if (input == 0)
-                    {
-                        gm.monsters.Clear();
-                        break;
-                    }
-                    else if (input == 1)
-                    {
-                        SkillChoiceBattle();
-                        break;
-                    }
-                    else if (input == 2)
-                    {
-                        TargetBattle();
-                        break;
-                    }
-                    else if (input == 3 && ItemLimits > 0)
-                    {
-                        ItemLimits--;
-                        gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
-                    }
-                    //else
-                    //    Console.WriteLine("최대치만큼 사용하였습니다.");
+                    gm.monsters.Clear();
+                    return;
                 }
+                else if (input == 1)
+                {
+                    SkillChoiceBattle();
+                    break;
+                }
+                else if (input == 2)
+                {
+                    TargetBattle();
+                    break;
+                }
+                else if (input == 3 && ItemLimits > 0)
+                {
+                    gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                    break;
+                }
+                else
+                    Console.WriteLine("최대치만큼 사용하였습니다.");
+
             }
 
         }
