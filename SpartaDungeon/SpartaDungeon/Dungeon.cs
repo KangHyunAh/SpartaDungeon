@@ -17,7 +17,10 @@ namespace SpartaDungeon
         GameManager gm { get; set; }
         Random random = new Random();
 
+
         //몬스터 스폰
+
+
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
