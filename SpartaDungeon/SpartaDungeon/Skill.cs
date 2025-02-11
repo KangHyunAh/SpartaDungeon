@@ -25,6 +25,7 @@ namespace SpartaDungeon
         public int UseHp { get; } // 사용할 HP
         public int UseMp { get; } // 사용할 MP
 
+        private Random random = new Random();
 
         public Skill(string n, string d, SkillType t, float p, int c, int h, int m)
         {
@@ -36,7 +37,12 @@ namespace SpartaDungeon
             UseHp = h;
             UseMp = m;
         }
-
+        public void HealSkill(Player player)
+        {
+            player.healthPoint += (int)(player.maxhealthPoint * SkillPower);
+            player.healthPoint = Math.Min(player.healthPoint, player.maxhealthPoint);
+            player.manaPoint -= UseMp;
+        }
         // 단일공격일시 매개변수에 index 넣어주기
         public void AttackSkill(List<Monster> monsters, Player player, int index = 0)
         {
@@ -64,22 +70,22 @@ namespace SpartaDungeon
                     target[0].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                 }
 
-                // 남은 적이 2마리 이상일 때
+                // 남은 적이 두마리 이상일 때
                 else if (target.Count >= 2)
                 {
-                    int rndtargetIndex1 = new Random().Next(0, target.Count);
 
-                    target[rndtargetIndex1].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
-
-                    int rndtargetIndex2 = new Random().Next(0, target.Count);
-
-                    while (rndtargetIndex1 != rndtargetIndex2)
+                    int rndtargetIndex1 = random.Next(0, target.Count);
+                    int rndtargetIndex2;
+                    // index2에 index1과 다른값이 나올때 까지 반복
+                    do
                     {
-                        rndtargetIndex2 = new Random().Next(0, target.Count);
-                    }
-
+                        rndtargetIndex2 = random.Next(0, target.Count);
+                    } while (rndtargetIndex1 == rndtargetIndex2);
+                    target[rndtargetIndex1].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                     target[rndtargetIndex2].Health -= (int)((player.strikePower + player.equipStrikePower) * SkillPower);
                 }
+
+                target.Clear();
             }
 
             // 단일 공격
@@ -91,6 +97,7 @@ namespace SpartaDungeon
             player.healthPoint -= UseHp;
             player.manaPoint -= UseMp;
         }
+
     }
 
     public class SkillManager()
@@ -105,10 +112,10 @@ namespace SpartaDungeon
                     break;
                 case "검사":
                     player.skills.Add(new Skill("알파 스트라이크", "적 한명에게 공격력 * 2.0의 데미지를 준다.", SkillType.Attack, 2.0f, 1, 0, 10));
-                    player.skills.Add(new Skill("더블 스트라이크", "랜덤한 적 두명에게 공격력 * 1.3의 데미지를 준다.", SkillType.Attack, 1.3f, 1, 0, 10));
+                    player.skills.Add(new Skill("더블 스트라이크", "랜덤한 적 두명에게 공격력 * 1.3의 데미지를 준다.", SkillType.Attack, 1.3f, 2, 0, 10));
                     break;
                 case "광전사":
-                    player.skills.Add(new Skill("분노 분출", "적 전체에 공격력 * 1.0의 데미지를 준다.", SkillType.Attack, 2.0f, 1, 20, 0));
+                    player.skills.Add(new Skill("분노 분출", "적 전체에 공격력 * 1.0의 데미지를 준다.", SkillType.Attack, 2.0f, 5, 20, 0));
                     player.skills.Add(new Skill("자가 치유", "자신의 최대 HP(장비 스탯 제외)의 30% 를 회복한다.", SkillType.Heal, 0.3f, 1, 0, 20));
                     break;
                 default:
