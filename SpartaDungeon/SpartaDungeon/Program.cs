@@ -43,7 +43,7 @@ namespace SpartaDungeon
                 new EquipItem("청동 도끼", EquipType.무기, 10,0,0, "어디선가 사용됐던거 같은 도끼입니다. ",new string []{"나이트","검사","광전사" }, 1500,false),
                 new EquipItem("스파르타의 창", EquipType.무기, 20,0,0, "스파르타의 전사들이 사용했다는 전설의 창입니다. ",new string []{"나이트","검사","광전사" }, 2500,false),
                 new EquipItem("기사의 장창", EquipType.무기, 10,10,0, "기사들이 사용하는 크고묵직한 창입니다. ",new string []{"나이트"}, 2500,false),
-                new EquipItem("전사의 장검", EquipType.무기, 15,15,0, "길어서 다루는데 기술이 필요한 장검입니다. ",new string []{"검사"}, 2500,false),
+                new EquipItem("전사의 장검", EquipType.무기, 15,5,0, "길어서 다루는데 기술이 필요한 장검입니다. ",new string []{"검사"}, 2500,false),
                 new EquipItem("광전사의 도끼", EquipType.무기, 20,0,0, "오로지 높은 공격력을 위한 도끼입니다. ",new string []{"광전사"}, 2500,false),
             //보조 목록 EquipType.SubWeapon
                 new EquipItem("나무방패", EquipType.보조, 0,2,0, "나무로 만들어진 기본적인 방패입니다. ",new string []{"나이트","검사","광전사" }, 500,false),

@@ -41,7 +41,6 @@ namespace SpartaDungeon
             void EquipScreen()
             {
                 int ListItemType = 101;
-                List<EquipItem> displayItemList;
                 while (true)
                 {
                     Console.Clear();
@@ -50,57 +49,43 @@ namespace SpartaDungeon
                     Console.WriteLine();
                     Console.WriteLine("[장비 아이템 목록]");
 
-                    displayItemList = new List<EquipItem>();
+                    List<EquipItem> displayItemList = new List<EquipItem>();
                     int index = 0;
-                    if (ListItemType >= 101 && ListItemType <= 105)
+                    for (int i = 0; i < gm.equipItemList.Count; i++)
                     {
-                        for (int i = 0; i < gm.equipItemList.Count; i++)
+                        if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == ListItemType - 100 - 1)
                         {
-                            if (gm.equipItemList[i].isEquip && gm.equipItemList[i].Type == ListItemType - 100 - 1)
-                            {
-                                displayItemList.Add(gm.equipItemList[i]);
-                                index++;
-                                Console.Write($"{index,2}.");
-                                gm.equipItemList[i].ShowEquipItemList(gm);
-                                if(i==gm.equipItemList.Count-1 && index == 0)
-                                {
-                                    Utility.ColorText(ConsoleColor.Gray, $"[{(EquipType)(ListItemType - 100 - 1)}] 비어있음");
-                                }
-                            }
+                            displayItemList.Add(gm.equipItemList[i]);
+                            index++;
+                            Console.Write($"  {index,2}.");
+                            gm.equipItemList[i].ShowEquipItemList(gm);
                         }
-                        Console.WriteLine();
-                        for (int i = 0; i < gm.equipItemList.Count; i++)
+                        if (i == gm.equipItemList.Count - 1 && index == 0)
                         {
-                            if (gm.equipItemList[i].ItemCount > 0 && gm.equipItemList[i].Type == ListItemType - 100 - 1)
-                            {
-                                index++;
-                                displayItemList.Add(gm.equipItemList[i]);
-                                Console.Write($"{index,2}.");
-                                gm.equipItemList[i].ShowEquipItemList(gm);
-                            }
+                            Utility.ColorText(ConsoleColor.DarkGray, $"  [{(EquipType)(ListItemType - 100 - 1)}] 비어있음");
                         }
                     }
-                    else
+                    Console.WriteLine();
+                    for (int i = 0; i < gm.equipItemList.Count; i++)
                     {
-                        for (int i = 0; i < gm.consumableItemsList.Count; i++)
+                        if (gm.equipItemList[i].ItemCount > 0 && gm.equipItemList[i].Type == ListItemType - 100 - 1)
                         {
-                            if (gm.consumableItemsList[i].ItemCount > 0)
-                            {
-                                index++; Console.Write($"{index}.");
-                                gm.consumableItemsList[i].DisplayItem();
-                            }
+                            index++;
+                            displayItemList.Add(gm.equipItemList[i]);
+                            Console.Write($"{index,2}.");
+                            gm.equipItemList[i].ShowEquipItemList(gm);
                         }
                     }
 
                     Console.WriteLine();
                     Console.WriteLine("목록바꾸기");
-                    Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발  106.소모품");
+                    Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발");
                     Console.WriteLine("0. 뒤로가기");
                     Console.WriteLine();
 
-                    int input = Utility.GetInputPlus(0, index, new int[] {101,102,103,104,105,106});
+                    int input = Utility.GetInputPlus(0, index, new int[] {101,102,103,104,105});
                     if (input == 0) break;
-                    else if (input > 100) ListItemType=input;
+                    else if (input > 100) ListItemType = input;
                     else displayItemList[input - 1].Equip(gm);
 
                 }
@@ -183,12 +168,12 @@ namespace SpartaDungeon
                                 {
                                     Utility.ColorText(ConsoleColor.Green, $"{gm.consumableItemsList[i].EffectAmount:+0;-0;}", Text.Write);
                                 }
-                                Console.WriteLine("\n1.사용     2.취소");
+                                Console.WriteLine("\n1.사용     0.취소");
 
-                                switch (Utility.GetInput(1, 2))
+                                switch (Utility.GetInput(0, 1))
                                 {
                                     case 1: gm.consumableItemsList[i].Use(gm.player); break;
-                                    case 2: break;
+                                    case 0: break;
                                 }
                             }
                         }
