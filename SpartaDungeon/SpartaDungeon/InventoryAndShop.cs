@@ -257,7 +257,7 @@ namespace SpartaDungeon
                     switch (input)
                     {
                         case 1: BuyScreen(); break;
-                        case 2: SaleScreen(101); break;
+                        case 2: SaleScreen(); break;
                     }
             }
 
