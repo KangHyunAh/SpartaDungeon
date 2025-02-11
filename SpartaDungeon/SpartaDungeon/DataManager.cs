@@ -111,17 +111,17 @@ namespace SpartaDungeon
             catch { Utility.ColorText(ConsoleColor.Red, "아이템 데이터를 저장하는 중 오류가 발생했습니다."); Thread.Sleep(1000); return; }
 
 
-            string questDataString = string.Empty;
-            string acceptQuestString = string.Empty;
-            string completeQuestString = string.Empty;
+            //string questDataString = string.Empty;
+            //string acceptQuestString = string.Empty;
+            //string completeQuestString = string.Empty;
 
-            try
-            {
-                questDataString = JsonConvert.SerializeObject(gm.QuestManager.quests);
-                acceptQuestString = JsonConvert.SerializeObject(gm.QuestManager.acceptedQuests);
-                completeQuestString = JsonConvert.SerializeObject(gm.QuestManager.completedQuests);
-            }
-            catch { Utility.ColorText(ConsoleColor.Red, "퀘스트 데이터를 저장하는 중 오류가 발생했습니다."); Thread.Sleep(1000); return; }
+            //try
+            //{
+            //    questDataString = JsonConvert.SerializeObject(gm.QuestManager.quests);
+            //    acceptQuestString = JsonConvert.SerializeObject(gm.QuestManager.acceptedQuests);
+            //    completeQuestString = JsonConvert.SerializeObject(gm.QuestManager.completedQuests);
+            //}
+            //catch { Utility.ColorText(ConsoleColor.Red, "퀘스트 데이터를 저장하는 중 오류가 발생했습니다."); Thread.Sleep(1000); return; }
 
 
             // 직렬화 한 데이터들을 담을 배열
@@ -131,31 +131,31 @@ namespace SpartaDungeon
             //   배열  JArray로 변환
             JObject playerJson = JObject.Parse(playerDataString);
             JObject itemJson = JObject.Parse(itemDataString);
-            JObject questListJson = JObject.Parse(questDataString);
+            //JObject questListJson = JObject.Parse(questDataString);
 
-            JArray acceptQuestJson = new JArray();
-            JArray completeQuestJson = new JArray();
+            //JArray acceptQuestJson = new JArray();
+            //JArray completeQuestJson = new JArray();
 
-            // 수락한 퀘스트가 있다면
-            if (gm.QuestManager.acceptedQuests.Count > 0)
-                acceptQuestJson = JArray.Parse(acceptQuestString);
+            //// 수락한 퀘스트가 있다면
+            //if (gm.QuestManager.acceptedQuests.Count > 0)
+            //    acceptQuestJson = JArray.Parse(acceptQuestString);
 
-            // 완료한 퀘스트가 있다면
-            if (gm.QuestManager.completedQuests.Count > 0)
-                completeQuestJson = JArray.Parse(completeQuestString);
+            //// 완료한 퀘스트가 있다면
+            //if (gm.QuestManager.completedQuests.Count > 0)
+            //    completeQuestJson = JArray.Parse(completeQuestString);
 
             // 배열에 추가
             jsonArr.Add(playerJson);
             jsonArr.Add(itemJson);
-            jsonArr.Add(questListJson);
+            //jsonArr.Add(questListJson);
 
-            // 수락한 퀘스트가 있다면
-            if(acceptQuestJson != null)
-                jsonArr.Add(acceptQuestJson);
+            //// 수락한 퀘스트가 있다면
+            //if(acceptQuestJson != null)
+            //    jsonArr.Add(acceptQuestJson);
 
-            // 완료한 퀘스트가 있다면
-            if(completeQuestJson != null)
-                jsonArr.Add(completeQuestJson);
+            //// 완료한 퀘스트가 있다면
+            //if(completeQuestJson != null)
+            //    jsonArr.Add(completeQuestJson);
 
             // 암호화(인코딩)
             byte[] bytes = Encoding.UTF8.GetBytes(jsonArr.ToString());
@@ -233,8 +233,8 @@ namespace SpartaDungeon
             JObject playerData = (JObject)jsonArr[0];
             JObject itemData = (JObject)jsonArr[1];
             JObject questData = (JObject)jsonArr[2];
-            JArray acceptQuestData = (JArray)jsonArr[3];
-            JArray clearQuestData = (JArray)jsonArr[4];
+            //JArray acceptQuestData = (JArray)jsonArr[3];
+            //JArray clearQuestData = (JArray)jsonArr[4];
 
             // 데이터 적용
             try
@@ -304,45 +304,45 @@ namespace SpartaDungeon
 
             // 퀘스트 불러오기
             // JObject => Dictionary<int, Quest> 변환
-            Dictionary<int, Quest> questDict = questData.ToObject<Dictionary<int, Quest>>();
+            //Dictionary<int, Quest> questDict = questData.ToObject<Dictionary<int, Quest>>();
 
-            // where로 꺼내올 퀘스트 담을 인스턴스
-            Quest tempQuest = new Quest(5555, " ", " ", 1, 1, 1);
+            //// where로 꺼내올 퀘스트 담을 인스턴스
+            //Quest tempQuest = new Quest(5555, " ", " ", 1, 1, 1);
 
-            foreach (KeyValuePair<int, Quest> quest in questDict)
-            {
-                tempQuest = gm.QuestManager.quests.Where(i => i.Key == quest.Key).OfType<Quest>().FirstOrDefault();
+            //foreach (KeyValuePair<int, Quest> quest in questDict)
+            //{
+            //    tempQuest = gm.QuestManager.quests.Where(i => i.Key == quest.Key).OfType<Quest>().FirstOrDefault();
 
-                if (tempQuest == null)
-                    continue;
+            //    if (tempQuest == null)
+            //        continue;
 
-                // JObject에 담겨있던 카운트와 완료여부 저장
-                tempQuest.CurrentCount = quest.Value.CurrentCount;
-                tempQuest.IsCompleted = quest.Value.IsCompleted;
-                tempQuest.IsAccepted = quest.Value.IsAccepted;
-            }
+            //    // JObject에 담겨있던 카운트와 완료여부 저장
+            //    tempQuest.CurrentCount = quest.Value.CurrentCount;
+            //    tempQuest.IsCompleted = quest.Value.IsCompleted;
+            //    tempQuest.IsAccepted = quest.Value.IsAccepted;
+            //}
 
-            // JArray => HashSet<int> 변환(수락한 퀘스트 목록)
-            HashSet<int> acceptList = acceptQuestData.ToObject<HashSet<int>>();
+            //// JArray => HashSet<int> 변환(수락한 퀘스트 목록)
+            //HashSet<int> acceptList = acceptQuestData.ToObject<HashSet<int>>();
 
-            if (acceptList != null)
-            {
-                foreach (var i in acceptList)
-                {
-                    gm.QuestManager.acceptedQuests.Add(i);
-                }
-            }
+            //if (acceptList != null)
+            //{
+            //    foreach (var i in acceptList)
+            //    {
+            //        gm.QuestManager.acceptedQuests.Add(i);
+            //    }
+            //}
 
-            // JArray => HashSet<int> 변환(클리어한 퀘스트 목록)
-            HashSet<int> clearList = clearQuestData.ToObject<HashSet<int>>();
+            //// JArray => HashSet<int> 변환(클리어한 퀘스트 목록)
+            //HashSet<int> clearList = clearQuestData.ToObject<HashSet<int>>();
             
-            if(clearList != null)
-            {
-                foreach (var i in clearList)
-                {
-                    gm.QuestManager.completedQuests.Add(i);
-                }
-            }
+            //if(clearList != null)
+            //{
+            //    foreach (var i in clearList)
+            //    {
+            //        gm.QuestManager.completedQuests.Add(i);
+            //    }
+            //}
 
         }
     }
