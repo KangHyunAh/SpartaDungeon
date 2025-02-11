@@ -474,7 +474,7 @@ namespace SpartaDungeon
                     List<EquipItem> bossdrop = gm.equipItemList.Where(x => x.IsBossItem == true).ToList();
                     int dropnum = random.Next(0, bossdrop.Count);
                     bossdrop[dropnum].ItemCount += 1;
-                    Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 {bossdrop[dropnum].Name}을 획득하였습니다.");
+                    Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 [{bossdrop[dropnum].Type.ToString()}]{bossdrop[dropnum].Name}을 획득하였습니다.");
                     bossdrop.Clear();
 
                 }
@@ -546,7 +546,7 @@ namespace SpartaDungeon
                     Addmonster.Health += gm.player.dungeonLevel;
                     Addmonster.MaxHealth += gm.player.dungeonLevel;
                 }
-                Addmonster.Lv += Addmonster.Atk / 10;
+                Addmonster.Lv = Addmonster.Atk / 10+1;
                 gm.monsters.Add(Addmonster);
             }
         }
