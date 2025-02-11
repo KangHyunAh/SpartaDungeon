@@ -22,7 +22,7 @@ namespace SpartaDungeon
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
             ItemLimits = 2;
-            if(gm.monsters.Count < 1)
+            if(gm.monsters.Count == 0)
             {
                 if (!(gm.player.dungeonLevel % 3 == 0))
                 {
@@ -506,9 +506,10 @@ namespace SpartaDungeon
             {
                 Monster monster = monsterList[random.Next(0, monsterList.Count)];
                 gm.monsters.Add(monster.Spawn());
-                gm.monsters[i].Lv += gm.player.dungeonLevel;
-                gm.monsters[i].Atk += gm.player.dungeonLevel * 3;
-                gm.monsters[i].Health += gm.player.dungeonLevel * 5;
+                gm.monsters[i].Atk += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel/3));
+                gm.monsters[i].Health += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3)*3);
+                gm.monsters[i].MaxHealth += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3)*3);
+                gm.monsters[i].Lv += gm.monsters[i].Atk/10;
             }
         }
         public void ScreenText(string tag)
