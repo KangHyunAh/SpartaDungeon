@@ -16,6 +16,7 @@ namespace SpartaDungeon
             DataManager dataManager = new DataManager();
             Dungeon dungeonManager = new Dungeon(questManager, player);
 
+
             while (true)
             {
                 if (gm.player.gold < 100 && gm.player.healthPoint <= 0)
@@ -52,8 +53,7 @@ namespace SpartaDungeon
                         break;
                     case 4:
                         if (gm.player.healthPoint > 0)
-                            dungeonManager.Battle(gm);
-
+                            gm.dungeon.Battle(gm);
                         else
                         {
                             Console.Clear();

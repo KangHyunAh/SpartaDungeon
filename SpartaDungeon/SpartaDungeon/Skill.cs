@@ -71,9 +71,9 @@ namespace SpartaDungeon
                 }
 
                 // 남은 적이 두마리 이상일 때
-                else if( target.Count >= 2)
+                else if (target.Count >= 2)
                 {
-                    
+
                     int rndtargetIndex1 = random.Next(0, target.Count);
                     int rndtargetIndex2;
                     // index2에 index1과 다른값이 나올때 까지 반복
@@ -97,7 +97,7 @@ namespace SpartaDungeon
             player.healthPoint -= UseHp;
             player.manaPoint -= UseMp;
         }
-        
+
     }
 
     public class SkillManager()

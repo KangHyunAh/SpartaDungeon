@@ -8,6 +8,7 @@ namespace SpartaDungeon
 {
     public class Quest
     {
+
         public int Id {  get;  set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -18,22 +19,20 @@ namespace SpartaDungeon
         public int RewardGold { get; }
         public int RewardExp { get; }
 
+
         public QuestStatus Status { get; set; }
 
         public Quest(int id, string title, string description, int goalCount, int rewardGold, int rewardExp )
+
         {
             Id = id;
             Title = title;
             Description = description;
-            GoalCount = goalCount;
-            RewardGold = rewardGold;
-            RewardExp = rewardExp;
-            CurrentCount = 0;
             IsCompleted = false;
             Status = QuestStatus.Availble;
         }
 
-        
+
 
         public void UpdateProgress(int amount)
         {
@@ -47,7 +46,8 @@ namespace SpartaDungeon
                 IsCompleted = true;
                 Console.WriteLine($"[퀘스트 완료] {Title} 퀘스트의 목표를 달성했습니다");
             }
-        }
+
+
 
         public void Reward(Player player)
         {

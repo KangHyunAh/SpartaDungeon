@@ -16,6 +16,7 @@ namespace SpartaDungeon
 
         public void AddQuest( Quest quest)
         {
+
             if (!quests.ContainsKey(quest.Id))
             {
                 quests.Add(quest.Id, quest);
@@ -43,9 +44,9 @@ namespace SpartaDungeon
                     Console.WriteLine($"[퀘스트 완료 가능] {quest.Title} 퀘스트 목표를 달성했습니다!");
                     CompleteQuest(questId, player);
                 }
-            }
-        }
 
+
+        }
 
         public void ShowAllQuests()
         {
@@ -64,46 +65,13 @@ namespace SpartaDungeon
 
         public bool AcceptQuest(int questId)
         {
-            if (quests.TryGetValue(questId, out Quest quest))
+            if (quests.TryGetValue(questId, out Quest quest) && !acceptedQuests.Contains(questId))
             {
-                if (!acceptedQuests.Contains(questId))
-                {
-                    acceptedQuests.Add(questId);
-                    Console.WriteLine($"[퀘스트 수락] {quest.Title}");
-                    return true;
-                }
-
-                else
-                {
-                    Console.WriteLine("이미 수락했거나 완료한 퀘스트 입니다");
-                }
-            }
-           
-            return false;
-        }
-
-        public bool CompleteQuest(int questId, Player player)
-        {
-            if(acceptedQuests.Contains(questId) && !completedQuests.Contains(questId))
-            {
-                completedQuests.Add(questId);
-                acceptedQuests.Remove(questId);
-
-                Quest quest = quests[questId];
-
-                player.gold += quest.RewardGold;
-                player.exp += quest.RewardExp;
-
-                Console.WriteLine($"[퀘스트 완료] {quests[questId].Title} 퀘스트를 완료했습니다!");
-                Console.WriteLine($"보상: {quest.RewardGold} 골드, {quest.RewardExp} 경험치 획득!");
+                acceptedQuests.Add(questId);
+                Console.WriteLine($"[퀘스트 수락] {quest.Title}");
                 return true;
             }
-
-            else
-            {
-                Console.WriteLine("퀘스트를 완료할 수 없습니다. (수락하지 않았거나 이미 완료한 퀘스트)");
-                return false;
-            }
+            return false;
         }
     }
 

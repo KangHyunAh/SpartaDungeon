@@ -34,7 +34,7 @@ static class Utility
             Console.Write("원하시는 행동을 입력해주세요.\n>>");
 
             //int.TryParse는 int로 변환이 가능한지 bool값을 반환, 가능(true)할 경우 out int input으로 숫자도 반환
-            if (int.TryParse(Console.ReadLine(), out int input) && ((input >= min) && (input <= max)||additionalNumsArr.Contains(input)))
+            if (int.TryParse(Console.ReadLine(), out int input) && ((input >= min) && (input <= max) || additionalNumsArr.Contains(input)))
                 return input;
 
             Console.WriteLine("잘못된 입력입니다. 다시 입력해주세요");
@@ -59,12 +59,12 @@ static class Utility
         Console.ResetColor();
     }
 
-    public static void RealTab(string String,bool LeftofRight,int gap)
+    public static void RealTabWrite(string String, bool LeftofRight, int gap)
     {
         Regex regex = new Regex("[가-힣]");
         MatchCollection koreanNum = regex.Matches(String);
         if (LeftofRight) Console.Write(String);
-        Console.Write(new string(' ', gap >= String.Length+koreanNum.Count ? (gap - (koreanNum.Count + String.Length)) : 0));
+        Console.Write(new string(' ', gap >= String.Length + koreanNum.Count ? (gap - (koreanNum.Count + String.Length)) : 0));
         if (!LeftofRight) Console.Write(String);
     }
 
@@ -78,12 +78,12 @@ static class Utility
         Shop
 
     }
-    public static void Art(ArtEnum artEnum,int gapSpaceInt = 0)     //그림 그리기 메서드
+    public static void Art(ArtEnum artEnum, int gapSpaceInt = 0)     //그림 그리기 메서드
     {
         switch (artEnum)
         {
-            case ArtEnum.Dungeon: DungeonArt(gapSpaceInt);break;
-            case ArtEnum .Shop: ShopArt(gapSpaceInt); break;
+            case ArtEnum.Dungeon: DungeonArt(gapSpaceInt); break;
+            case ArtEnum.Shop: ShopArt(gapSpaceInt); break;
         }
 
 
@@ -105,3 +105,4 @@ static class Utility
 
     }
 }
+
