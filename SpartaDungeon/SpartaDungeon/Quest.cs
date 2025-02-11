@@ -36,16 +36,17 @@ namespace SpartaDungeon
 
         public void UpdateProgress(int amount)
         {
-            if(IsCompleted) return;
+            if (IsCompleted) return;
 
-            CurrentCount+= amount;
+            CurrentCount += amount;
             Console.WriteLine($"[진행 중] {Title}: {CurrentCount} / {GoalCount} 처치");
-            
-            if(CurrentCount >= GoalCount)
+
+            if (CurrentCount >= GoalCount)
             {
                 IsCompleted = true;
                 Console.WriteLine($"[퀘스트 완료] {Title} 퀘스트의 목표를 달성했습니다");
             }
+        }
 
 
 
