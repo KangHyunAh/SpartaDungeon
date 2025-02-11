@@ -36,8 +36,8 @@ namespace SpartaDungeon
             {
                 exp = exp - maxExp;
                 maxExp = (int)(1.1 * maxExp);
-                strikePower = (int)(1.02 * strikePower);
-                defensivePower = (int)(1.02 * defensivePower);
+                strikePower = (int)(1.1 * strikePower);
+                defensivePower = (int)(1.2 * defensivePower);
                 maxhealthPoint = (int)(1.03 * maxhealthPoint);
                 level++;
                 Utility.ColorText(ConsoleColor.Yellow, "레벨 업!");
