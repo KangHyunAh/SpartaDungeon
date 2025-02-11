@@ -36,8 +36,8 @@ namespace SpartaDungeon
             {
                 exp = exp - maxExp;
                 maxExp = (int)(1.1 * maxExp);
-                strikePower = (int)(1.02 * strikePower);
-                defensivePower = (int)(1.02 * defensivePower);
+                strikePower = (int)(1.1 * strikePower);
+                defensivePower = (int)(1.2 * defensivePower);
                 maxhealthPoint = (int)(1.03 * maxhealthPoint);
                 level++;
                 Utility.ColorText(ConsoleColor.Yellow, "레벨 업!");
@@ -52,7 +52,7 @@ namespace SpartaDungeon
             Console.Write($"HP {healthPoint,4}/{(maxhealthPoint + equipMaxhealthPoint),4}({maxhealthPoint}+{equipMaxhealthPoint})\n");
             for (int i = 0; i < 10; i++)
             {
-                if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Green, "■", Text.Write);
+                if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
                 else Console.Write("□");
             }
         }
@@ -92,13 +92,20 @@ namespace SpartaDungeon
         public void Rest()
         {
             Console.Clear();
-            Console.WriteLine("휴식을 선택하셨습니다.");
             Console.WriteLine("여관에 입장하셨습니다.");
-            Console.WriteLine("여관에서는 100골드를 소모하고 체력과 마나를 최대치만큼 회복합니다.");
-            Console.WriteLine("현재 골드 : " + gold + " G");
+            Console.WriteLine("100골드를 소모하고 체력과 마나를 최대치만큼 회복합니다.");
+            Console.WriteLine(" ");
+            Console.WriteLine("현재 체력 : ");
+            DisplayHpBar(); Console.WriteLine();
+            Console.WriteLine("현재 마나 : ");
+            DisplayMpBar(); Console.WriteLine();
+            Console.WriteLine(" ");
+            Console.WriteLine("현재 골드 : "+gold+" G");
+            Console.WriteLine(" ");
             Console.WriteLine("실행하시겠습니까?");
             Console.WriteLine("1. 실행");
             Console.WriteLine("0. 나가기");
+            Console.WriteLine(" ");
             if (Utility.GetInput(0, 1) == 0)
             {
                 Console.WriteLine("창을 닫습니다.");
@@ -108,7 +115,9 @@ namespace SpartaDungeon
             {
                 if ((gold - 100) < 0) //골드 부족
                 {
+                    Console.Clear();
                     Console.WriteLine("골드가 부족합니다.");
+                    Console.WriteLine(" ");
                     Console.WriteLine("0. 나가기");
                     if (Utility.GetInput(0, 0) == 0)
                     {
@@ -118,12 +127,17 @@ namespace SpartaDungeon
                 }
                 else //골드 소모 + 최대체력(+장비)로 회복
                 {
+                    Console.Clear();
                     gold = gold - 100;
                     healthPoint = maxhealthPoint + equipMaxhealthPoint;
                     manaPoint = maxManaPoint;
+                    Console.WriteLine("현재 체력 : ");
+                    DisplayHpBar(); Console.WriteLine();
+                    Console.WriteLine("현재 마나 : ");
+                    DisplayMpBar(); Console.WriteLine();
+                    Console.WriteLine(" ");
                     Console.WriteLine("현재 골드 : " + gold + " G");
-                    Console.WriteLine("현재 체력 : " + (healthPoint));
-                    Console.WriteLine("현재 마나 : " + (manaPoint));
+                    Console.WriteLine(" ");
                     Console.WriteLine("0. 나가기");
                     if (Utility.GetInput(0, 0) == 0)
                     {

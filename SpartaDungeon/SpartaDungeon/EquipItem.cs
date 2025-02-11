@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,44 +49,91 @@ namespace SpartaDungeon
             isEquip = false;
             IsBossItem = isBossItem;
         }
-        public void DisplayEquipItem()
+
+        public void Equip(GameManager gm)
         {
-            Console.Write("[E]"); Utility.RealTabWrite($"{Name}", true, 16); Console.Write("|"); Utility.RealTabWrite(JobLimit.Length == 3 ? $"[공용]" : $"[{JobLimit[0]}전용]", true, 12); Console.Write($"|{Description}\n");
-            Console.Write("\t");
-            if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
-            if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
-            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
-            Console.WriteLine();
+            if (JobLimit.Contains(gm.player.chad))
+            {
+                EquipItem equipedItem = gm.equipItemList.FirstOrDefault(item => item.isEquip == true && item.Type == Type);
+                if (equipedItem == null) { isEquip = true; ItemCount--; }
+                else if (equipedItem == this) { isEquip = false; ItemCount++; }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("장착중인 장비가 있습니다. 해제하고 장착하시겠습니까?");
+
+                    Utility.RealTabWrite($"{equipedItem.Name}", true, 18);
+                    Console.Write("==> ");
+                    Utility.RealTabWrite($"{Name}", true, 18); Console.WriteLine();
+
+                    Utility.RealTabWrite($"[atk{equipedItem.Atk,3:+0;-0}]", true, 18); Console.Write("==> "); Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9);
+                    if (equipedItem.Atk > Atk) Utility.ColorText(ConsoleColor.Red, $"{(Atk - equipedItem.Atk),3:+0;-0}", Text.Write);
+                    else if (equipedItem.Atk < Atk) Utility.ColorText(ConsoleColor.Cyan, $"{(Atk - equipedItem.Atk),3:+0;-0}", Text.Write);
+                    Console.WriteLine();
+                    Utility.RealTabWrite($"[def{equipedItem.Def,3:+0;-0}]", true, 18); Console.Write("==> "); Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 9);
+                    if (equipedItem.Def > Def) Utility.ColorText(ConsoleColor.Red, $"{(Def - equipedItem.Def),3:+0;-0}", Text.Write);
+                    else if (equipedItem.Def < Def) Utility.ColorText(ConsoleColor.Cyan, $"{(Def - equipedItem.Def),3:+0;-0}", Text.Write);
+                    Console.WriteLine();
+                    Utility.RealTabWrite($"[maxHP{equipedItem.MaxHp,3:+0;-0}]", true, 18); Console.Write("==> "); Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 9);
+                    if (equipedItem.MaxHp > MaxHp) Utility.ColorText(ConsoleColor.Red, $"{(MaxHp - equipedItem.MaxHp),4:+0;-0}", Text.Write);
+                    else if (equipedItem.MaxHp < MaxHp) Utility.ColorText(ConsoleColor.Cyan, $"{(MaxHp - equipedItem.MaxHp),4:+0;-0}", Text.Write);
+                    Console.WriteLine();
+
+                    Console.WriteLine("1.장착      0.취소");
+
+                    int input = Utility.GetInput(0, 1);
+                    if (input == 1)
+                    {
+                        equipedItem.isEquip = false;
+                        equipedItem.ItemCount++;
+                        isEquip = true;
+                        ItemCount--;
+                    }
+                }
+                gm.inventoryAndShop.UpdateEquipStatus(gm);
+            }
+            else
+            {
+                Utility.ColorText(ConsoleColor.Red, "해당 장비를 착용할 수 없는 직업입니다.");
+                Console.Write("아무키입력");
+                Console.ReadLine();
+            }
         }
-        public void DisplayinventoryItem()
+
+        public void SaleEquipItem(GameManager gm)
         {
-            Utility.RealTabWrite($"{Name}", true, 14); Console.Write($"|{Description}\n");
-            Console.Write($"   소지 {ItemCount,-2}개|");
-            if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
-            if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
-            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
-            Console.WriteLine();
-            Console.WriteLine();
-        }
-        public void DisplayShopItem(bool isSale) //true일경우 판매가 표시 false경우 구매가 표시
-        {
-            Console.WriteLine($"{Name,-8} |" + (JobLimit.Length == 3 ? "[공용]" : $"[{JobLimit[0]}전용]") + $" |{Description}");
-            Console.Write(!isSale ? $"    가격 {Cost,5}" : $"\t판매가 {Cost / 2,-5}");
-            Console.Write($"|소지 개수 {ItemCount,-2}|");
-            if (Atk != 0) Console.Write($"atk{Atk,4:+0;-0;0}|");
-            if (Def != 0) Console.Write($"def{Def,4:+0;-0;0}|");
-            if (MaxHp != 0) Console.Write($"maxHp{MaxHp,5:+0;-0;0}|");
-            Console.WriteLine();
+            Console.Clear();
+            Console.WriteLine("이 아이템을 판매합니까?\n");
+            Console.Write($"{Name}  판매가 "); Utility.ColorText(ConsoleColor.White, $"{Cost / 2}G",Text.Write); Console.WriteLine($"    | 소지금 {gm.player.gold}G");
+            Console.WriteLine("\n1.판매     0.취소");
+            if(Utility.GetInput(0, 1) == 1)
+            {
+                ItemCount--;
+                gm.player.gold += Cost / 2;
+                Console.Write("판매완료  소지금 "); Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold,5}G ", Text.Write); Utility.ColorText(ConsoleColor.Green, $"+{Cost / 2}");
+                Console.Write("아무키입력"); Console.ReadLine();
+            }
         }
 
         public void ShowEquipItemList(GameManager gm, bool isShop = false, bool isSale = false) //장비아이템 정보 출력 (이름, 부위, 설명 / 가격, 스텟, 스텟증감, 착욕가능직업)
         {
-            if (isEquip) Console.Write("[E]"); Utility.RealTabWrite($"{Name}", true, 16); Utility.RealTabWrite($"|[{(EquipType)Type}]", true, 7); Console.WriteLine($"|{Description}");//첫줄
+            if (isEquip) { Console.ForegroundColor = ConsoleColor.Yellow; Console.Write("[E]"); } Utility.RealTabWrite($"{Name}", true, 16); Utility.RealTabWrite($"|[{(EquipType)Type}]", true, 7); Console.WriteLine($"|{Description}");//첫줄
+            if (isEquip) Console.ResetColor();
             //둘째줄
-            if (isShop) Utility.RealTabWrite($"{Cost}G |", true, 16); else if (isSale) Utility.RealTabWrite($"{Cost / 2}G |", true, 16);
-            if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 11);    //스텟
-            if (Def != 0) Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 11);
-            if (MaxHp != 0) Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 12);
+            if (ItemCount >= 1) Console.Write($"  소지X{ItemCount,2} "); else Console.Write("          ");
+            if (isShop) 
+            {
+                if (!isSale)
+                {
+                    Console.ForegroundColor = Cost <= gm.player.gold ? ConsoleColor.White : ConsoleColor.DarkGray;
+                    Utility.RealTabWrite($"{Cost}G |", false, 10); Console.ResetColor();
+                }
+                else { Console.ForegroundColor = ConsoleColor.White; Utility.RealTabWrite($"판매가{Cost / 2}G  ", false, 10); Console.ResetColor(); }
+            } 
+            else Console.Write("          ");
+            if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9);    //스텟
+            if (Def != 0) Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 9);
+            if (MaxHp != 0) Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 10);
             Console.Write("  ");
             int deltaAtk, deltaDef, deltaMaxHp;
             EquipItem equipedItem = gm.equipItemList.FirstOrDefault(item => item.isEquip == true && item.Type == Type);
@@ -96,17 +145,18 @@ namespace SpartaDungeon
             {
                 deltaAtk = Atk - equipedItem.Atk; deltaDef = Def - equipedItem.Def; deltaMaxHp = MaxHp - equipedItem.MaxHp;
             }
+            Console.Write("   ");
             if (deltaAtk == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
             else if (deltaAtk > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
             else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
 
-            if (deltaDef == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
-            else if (deltaDef > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaDef,3:+0;-0}] ", Text.Write);
-            else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaDef,3:+0;-0}] ", Text.Write);
+            if (deltaDef == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[def +0] ", Text.Write);
+            else if (deltaDef > 0) Utility.ColorText(ConsoleColor.Cyan, $"[def{deltaDef,3:+0;-0}] ", Text.Write);
+            else Utility.ColorText(ConsoleColor.Red, $"[def{deltaDef,3:+0;-0}] ", Text.Write);
 
-            if (deltaMaxHp == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
-            else if (deltaMaxHp > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaMaxHp,3:+0;-0}] ", Text.Write);
-            else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaMaxHp,3:+0;-0}] ", Text.Write);
+            if (deltaMaxHp == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[maxHP +0] ", Text.Write);
+            else if (deltaMaxHp > 0) Utility.ColorText(ConsoleColor.Cyan, $"[maxHP{deltaMaxHp,3:+0;-0}] ", Text.Write);
+            else Utility.ColorText(ConsoleColor.Red, $"[maxHP{deltaMaxHp,3:+0;-0}] ", Text.Write);
 
             Console.Write("  ");
 
@@ -155,6 +205,7 @@ namespace SpartaDungeon
                 ItemCount = 0;
             }
 
+           
             public void Use(Player player)
             {
                 if (ItemCount > 0)
@@ -185,7 +236,10 @@ namespace SpartaDungeon
 
             public void DisplayItem()
             {
-                Console.WriteLine($"[P]{Name} | 효과:{EffectAmount} | 설명: {Description} |가격: {Cost} |개수: {ItemCount}");
+                Console.WriteLine($"[P]{Name} | 효과:{EffectAmount,3} | 설명: {Description}");
+                Console.Write("       |가격 "); 
+                Utility.ColorText(ConsoleColor.White, $"{Cost,5}G ", Text.Write); 
+                Console.WriteLine($"|소지 X{ItemCount,2}");
             }
         }
         public class PotionPlayer
