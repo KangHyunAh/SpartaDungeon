@@ -57,7 +57,7 @@ namespace SpartaDungeon
             Console.WriteLine("0. 도망가기");
             Console.WriteLine("1. 스킬");
             Console.WriteLine("2. 기본 공격");
-            Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
+            Console.WriteLine($"3. 소모아이템(사용가능 횟수 : {ItemLimits})");
             Console.WriteLine();
             while (true)
             {
