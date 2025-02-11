@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using SpartaDungeon.PotionNamespace;
 using System.IO;
 using System.Security.Cryptography;
+using System.Runtime.InteropServices;
 
 namespace SpartaDungeon
 {
@@ -16,8 +17,10 @@ namespace SpartaDungeon
         private readonly string folderPath = "./Save";            // 세이브파일이 존재할 폴더의 위치
         //private const string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
         private readonly string filePath = "./Save/testSaveData.json";     // 세이브파일의 위치
-        private readonly string keyPath = "./Save/Key.bin";     // Key파일의 위치
-        private readonly string ivPath = "./Save/IV.bin";     // IV파일의 위치
+
+        private readonly string decrypteFolderPath = "./Decrypt"; // 복호화 시 필요한 파일들이 존재할 폴더의 위치
+        private readonly string keyPath = "./Decrypt/Key.bin";     // Key파일의 위치
+        private readonly string ivPath = "./Decrypt/IV.bin";     // IV파일의 위치
 
 
         // 캐릭터 생성
@@ -75,9 +78,20 @@ namespace SpartaDungeon
             // 폴더 주소 설정
             DirectoryInfo folder = new DirectoryInfo(folderPath);
 
+            DirectoryInfo decrypteFolder = new DirectoryInfo(decrypteFolderPath);
+
             // 폴더가 존재하지 않는다면 생성
             if (!folder.Exists)
                 folder.Create();
+
+            // 복호화 파일들 보관할 폴더 생성/숨김 처리
+            if (!decrypteFolder.Exists)
+            {
+                decrypteFolder.Create();
+
+                // |= : 파일 시스템에 속성을 추가 할 때 사용 |  &= : 파일 시스템에 속성을 제거 할 때 사용
+                decrypteFolder.Attributes |= FileAttributes.Hidden;
+            }
 
             string playerDataString = string.Empty;
 
@@ -161,12 +175,10 @@ namespace SpartaDungeon
             //if(completeQuestJson != null)
             //    jsonArr.Add(completeQuestJson);
 
-            // 암호화(인코딩)
-
-            // 문자열로 변환 후 파일 생성
-
+            // 데이터를 저장한 배열 암호화
             string encodingJson = Aes256Encrypt(jsonArr.ToString());
 
+            // 암호화 한 데이터를 기반으로 파일 생성
             File.WriteAllText(filePath, encodingJson);
         }
 
@@ -217,8 +229,9 @@ namespace SpartaDungeon
 
             try
             {
-                // json파일 => 스트링으로 변환
+                // 암호화 된 json파일 => 스트링으로 변환
                 data = File.ReadAllText(filePath);
+                // 복호화
                 decryptData = Aes256Decrypt(data);
             }
             catch (Exception e)
@@ -229,7 +242,7 @@ namespace SpartaDungeon
                 user = CreateCharacter();
             }
 
-            
+
 
             // 문자열 JArray로 변환
             JArray jsonArr = JArray.Parse(decryptData);
@@ -358,7 +371,6 @@ namespace SpartaDungeon
         {
             byte[] encrypted;
 
-            // using문 종료 시 자동으로 리소스들이 즉시 해제됨
             // Aes 클래스는 IDisposable 인터페이스를 구현하고 있기 때문에 사용이 끝나면 반드시 리소스를 해제 해주어야 함
             using (Aes aes = Aes.Create())
             {
@@ -382,8 +394,17 @@ namespace SpartaDungeon
                 ICryptoTransform encrpytor = aes.CreateEncryptor(aes.Key, aes.IV);
 
                 // Key와 IV 값 암호화 후 정해진 경로에 파일 저장
-                LockKeyOrIV(ivPath, aes.IV);
-                LockKeyOrIV(keyPath, aes.Key);
+                // 사용자의 운영체제가 윈도우라면 Key/IV 암호화, 윈도우가 아니라면 그대로 저장
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    LockKeyOrIV(keyPath, aes.Key);
+                    LockKeyOrIV(ivPath, aes.IV);
+                }
+                else
+                {
+                    File.WriteAllBytes(keyPath, aes.Key);
+                    File.WriteAllBytes(ivPath, aes.IV);
+                }
 
                 // 스트림 : 데이터가 연속적으로 이동하는 통로
                 // MemoryStream : 메모리 내 바이트 배열을 스트림으로 다루기 위한 클래스 // IDisposable
@@ -426,28 +447,33 @@ namespace SpartaDungeon
                 aes.Padding = PaddingMode.PKCS7;
 
                 // PC에 저장된 암호화 된 Key, IV(Initialize Vector) 값을 복호화해서 가져오기
-                aes.Key = UnLockKeyOrIV(keyPath);
-                aes.IV = UnLockKeyOrIV(ivPath);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    aes.Key = UnLockKeyOrIV(keyPath);
+                    aes.IV = UnLockKeyOrIV(ivPath);
+                }
+                // 사용자 운영체제가 윈도우가 아닐경우
+                else
+                {
+                    aes.Key = File.ReadAllBytes(keyPath);
+                    aes.IV = File.ReadAllBytes(ivPath);
+                }
 
 
                 ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
 
-                try
+                using (MemoryStream ms = new MemoryStream(bytes))
                 {
-                    using (MemoryStream ms = new MemoryStream(bytes))
+                    using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
                     {
-                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                        using (StreamReader sr = new StreamReader(cs))
                         {
-                            using (StreamReader sr = new StreamReader(cs))
-                            {
-                                // MemoryStream에 저장된 암호화된 데이터를 CryptoStream이 복호화하고,
-                                // StreamReader가 이를 문자열로 변환하여 읽음
-                                result = sr.ReadToEnd();
-                            }
+                            // MemoryStream에 저장된 암호화된 데이터를 CryptoStream이 복호화하고,
+                            // StreamReader가 이를 문자열로 변환하여 읽음
+                            result = sr.ReadToEnd();
                         }
                     }
                 }
-                catch (Exception ex) { Console.WriteLine($" "); }
             }
 
             return result;
