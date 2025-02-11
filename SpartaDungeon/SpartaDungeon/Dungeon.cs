@@ -57,15 +57,13 @@ namespace SpartaDungeon
             Console.WriteLine("0. 도망가기");
             Console.WriteLine("1. 스킬");
             Console.WriteLine("2. 기본 공격");
-            Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
+            Console.WriteLine($"3. 소모아이템(사용가능 횟수 : {ItemLimits})");
             Console.WriteLine();
             while (true)
             {
                 int input = Utility.GetInput(0, 3);
                 if (input == 0)
-                {
                     return;
-                }
                 else if (input == 1)
                 {
                     SkillChoiceBattle();
@@ -494,6 +492,7 @@ namespace SpartaDungeon
             {
                 Console.WriteLine();
                 int input = Utility.GetInput(0, 0);
+                return;
             }
 
         }
@@ -505,11 +504,21 @@ namespace SpartaDungeon
             for (int i = 0; i < spawnNum; i++)
             {
                 Monster monster = monsterList[random.Next(0, monsterList.Count)];
-                gm.monsters.Add(monster.Spawn());
-                gm.monsters[i].Atk += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel/3));
-                gm.monsters[i].Health += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3)*3);
-                gm.monsters[i].MaxHealth += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3)*3);
-                gm.monsters[i].Lv += gm.monsters[i].Atk/10;
+                Monster Addmonster = monster.Spawn();
+                if (Addmonster.MonsterType != "이벤트")
+                {
+                    Addmonster.Atk += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3));
+                    Addmonster.Health += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3) * 3);
+                    Addmonster.MaxHealth += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3) * 3);
+                }
+                else
+                {
+                    Addmonster.Atk += gm.player.dungeonLevel;
+                    Addmonster.Health += gm.player.dungeonLevel;
+                    Addmonster.MaxHealth += gm.player.dungeonLevel;
+                }
+                Addmonster.Lv += Addmonster.Atk / 10;
+                gm.monsters.Add(Addmonster);
             }
         }
         public void ScreenText(string tag)
