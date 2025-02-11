@@ -1,19 +1,22 @@
-﻿using System;
+﻿using SpartaDungeon.PotionNamespace;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SpartaDungeon
 {
     public class Dungeon
     {
         private int EnterHp { get; set; }
-        public int ItemLimits {  get; set; }
+        public int ItemLimits { get; set; }
         GameManager gm { get; set; }
         Random random = new Random();
 
@@ -30,55 +33,42 @@ namespace SpartaDungeon
             else
             {
                 MonsterSpawn(gm.bossmonsterList, 1);
-                MonsterSpawn(gm.monsterList, random.Next(1, 5));
+                MonsterSpawn(gm.monsterList, random.Next(1, 4));
             }
             ReadyBattle();
         }
         public void ReadyBattle()
         {
+
+            ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
+            Console.WriteLine("[몬스터 정보]");
+            Console.WriteLine();
+
+            MonsterInfo();
+
+            Console.WriteLine();
+            Hpbar();
+            Mpbar();
+            Console.WriteLine();
+            Console.WriteLine("0. 도망가기");
+            Console.WriteLine("1. 스킬");
+            Console.WriteLine("2. 기본 공격");
+            Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
+            Console.WriteLine();
+
             while (true)
             {
-                ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
-                Console.WriteLine("[몬스터 정보]");
-                Console.WriteLine();
-
-                MonsterInfo();
-
-                Console.WriteLine();
-                Hpbar();
-                Mpbar();
-                Console.WriteLine();
-                Console.WriteLine("0. 도망가기");
-                Console.WriteLine("1. 스킬");
-                Console.WriteLine("2. 기본 공격");
-                Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
-                Console.WriteLine();
-                while (true)
-                {
-                    int input = Utility.GetInput(0, 3);
-                    if (input == 0)
-                    {
-                        gm.monsters.Clear();
-                        break;
-                    }
-                    else if (input == 1)
-                    {
-                        SkillChoiceBattle();
-                        break;
-                    }
-                    else if (input == 2)
-                    {
-                        TargetBattle();
-                        break;
-                    }
-                    else if (input == 3 && ItemLimits > 0)
-                    {
-                        ItemLimits--;
-                        gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
-                    }
-                    //else
-                    //    Console.WriteLine("최대치만큼 사용하였습니다.");
-                }
+                int input = Utility.GetInput(0, 3);
+                if (input == 0)
+{                    {gm.monsters.Clear();return; }
+}                else if (input == 1)
+                    { SkillChoiceBattle(); break; }
+                else if (input == 2)
+                    { TargetBattle(); break; }
+                else if (input == 3 && ItemLimits > 0)
+                    { UseItem(); break; }
+                else
+                    Console.WriteLine("최대치만큼 사용하였습니다.");
             }
 
         }
@@ -557,6 +547,56 @@ namespace SpartaDungeon
                 Console.Write("□");
             }
             Console.WriteLine();
+        }
+        public void UseItem()
+        {
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("[소비 아이템 목록]");
+            int idx = 0;
+            for (int i = 0; i < gm.consumableItemsList.Count; i++)
+            {
+                if (gm.consumableItemsList[i].ItemCount != 0)
+                {
+                    idx++;
+                    Console.WriteLine($"{idx}.[P]{gm.consumableItemsList[i].Name} | 효과:{gm.consumableItemsList[i].EffectAmount} | " +
+                        $"설명: {gm.consumableItemsList[i].Description} |가격: {gm.consumableItemsList[i].Cost} |개수: {gm.consumableItemsList[i].ItemCount}");
+                }
+            }
+            Console.WriteLine();
+            int listnum = gm.consumableItemsList.Count(m => m.ItemCount > 0);
+            if (listnum == 1)
+                Console.WriteLine("1. 사용하기");
+            else if (listnum > 1)
+                Console.WriteLine($"1~{listnum}. 사용하기");
+            Console.WriteLine("0. 나가기");
+            int input = Utility.GetInput(0, listnum);
+            if (input == 0)
+                ReadyBattle();
+            else
+            {
+                idx = 0;
+                for (int i = 0; i < gm.consumableItemsList.Count; i++)
+                {
+                    if (gm.consumableItemsList[i].ItemCount != 0)
+                    {
+                        idx++;
+                        if (idx == input)
+                        {
+                            Console.WriteLine($"{gm.consumableItemsList[i].Name}을(를) 사용하시겠습니까?");
+                            gm.player.DisplayHpBar(); if (gm.consumableItemsList[i].Type == PotionType.Health) Utility.ColorText(ConsoleColor.Green, $"{gm.consumableItemsList[i].EffectAmount:+0;-0;}", Text.Write);
+                            Console.WriteLine();
+                            gm.player.DisplayMpBar(); if (gm.consumableItemsList[i].Type == PotionType.Mana) Utility.ColorText(ConsoleColor.Green, $"{gm.consumableItemsList[i].EffectAmount:+0;-0;}", Text.Write);
+                            Console.WriteLine("\n1.사용     2.취소");
+                            switch (Utility.GetInput(1, 2))
+                            {
+                                case 1: { gm.consumableItemsList[i].Use(gm.player); ItemLimits--;  MonsterAttack(); } break;
+                                case 2: ReadyBattle(); break;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
