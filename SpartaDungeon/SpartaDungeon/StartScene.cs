@@ -11,8 +11,10 @@ namespace SpartaDungeon
     {
         public void Lobby(GameManager gm)
         {
+            QuestManager questManager = new QuestManager();
+            Player player = new Player();
             DataManager dataManager = new DataManager();
-            Dungeon dungeonManager = new Dungeon();
+            Dungeon dungeonManager = new Dungeon(questManager, player);
 
             while (true)
             {
@@ -79,7 +81,7 @@ namespace SpartaDungeon
             {
                 Console.Clear();
                 Console.WriteLine("====[퀘스트 목록]====");
-                gm.QuestManager.ShowAllQuests();
+                gm.questManager.ShowAllQuests();
                 Console.WriteLine();
                 Console.WriteLine("퀘스트를 수락하려면 ID를 입력하세요.");
                 Console.WriteLine("0. 나가기");
@@ -88,7 +90,7 @@ namespace SpartaDungeon
                 if (questID == 0)
                     return;
 
-                if (gm.QuestManager.AcceptQuest(questID))
+                if (gm.questManager.AcceptQuest(questID))
                 {
                     Console.WriteLine("퀘스트가 수락되었습니다!");
                 }

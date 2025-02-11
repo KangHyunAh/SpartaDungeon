@@ -25,18 +25,6 @@ namespace SpartaDungeon
             this.player = player;
         }
 
-        public void EnterDunGeon()
-        {
-            int monsterKills = 3;
-            int questId = 1;
-
-            questManager.UpdateQuestProgress(questId, monsterKills);
-
-            if (questManager.IsQuestCompleted(questId))
-            {
-                questManager.CompleteQuest(questId, player);
-            }
-        }
 
         internal void Battle(GameManager gm)
         {
@@ -428,6 +416,16 @@ namespace SpartaDungeon
             }
                 
 
+        }
+
+        public void DefeatMonster(Monster monster)
+        {
+            Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
+            
+            foreach(int questId in questManager.acceptedQuests)
+            {
+                questManager.UpdateQuestProgress(questId, 1, player);
+            }
         }
 
         public void BattleResult()

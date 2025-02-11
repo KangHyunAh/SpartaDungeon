@@ -16,19 +16,32 @@ namespace SpartaDungeon
 
         public void AddQuest( Quest quest)
         {
-            quests[quest.Id] = quest;
+            if (!quests.ContainsKey(quest.Id))
+            {
+                quests.Add(quest.Id, quest);
+                Console.WriteLine($"[퀘스트 추가됨] {quest.Title} (ID: {quest.Id})");
+            }
+
+            else
+            {
+                Console.WriteLine($"[경고] 이미 존재하는 퀘스트 (ID: {quest.Id})");
+            }
         }
 
-        public void UpdateQuestProgress(int questId, Monster monster)
+        public void UpdateQuestProgress(int questId, int progressAmount, Player player)
         {
             if(quests.TryGetValue(questId, out Quest quest))
             {
-                quest.UpdateProgress(monster);
+                if (quest.Status == QuestStatus.Accepted)
+                {
+                    quest.UpdateProgress(progressAmount);
+                    Console.WriteLine($"퀘스트 '{quest.Title}' 진행 상태 업데이트 됨. ({quest.CurrentCount} / {quest.GoalCount})");
+                }
 
                 if (quest.IsCompleted)
                 {
-                    Player player = new Player();
-                    quest.Reward(player);
+                    Console.WriteLine($"[퀘스트 완료 가능] {quest.Title} 퀘스트 목표를 달성했습니다!");
+                    CompleteQuest(questId, player);
                 }
             }
         }
@@ -92,5 +105,12 @@ namespace SpartaDungeon
                 return false;
             }
         }
+    }
+
+    public enum QuestStatus
+    {
+        Availble,
+        Accepted,
+        Completed
     }
 }

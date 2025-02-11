@@ -18,6 +18,8 @@ namespace SpartaDungeon
         public int RewardGold { get; }
         public int RewardExp { get; }
 
+        public QuestStatus Status { get; set; }
+
         public Quest(int id, string title, string description, int goalCount, int rewardGold, int rewardExp )
         {
             Id = id;
@@ -28,17 +30,17 @@ namespace SpartaDungeon
             RewardExp = rewardExp;
             CurrentCount = 0;
             IsCompleted = false;
+            Status = QuestStatus.Availble;
         }
 
         
 
-        public void UpdateProgress(Monster monster)
+        public void UpdateProgress(int amount)
         {
             if(IsCompleted) return;
 
-            CurrentCount++;
+            CurrentCount+= amount;
             Console.WriteLine($"[진행 중] {Title}: {CurrentCount} / {GoalCount} 처치");
-            
             
             if(CurrentCount >= GoalCount)
             {

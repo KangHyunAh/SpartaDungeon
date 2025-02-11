@@ -10,7 +10,6 @@ namespace SpartaDungeon
         static void Main(string[] args)     //메인게임진행
         {
             GameManager gm = new GameManager();
-            QuestManager questManager = new QuestManager();
             
             StartScene start = new StartScene();
             gm.player = new DataManager().LoadData(gm);
@@ -23,10 +22,10 @@ namespace SpartaDungeon
         public StartScene startScene = new StartScene();
         public InventoryAndShop inventoryAndShop = new InventoryAndShop();
         public Player player = new Player();
+        public Dungeon dungeon;
+        public QuestManager questManager;
 
 
-
-        public Dungeon dungeon = new Dungeon();
         public List<Monster> monsters = new List<Monster>();
         public List<Monster> monsterList;
         public List<Monster> bossmonsterList;
@@ -34,11 +33,13 @@ namespace SpartaDungeon
         public List<EquipItem> equipItemList;
         public List<ConsumableItem> consumableItemsList;
 
-        public QuestManager QuestManager;
+        
 
         public GameManager()        //게임매니저 생성자
         {
-            QuestManager = new QuestManager();
+            questManager = new QuestManager();
+            player = new Player();
+            dungeon = new Dungeon(questManager, player);
 
             //장비아이템 리스트
             equipItemList = new List<EquipItem>     //  string 이름, EquipType 장착부위, int 공격력, int 방어력, int 쵀대채력, string 설명, int 가격
@@ -100,8 +101,8 @@ namespace SpartaDungeon
                 new Monster(10,"영웅의 기억",10,100,10,10,"보스"),
             };
 
-            QuestManager.AddQuest(new Quest(1, "흔적 퇴치", "5마리의 흔적을 잡으세요", 5, 50, 80));
-            QuestManager.AddQuest(new Quest(2, "보스 퇴치", "영웅의 기억을 잡으세요", 1, 200, 300 ));
+            questManager.AddQuest(new Quest(1, "흔적 퇴치", "5마리의 흔적을 잡으세요", 5, 50, 80));
+            questManager.AddQuest(new Quest(2, "보스 퇴치", "영웅의 기억을 잡으세요", 1, 200, 300 ));
 
         }
         
