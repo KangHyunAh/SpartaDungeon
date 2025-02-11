@@ -13,75 +13,77 @@ namespace SpartaDungeon
     public class Dungeon
     {
         private int EnterHp { get; set; }
-        public int ItemLimits {  get; set; }
+        public int ItemLimits { get; set; }
         GameManager gm { get; set; }
         Random random = new Random();
-
-
-        //몬스터 스폰
-
 
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
             ItemLimits = 2;
-            if (!(gm.player.dungeonLevel % 3 == 0))
+            if(gm.monsters.Count < 1)
             {
-                MonsterSpawn(gm.monsterList, random.Next(1, 5));
+                if (!(gm.player.dungeonLevel % 3 == 0))
+                {
+                    MonsterSpawn(gm.monsterList, random.Next(1, 5));
+                }
+                else
+                {
+                    MonsterSpawn(gm.bossmonsterList, 1);
+                    MonsterSpawn(gm.monsterList, random.Next(1, 4));
+                }
             }
             else
-            {
-                MonsterSpawn(gm.bossmonsterList, 1);
-                MonsterSpawn(gm.monsterList, random.Next(1, 5));
-            }
+                foreach (Monster monster in gm.monsters)
+                {
+                    monster.Health = monster.MaxHealth;
+                }
             ReadyBattle();
         }
         public void ReadyBattle()
         {
+
+            ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
+            Console.WriteLine("[몬스터 정보]");
+            Console.WriteLine();
+
+            MonsterInfo();
+
+            Console.WriteLine();
+            Hpbar();
+            Mpbar();
+            Console.WriteLine();
+            Console.WriteLine("0. 도망가기");
+            Console.WriteLine("1. 스킬");
+            Console.WriteLine("2. 기본 공격");
+            Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
+            Console.WriteLine();
             while (true)
             {
-                ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
-                Console.WriteLine("[몬스터 정보]");
-                Console.WriteLine();
-
-                MonsterInfo();
-
-                Console.WriteLine();
-                Hpbar();
-                Mpbar();
-                Console.WriteLine();
-                Console.WriteLine("0. 도망가기");
-                Console.WriteLine("1. 스킬");
-                Console.WriteLine("2. 기본 공격");
-                Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
-                Console.WriteLine();
-                while (true)
+                int input = Utility.GetInput(0, 3);
+                if (input == 0)
                 {
-                    int input = Utility.GetInput(0, 3);
-                    if (input == 0)
-                    {
-                        gm.monsters.Clear();
-                        break;
-                    }
-                    else if (input == 1)
-                    {
-                        SkillChoiceBattle();
-                        break;
-                    }
-                    else if (input == 2)
-                    {
-                        TargetBattle();
-                        break;
-                    }
-                    else if (input == 3 && ItemLimits > 0)
-                    {
-                        ItemLimits--;
-                        gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
-                    }
-                    //else
-                    //    Console.WriteLine("최대치만큼 사용하였습니다.");
+                    return;
                 }
+                else if (input == 1)
+                {
+                    SkillChoiceBattle();
+                    break;
+                }
+                else if (input == 2)
+                {
+                    TargetBattle();
+                    break;
+                }
+                else if (input == 3 && ItemLimits > 0)
+                {
+                    gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                    break;
+                }
+                else
+                    Console.WriteLine("최대치만큼 사용하였습니다.");
+
             }
 
         }

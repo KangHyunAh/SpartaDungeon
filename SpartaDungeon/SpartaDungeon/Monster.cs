@@ -11,6 +11,7 @@ namespace SpartaDungeon
         public int Lv {  get; set; }
         public string Name { get; }
         public int Health { get; set; }
+        public int MaxHealth { get; set; }
         public int Atk { get; set; }
         public int Rewards { get; set; }
         public int Exp { get; set; }
@@ -26,6 +27,7 @@ namespace SpartaDungeon
             {
                 Lv = lv;
                 Health = health;
+                MaxHealth = health;
                 health = Math.Max(health, 0);
                 Atk = atk;
 
@@ -36,6 +38,7 @@ namespace SpartaDungeon
                 Lv = lv + random;
                 Health = health + random * 3;
                 health = Math.Max(health, 0);
+                MaxHealth = health + random * 3;
                 Rewards += Lv * 100;
                 Exp += Lv * 5;
                 Atk = atk + random ;
