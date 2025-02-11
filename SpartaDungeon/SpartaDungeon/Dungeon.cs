@@ -76,7 +76,7 @@ namespace SpartaDungeon
                 }
                 else if (input == 3 && ItemLimits > 0)
                 {
-                    gm.inventoryAndShop.ConsumableItemInventoryScreen(gm);
+                    gm.inventoryAndShop.ConsumableItemInventoryScreen(gm,true);
                     break;
                 }
                 else

@@ -93,7 +93,7 @@ namespace SpartaDungeon
             }
         }
 
-        public void ConsumableItemInventoryScreen(GameManager gm)
+        public void ConsumableItemInventoryScreen(GameManager gm,bool isDungeon = false)
         {
             while (true)
             {
@@ -119,7 +119,7 @@ namespace SpartaDungeon
                 Console.WriteLine();
 
                 int input = Utility.GetInput(0, index);
-                if (input == 0) break;
+                if (input == 0) { if (isDungeon) gm.dungeon.ReadyBattle(); break; }
                 else
                 {
                     index = 0;
@@ -148,7 +148,7 @@ namespace SpartaDungeon
 
                                 switch (Utility.GetInput(0, 1))
                                 {
-                                    case 1: gm.consumableItemsList[i].Use(gm.player); break;
+                                    case 1: gm.consumableItemsList[i].Use(gm.player); if (isDungeon) { gm.dungeon.ItemLimits--; gm.dungeon.ReadyBattle(); } break;
                                     case 0: break;
                                 }
                             }
