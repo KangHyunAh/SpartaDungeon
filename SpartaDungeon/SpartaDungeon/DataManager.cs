@@ -232,7 +232,7 @@ namespace SpartaDungeon
             // 배열에 있는 데이터 JObject/JArray로 변환하여 변수에 하나씩 넣어주기
             JObject playerData = (JObject)jsonArr[0];
             JObject itemData = (JObject)jsonArr[1];
-            JObject questData = (JObject)jsonArr[2];
+            //JObject questData = (JObject)jsonArr[2];
             //JArray acceptQuestData = (JArray)jsonArr[3];
             //JArray clearQuestData = (JArray)jsonArr[4];
 
