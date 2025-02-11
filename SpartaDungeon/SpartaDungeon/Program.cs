@@ -10,11 +10,8 @@ namespace SpartaDungeon
         static void Main(string[] args)     //메인게임진행
         {
             GameManager gm = new GameManager();
-            QuestManager questManager = new QuestManager();
-
-            StartScene start = new StartScene();
             gm.player = new DataManager().LoadData(gm);
-            start.Lobby(gm);
+            gm.startScene.Lobby(gm);
         }
     }
 
@@ -23,8 +20,6 @@ namespace SpartaDungeon
         public StartScene startScene = new StartScene();
         public InventoryAndShop inventoryAndShop = new InventoryAndShop();
         public Player player = new Player();
-
-
 
         public Dungeon dungeon = new Dungeon();
         public List<Monster> monsters = new List<Monster>();
