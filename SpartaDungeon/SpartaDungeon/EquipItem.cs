@@ -60,11 +60,11 @@ namespace SpartaDungeon
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("장착중인 장비가 있습니다. 해제하고 장착하시겠습니까?");
+                    Console.WriteLine("\n장착중인 장비가 있습니다. 해제하고 장착하시겠습니까?\n");
 
                     Utility.RealTabWrite($"{equipedItem.Name}", true, 18);
                     Console.Write("==> ");
-                    Utility.RealTabWrite($"{Name}", true, 18); Console.WriteLine();
+                    Utility.RealTabWrite($"{Name}", true, 18); Console.WriteLine("\n");
 
                     Utility.RealTabWrite($"[atk{equipedItem.Atk,3:+0;-0}]", true, 18); Console.Write("==> "); Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9);
                     if (equipedItem.Atk > Atk) Utility.ColorText(ConsoleColor.Red, $"{(Atk - equipedItem.Atk),3:+0;-0}", Text.Write);
@@ -79,7 +79,7 @@ namespace SpartaDungeon
                     else if (equipedItem.MaxHp < MaxHp) Utility.ColorText(ConsoleColor.Cyan, $"{(MaxHp - equipedItem.MaxHp),4:+0;-0}", Text.Write);
                     Console.WriteLine();
 
-                    Console.WriteLine("1.장착      0.취소");
+                    Console.WriteLine("\n1.장착      0.취소");
 
                     int input = Utility.GetInput(0, 1);
                     if (input == 1)
@@ -120,7 +120,7 @@ namespace SpartaDungeon
             if (isEquip) { Console.ForegroundColor = ConsoleColor.Yellow; Console.Write("[E]"); } Utility.RealTabWrite($"{Name}", true, 16); Utility.RealTabWrite($"|[{(EquipType)Type}]", true, 7); Console.WriteLine($"|{Description}");//첫줄
             if (isEquip) Console.ResetColor();
             //둘째줄
-            if (ItemCount >= 1) Console.Write($"  소지X{ItemCount,2} "); else Console.Write("          ");
+            if (ItemCount >= 1) Console.Write($"  소지X{ItemCount,2} "); else Utility.ColorText(ConsoleColor.DarkGray, $"  소지X{ItemCount,2} ", Text.Write);
             if (isShop) 
             {
                 if (!isSale)

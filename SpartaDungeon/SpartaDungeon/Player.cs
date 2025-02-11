@@ -52,7 +52,7 @@ namespace SpartaDungeon
             Console.Write($"HP {healthPoint,4}/{(maxhealthPoint + equipMaxhealthPoint),4}({maxhealthPoint}+{equipMaxhealthPoint})\n");
             for (int i = 0; i < 10; i++)
             {
-                if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Green, "■", Text.Write);
+                if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
                 else Console.Write("□");
             }
         }
