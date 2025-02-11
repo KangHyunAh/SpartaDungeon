@@ -9,11 +9,11 @@ namespace SpartaDungeon
     public class Quest
     {
 
-        public int Id {  get;  set; }
+        public int QuestId {  get;  set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int GoalCount { get; }
-        public int CurrentCount { get; set;}
+        public int CurrentProgress { get; set;}
         public bool IsCompleted {  get; set; }
         public bool IsAccepted { get; set; }
         public int RewardGold { get; }
@@ -25,25 +25,33 @@ namespace SpartaDungeon
         public Quest(int id, string title, string description, int goalCount, int rewardGold, int rewardExp )
 
         {
-            Id = id;
+            QuestId = id;
             Title = title;
             Description = description;
             IsCompleted = false;
             Status = QuestStatus.Availble;
+            GoalCount = goalCount;
+            CurrentProgress = 0;
+
+            RewardGold = rewardGold;
+            RewardExp = rewardExp;
         }
 
 
 
         public void UpdateProgress(int amount)
         {
+            
             if (IsCompleted) return;
 
-            CurrentCount += amount;
-            Console.WriteLine($"[진행 중] {Title}: {CurrentCount} / {GoalCount} 처치");
+            Console.WriteLine($"[DEBUG] UpdateProgress 호출됨 - 기존 진행도: {CurrentProgress}, 추가량: {amount}");
+            CurrentProgress += amount;
+            Console.WriteLine($"[진행 중] {Title}: {CurrentProgress} / {GoalCount} 처치");
 
-            if (CurrentCount >= GoalCount)
+            if (CurrentProgress >= GoalCount)
             {
-                IsCompleted = true;
+                CurrentProgress = GoalCount;
+                Status = QuestStatus.Completed;
                 Console.WriteLine($"[퀘스트 완료] {Title} 퀘스트의 목표를 달성했습니다");
             }
         }

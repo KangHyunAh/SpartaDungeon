@@ -104,7 +104,8 @@ namespace SpartaDungeon
                 new Monster(10,"영웅의 기억",10,100,10,10,"보스"),
             };
 
-
+           
+            
             questManager.AddQuest(new Quest(1, "흔적 퇴치", "5마리의 흔적을 잡으세요", 5, 50, 80));
             questManager.AddQuest(new Quest(2, "보스 퇴치", "영웅의 기억을 잡으세요", 1, 200, 300 ));
 
