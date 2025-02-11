@@ -76,6 +76,7 @@ namespace SpartaDungeon
                             displayItemList.Add(gm.equipItemList[i]);
                             Console.Write($"{index,2}.");
                             gm.equipItemList[i].ShowEquipItemList(gm);
+                            Console.WriteLine();
                         }
                     }
 
