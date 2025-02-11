@@ -13,14 +13,28 @@ namespace SpartaDungeon
     public class Dungeon
     {
         private int EnterHp { get; set; }
+        private int EnterMp {  get; set; }
         public int ItemLimits { get; set; }
         GameManager gm { get; set; }
         Random random = new Random();
+
+
+        private QuestManager questManager;
+        private Player player;
+
+        public Dungeon(QuestManager questManager, Player player)
+        {
+            this.questManager = questManager;
+            this.player = player;
+        }
+
+
 
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
+            EnterMp = gm.player.manaPoint;
             ItemLimits = 2;
             if(gm.monsters.Count == 0)
             {
@@ -51,8 +65,9 @@ namespace SpartaDungeon
             MonsterInfo();
 
             Console.WriteLine();
-            Hpbar();
-            Mpbar();
+            gm.player.DisplayHpBar();
+            Console.WriteLine();
+            gm.player.DisplayMpBar();
             Console.WriteLine();
             Console.WriteLine("0. 도망가기");
             Console.WriteLine("1. 스킬");
@@ -132,7 +147,9 @@ namespace SpartaDungeon
             MonsterInfo();
 
             Console.WriteLine();
-            Hpbar();
+            gm.player.DisplayHpBar();
+            Console.WriteLine();
+            gm.player.DisplayMpBar();
             Console.WriteLine();
             Console.WriteLine();
             if (useskill && gm.player.skills[skillnum - 1].Count == 5)
@@ -197,16 +214,18 @@ namespace SpartaDungeon
         {
             ScreenText("Battle!! - Player의 턴");
             Console.WriteLine($"{gm.player.name}가 {gm.player.skills[skillnum].Name}을(를) 사용!");
-            Hpbar();
-            Mpbar();
+            gm.player.DisplayHpBar();
+            Console.WriteLine();
+            gm.player.DisplayMpBar();
             gm.player.skills[skillnum].HealSkill(gm.player);
             Console.WriteLine();
             Console.WriteLine("           v");
             Console.WriteLine("           v");
             Console.WriteLine("           v");
             Console.WriteLine();
-            Hpbar();
-            Mpbar();
+            gm.player.DisplayHpBar();
+            Console.WriteLine();
+            gm.player.DisplayMpBar();
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
@@ -252,13 +271,15 @@ namespace SpartaDungeon
                 else
                 {
                     Utility.ColorText(ConsoleColor.DarkGray, $"-[{i + 1}] Lv. {livemonster[i].Lv} {livemonster[i].Name} [Dead]");
+                    DefeatMonster(livemonster[i]);
                 }
             }
             livemonster.Clear();
 
             Console.WriteLine();
-            Hpbar();
-            Mpbar();
+            gm.player.DisplayHpBar();
+            Console.WriteLine();
+            gm.player.DisplayMpBar(); ;
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
@@ -308,8 +329,11 @@ namespace SpartaDungeon
                 {
                     Console.WriteLine($"Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name}");
                     Console.WriteLine($"HP. {monsternum[i]} => Dead");
+                    DefeatMonster(gm.monsters[target]);
                 }
             }
+
+
 
             Console.WriteLine();
             Console.WriteLine("0. 다음");
@@ -353,13 +377,15 @@ namespace SpartaDungeon
                         if (evasion == 0)
                         {
                             Console.WriteLine($"{monster.Name}의 공격을 {gm.player.name}은(는) 회피하였습니다.");
-                            Hpbar();
+                            gm.player.DisplayHpBar();
+                            Console.WriteLine();
                             Thread.Sleep(300);
                         }
                         else if (damage == 0)
                         {
                             Console.WriteLine($"{monster.Name}의 공격을 {gm.player.name}은(는) 높은 방어력으로 공격을 막아냈습니다.");
-                            Hpbar();
+                            gm.player.DisplayHpBar();
+                            Console.WriteLine();
                             Thread.Sleep(300);
                         }
                         else
@@ -369,13 +395,15 @@ namespace SpartaDungeon
                                 if (Critical < 15)
                                 {
                                     Console.WriteLine($"{monster.Name}은 {gm.player.name}에게 공격을 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!");
-                                    Hpbar();
+                                    gm.player.DisplayHpBar();
+                                    Console.WriteLine();
                                     Thread.Sleep(300);
                                 }
                                 else
                                 {
                                     Console.WriteLine($"{monster.Name}은 {gm.player.name}에게 공격을 맞췄습니다. [데미지 : {damage}]");
-                                    Hpbar();
+                                    gm.player.DisplayHpBar();
+                                    Console.WriteLine();
                                     Thread.Sleep(300);
                                 }
                             }
@@ -385,13 +413,15 @@ namespace SpartaDungeon
                                 if (Critical < 15)
                                 {
                                     Console.WriteLine($"{monster.Name}은 {gm.player.name}에게 공격을 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!\n[Hp {playerHp} => [Dead]");
-                                    Hpbar();
+                                    gm.player.DisplayHpBar();
+                                    Console.WriteLine();
                                     Thread.Sleep(300);
                                 }
                                 else
                                 {
                                     Console.WriteLine($"{monster.Name}은 {gm.player.name}에게 공격을 맞췄습니다. [데미지 : {damage}][Hp {playerHp} => [Dead]");
-                                    Hpbar();
+                                    gm.player.DisplayHpBar();
+                                    Console.WriteLine();
                                     Thread.Sleep(300);
                                 }
                             }
@@ -416,6 +446,21 @@ namespace SpartaDungeon
             }
 
 
+        }
+
+        public void DefeatMonster(Monster monster)
+        {
+            Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
+            Console.WriteLine("DefeatMonster 호출됨");
+
+            Console.WriteLine($"현재 진행 중인 퀘스트 개수: {questManager.acceptedQuests.Count}");
+
+            foreach (int questId in questManager.acceptedQuests)
+            {
+                Console.WriteLine($"퀘스트 진행 업데이트 시도: {questId}");
+                questManager.UpdateQuestProgress(questId, 1, player);
+                Console.WriteLine($"퀘스트 진행도 업데이트됨: {questId}");
+            }
         }
 
         public void BattleResult()
@@ -464,6 +509,18 @@ namespace SpartaDungeon
                     bossdrop.Clear();
 
                 }
+                foreach (Monster monster in gm.monsters)
+                {
+                    if (monster.Getitem == 0)
+                    {
+                        int dropnum = random.Next(0, gm.equipItemList.Count);
+                        if(!gm.equipItemList[dropnum].IsBossItem)
+                        {
+                            gm.equipItemList[dropnum].ItemCount += 1;
+                            Console.WriteLine($"{monster.Name}에게서 [{gm.equipItemList[dropnum].Type.ToString()}]{gm.equipItemList[dropnum].Name}을 획득하였습니다.");
+                        }
+                    }
+                }
                 gm.player.ControlLevel();
                 gm.player.dungeonLevel += 1;
             }
@@ -473,9 +530,12 @@ namespace SpartaDungeon
             Console.WriteLine();
             Console.WriteLine($"Lv. {gm.player.level} {gm.player.name}");
             Console.WriteLine($"Hp. {EnterHp} => {gm.player.healthPoint}");
+            Console.WriteLine($"Mp. {EnterMp} => {gm.player.manaPoint}");
             Console.WriteLine();
 
-            Hpbar();
+            gm.player.DisplayHpBar();
+            Console.WriteLine();
+            gm.player.DisplayMpBar();
             gm.monsters.Clear();
 
             Console.WriteLine();

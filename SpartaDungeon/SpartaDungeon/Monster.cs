@@ -16,6 +16,7 @@ namespace SpartaDungeon
         public int Rewards { get; set; }
         public int Exp { get; set; }
         public string MonsterType { get; }
+        public int Getitem;
 
         public Monster(string name, int health, int atk, int rewards, int exp, string monstertype)
         {
@@ -23,6 +24,7 @@ namespace SpartaDungeon
             Rewards = rewards;
             Exp = exp;
             MonsterType = monstertype;
+            Getitem = new Random().Next(0, 9);
             if (monstertype == "이벤트")
             {
                 Lv = 1;
@@ -30,7 +32,7 @@ namespace SpartaDungeon
                 MaxHealth = health;
                 health = Math.Max(health, 0);
                 Atk = atk;
-
+                Getitem = 1;
             }
             else
             {
@@ -42,6 +44,7 @@ namespace SpartaDungeon
                 Rewards += Lv * 100;
                 Exp += Lv * 5;
                 Atk = atk + random;
+                Getitem = new Random().Next(0, 9);
             }
         }
         public Monster Spawn()

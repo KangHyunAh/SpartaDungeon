@@ -11,7 +11,11 @@ namespace SpartaDungeon
     {
         public void Lobby(GameManager gm)
         {
+            QuestManager questManager = new QuestManager();
+            Player player = new Player();
             DataManager dataManager = new DataManager();
+            Dungeon dungeonManager = new Dungeon(questManager, player);
+
 
             while (true)
             {
@@ -22,15 +26,34 @@ namespace SpartaDungeon
 
                 Console.Clear();
 
+
                 Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
                 Console.WriteLine("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.");
                 Console.WriteLine();
+
+                Console.WriteLine("┌────────────────────────────────────────────────────┐");
+                Console.WriteLine("│  ####   ####       #      ####     #####      #    │");
+                Console.WriteLine("│ #   #    #  #     ###      #  #    # # #     ###   │");
+                Console.WriteLine("│ #        #  #     # #      #  #      #       # #   │");
+                Console.WriteLine("│  ###     #  #    #  #      ###       #      #  #   │");
+                Console.WriteLine("│     #    ###     #####     #  #      #      #####  │");
+                Console.WriteLine("│ #   #    #       #   #     #  #      #      #   #  │");
+                Console.WriteLine("│ ####    ###     ##   ##   ###  #    ###    ##   ## │");
+                Console.WriteLine("└────────────────────────────────────────────────────┘");
+
+                Console.WriteLine();
                 Console.WriteLine("1. 캐릭터 정보");
+                Console.WriteLine();
                 Console.WriteLine("2. 인벤토리");
+                Console.WriteLine();
                 Console.WriteLine("3. 상점");
+                Console.WriteLine();
                 Console.WriteLine($"4. 던전 입장({gm.player.dungeonLevel} 층)");
+                Console.WriteLine();
                 Console.WriteLine("5. 퀘스트");
+                Console.WriteLine();
                 Console.WriteLine("6. 휴식하기");
+                Console.WriteLine();
                 Console.WriteLine("7. 게임종료");
                 Console.WriteLine();
 
@@ -77,7 +100,7 @@ namespace SpartaDungeon
             {
                 Console.Clear();
                 Console.WriteLine("====[퀘스트 목록]====");
-                gm.QuestManager.ShowAllQuests();
+                gm.questManager.ShowAllQuests();
                 Console.WriteLine();
                 Console.WriteLine("퀘스트를 수락하려면 ID를 입력하세요.");
                 Console.WriteLine("0. 나가기");
@@ -86,7 +109,7 @@ namespace SpartaDungeon
                 if (questID == 0)
                     return;
 
-                if (gm.QuestManager.AcceptQuest(questID))
+                if (gm.questManager.AcceptQuest(questID))
                 {
                     Console.WriteLine("퀘스트가 수락되었습니다!");
                 }
