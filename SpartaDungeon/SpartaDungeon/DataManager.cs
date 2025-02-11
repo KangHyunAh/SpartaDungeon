@@ -9,6 +9,9 @@ using SpartaDungeon.PotionNamespace;
 using System.IO;
 using System.Security.Cryptography;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
+using Security;
+using Foundation;
 
 namespace SpartaDungeon
 {
@@ -400,6 +403,11 @@ namespace SpartaDungeon
                     LockKeyOrIV(keyPath, aes.Key);
                     LockKeyOrIV(ivPath, aes.IV);
                 }
+                else if (OperatingSystem.IsMacOS())
+                {
+                    AddToKeyOrIVForMac("AESKey", aes.Key);
+                    AddToKeyOrIVForMac("AESIV", aes.IV);
+                }
                 else
                 {
                     File.WriteAllBytes(keyPath, aes.Key);
@@ -447,12 +455,18 @@ namespace SpartaDungeon
                 aes.Padding = PaddingMode.PKCS7;
 
                 // PC에 저장된 암호화 된 Key, IV(Initialize Vector) 값을 복호화해서 가져오기
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (OperatingSystem.IsWindows())
                 {
                     aes.Key = UnLockKeyOrIV(keyPath);
                     aes.IV = UnLockKeyOrIV(ivPath);
                 }
-                // 사용자 운영체제가 윈도우가 아닐경우
+                // 사용자의 운영체제가 MacOS 일 경우
+                else if(OperatingSystem.IsMacOS())
+                {
+                    aes.Key = SearchToKeyOrIVForMac("AESKey");
+                    aes.IV = SearchToKeyOrIVForMac("AESIV");
+                }
+                // 사용자 운영체제가 윈도우,맥이 아닐경우
                 else
                 {
                     aes.Key = File.ReadAllBytes(keyPath);
@@ -479,18 +493,61 @@ namespace SpartaDungeon
             return result;
         }
 
-        // 경로에 저장된 암호화 된 Key, IV 복호화
+        // 경로에 저장된 암호화 된 Key, IV 복호화 (윈도우에서만 작동)
         private byte[] UnLockKeyOrIV(string path)
         {
             byte[] data = File.ReadAllBytes(path);
             return ProtectedData.Unprotect(data, null, DataProtectionScope.LocalMachine);
         }
 
-        // 저장 시 생성한 Key, IV 암호화
+        // 저장 시 생성한 Key, IV 암호화 (윈도우에서만 작동)
         private void LockKeyOrIV(string path, byte[] data)
         {
             byte[] lockData = ProtectedData.Protect(data, null, DataProtectionScope.LocalMachine);
             File.WriteAllBytes(path, lockData);
+        }
+
+        // Key,IV 키체인에 추가 (Mac)
+        private void AddToKeyOrIVForMac(string name, byte[] data)
+        {
+            SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
+            {
+                Service = "Test",
+                Account = name,
+                ValueData = NSData.FromArray(data)
+            };
+
+            SecStatusCode result = SecKeyChain.Add(secRecord);
+
+            if(result == SecStatusCode.DuplicateItem)
+            {
+                SecRecord record = new SecRecord(SecKind.GenericPassword)
+                {
+                    Service = "Test",
+                    Account = name,
+                };
+                SecStatusCode updateResult = SecKeyChain.Update(record, secRecord);
+            }
+        }
+
+        // 키체인에서 Key,IV 가져오기 (Mac)
+        private byte[] SearchToKeyOrIVForMac(string name)
+        {
+            SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
+            {
+                Service = "Test",
+                Account = name
+            };
+
+            SecStatusCode status;
+            SecRecord result = SecKeyChain.QueryAsRecord(secRecord, out status);
+
+            if (status == SecStatusCode.Success)
+            {
+                return result.ValueData.ToArray();
+            }
+
+            return null;
         }
     }
 }
