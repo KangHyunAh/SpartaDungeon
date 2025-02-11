@@ -12,7 +12,6 @@ namespace SpartaDungeon
         public void Lobby(GameManager gm)
         {
             DataManager dataManager = new DataManager();
-            Dungeon dungeonManager = new Dungeon();
 
             while (true)
             {
@@ -50,7 +49,7 @@ namespace SpartaDungeon
                         break;
                     case 4:
                         if (gm.player.healthPoint > 0)
-                            dungeonManager.Battle(gm);
+                            gm.dungeon.Battle(gm);
 
                         else
                         {

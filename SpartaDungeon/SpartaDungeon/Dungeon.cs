@@ -53,7 +53,7 @@ namespace SpartaDungeon
             Console.WriteLine("0. 도망가기");
             Console.WriteLine("1. 스킬");
             Console.WriteLine("2. 기본 공격");
-            Console.WriteLine($"3. 소모아이템(입장가능 횟수 : {ItemLimits})");
+            Console.WriteLine($"3. 소모아이템(사용가능 횟수 : {ItemLimits})");
             Console.WriteLine();
 
             while (true)
@@ -66,7 +66,7 @@ namespace SpartaDungeon
                 else if (input == 2)
                     { TargetBattle(); break; }
                 else if (input == 3 && ItemLimits > 0)
-                    { UseItem(); break; }
+                    { gm.inventoryAndShop.ConsumableItemInventoryScreen(gm); break; }
                 else
                     Console.WriteLine("최대치만큼 사용하였습니다.");
             }
@@ -548,7 +548,7 @@ namespace SpartaDungeon
             }
             Console.WriteLine();
         }
-        public void UseItem()
+        public void UseItem(Dungeon dungeon)
         {
             Console.Clear();
             Console.WriteLine();
@@ -590,7 +590,7 @@ namespace SpartaDungeon
                             Console.WriteLine("\n1.사용     2.취소");
                             switch (Utility.GetInput(1, 2))
                             {
-                                case 1: { gm.consumableItemsList[i].Use(gm.player); ItemLimits--;  MonsterAttack(); } break;
+                                case 1: { gm.consumableItemsList[i].Use(gm.player); ItemLimits--; dungeon.MonsterAttack(); /*MonsterAttack();*/ } break;
                                 case 2: ReadyBattle(); break;
                             }
                         }

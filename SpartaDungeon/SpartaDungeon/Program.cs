@@ -11,10 +11,8 @@ namespace SpartaDungeon
         {
             GameManager gm = new GameManager();
             QuestManager questManager = new QuestManager();
-            
-            StartScene start = new StartScene();
-            gm.player = new DataManager().LoadData(gm);
-            start.Lobby(gm);   
+            gm.startScene.Lobby(gm);
+            gm.player = new DataManager().LoadData(gm);  
         }
     }
 
