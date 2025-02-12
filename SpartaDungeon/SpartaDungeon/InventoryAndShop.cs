@@ -63,7 +63,7 @@ namespace SpartaDungeon
                 if (ListItemType != 106)
                 {
                     Console.WriteLine("[장착중]");
-                    Console.Write("11.");
+                    Console.Write("10.");
                     if (equipedItem == null) Utility.ColorText(ConsoleColor.DarkGray, $"   [{(EquipType)(ListItemType - 100 - 1)}] 빈 슬롯\n");
                     else equipedItem.DisplayEquipItemList(gm, true);
 
@@ -100,13 +100,13 @@ namespace SpartaDungeon
 
                 if (ListItemType != 106)
                 {
-                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(22)", Text.Write);
+                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(11)", Text.Write);
                     Utility.ColorText(ConsoleColor.White, $"    페이지 {page,2}/{(displayItemList.Count / 5) + 1 - (displayItemList.Count != 0 && displayItemList.Count % 5 == 0 ? 1 : 0),2}    ", Text.Write);
                     Utility.ColorText(page == (displayItemList.Count / 5) + 1 - (displayItemList.Count != 0 && displayItemList.Count % 5 == 0 ? 1 : 0) ? ConsoleColor.DarkGray : ConsoleColor.White, "    (33)다음페이지>>", Text.Write);
                 }
                 else
                 {
-                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(22)", Text.Write);
+                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(11)", Text.Write);
                     Utility.ColorText(ConsoleColor.White, $"    페이지 {page,2}/{(displayConsumList.Count / 6) + 1 - (displayConsumList.Count != 0 && displayConsumList.Count % 6 == 0 ? 1 : 0),2}    ", Text.Write);
                     Utility.ColorText(page == (displayConsumList.Count / 6) + 1 - ((displayConsumList.Count !=0 && displayConsumList.Count % 6 == 0)? 1 : 0) ? ConsoleColor.DarkGray : ConsoleColor.White, "    (33)다음페이지>>", Text.Write);
 
@@ -118,10 +118,10 @@ namespace SpartaDungeon
                 Console.WriteLine("0. 뒤로가기");
                 Console.WriteLine();
 
-                int input = Utility.GetInputPlus(0, 5, ListItemType == 106 ? new int[] { 22, 33, 101, 102, 103, 104, 105, 106 } : new int[] { 11, 22, 33, 101, 102, 103, 104, 105, 106 });
+                int input = Utility.GetInputPlus(0, 5, ListItemType == 106 ? new int[] { 11, 33, 101, 102, 103, 104, 105, 106 } : new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
                 if (input == 0) break;
                 else if (input > 100) { ListItemType = input; page = 1; }
-                else if (input == 11)
+                else if (input == 10)
                 {
                     if (equipedItem != null)
                     {
@@ -144,7 +144,7 @@ namespace SpartaDungeon
                         }
                     }
                 }
-                else if (input == 22) page = (page == 1 ? 1 : page - 1);
+                else if (input == 11) page = (page == 1 ? 1 : page - 1);
                 else if (input == 33)
                 {
                     if (ListItemType != 106) page = (page == ((displayItemList.Count / 5) + 1 - (displayItemList.Count!=0 && displayItemList.Count % 5 == 0 ? 1 : 0)) ? page : page + 1);

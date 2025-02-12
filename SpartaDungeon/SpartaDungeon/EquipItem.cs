@@ -119,8 +119,8 @@ namespace SpartaDungeon
         {   //첫째줄
             if (isEquip) { Console.ForegroundColor = ConsoleColor.Yellow; Console.Write("[E]"); } 
             Utility.RealTabWrite($"{Name}", true, 16); 
-            Utility.RealTabWrite($"|[{(EquipType)Type}]", true, 7); 
-            Console.WriteLine($"|{Description}");
+            Utility.RealTabWrite($"[{(EquipType)Type}] ", true, 7); 
+            Console.WriteLine($" - {Description}");
             if (isEquip) Console.ResetColor();
             
             //둘째줄
@@ -135,11 +135,11 @@ namespace SpartaDungeon
                 }
                 else { Console.ForegroundColor = ConsoleColor.White; Utility.RealTabWrite($"판매가{Cost / 2,5}G |", false, 15); Console.ResetColor(); }
             } 
-            else Console.Write("          ");
-            if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9);    //스텟
-            if (Def != 0) Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 9);
-            if (MaxHp != 0) Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 10);
-            Console.Write("  ");
+            else Console.Write("         |");
+            if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9); else Console.Write("         ");   //스텟
+            if (Def != 0) Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 9); else Console.Write("         ");
+            if (MaxHp != 0) Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 10); else Console.Write("          ");
+            Console.Write("|");
             int deltaAtk, deltaDef, deltaMaxHp;
             EquipItem equipedItem = gm.equipItemList.FirstOrDefault(item => item.isEquip == true && item.Type == Type);
             if (equipedItem == null)
@@ -150,7 +150,6 @@ namespace SpartaDungeon
             {
                 deltaAtk = Atk - equipedItem.Atk; deltaDef = Def - equipedItem.Def; deltaMaxHp = MaxHp - equipedItem.MaxHp;
             }
-            Console.Write("   ");
             if (deltaAtk == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
             else if (deltaAtk > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
             else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
