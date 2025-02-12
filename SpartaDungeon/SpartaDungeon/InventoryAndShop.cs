@@ -118,8 +118,10 @@ namespace SpartaDungeon
                 Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발   106.소모품");
                 Console.WriteLine("0. 뒤로가기");
                 Console.WriteLine();
-                                                        //소모품일경우 장착슬롯 10 입력불가
-                int input = Utility.GetInputPlus(0, 5, ListItemType == 106 ? new int[] { 11, 33, 101, 102, 103, 104, 105, 106 } : new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
+                //소모품일경우 장착슬롯 10 입력불가
+                int input;
+                if(ListItemType!=106) input = Utility.GetInputPlus(0, displayItemList.Count-((page-1)*5)>5 ? 5 : displayItemList.Count - ((page - 1) * 5), new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
+                else input = Utility.GetInputPlus(0, displayConsumList.Count - ((page - 1) * 6) > 5 ? 5 : displayConsumList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
                 if (input == 0) break;
                 else if (input > 100) { ListItemType = input; page = 1; }
                 else if (input == 10)
@@ -298,7 +300,9 @@ namespace SpartaDungeon
                     Console.WriteLine("0. 뒤로가기");
                     Console.WriteLine();
                     //소모품일경우 장착슬롯 10 입력불가
-                    int input = Utility.GetInputPlus(0, 5, ListItemType == 106 ? new int[] { 11, 33, 101, 102, 103, 104, 105, 106 } : new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
+                    int input;
+                    if (ListItemType != 106) input = Utility.GetInputPlus(0, displayItemList.Count - ((page - 1) * 5) > 5 ? 5 : displayItemList.Count - ((page - 1) * 5), new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
+                    else input = Utility.GetInputPlus(0, displayConsumList.Count - ((page - 1) * 6) > 5 ? 5 : displayConsumList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
                     if (input == 0) break;
                     else if (input > 100) { ListItemType = input; page = 1; }
                     else if (input == 10)
@@ -407,7 +411,9 @@ namespace SpartaDungeon
                     Console.WriteLine("0. 뒤로가기");
                     Console.WriteLine();
 
-                    int input = Utility.GetInputPlus(0, 6,new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
+                    int input;
+                    if (ListItemType != 106) input = Utility.GetInputPlus(0, displayItemList.Count - ((page - 1) * 5) > 5 ? 5 : displayItemList.Count - ((page - 1) * 5), new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
+                    else input = Utility.GetInputPlus(0, gm.consumableItemsList.Count - ((page - 1) * 6) > 5 ? 5 : gm.consumableItemsList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
                     if (input == 0) break;
                     else if (input > 100) { ListItemType = input; page = 1; }
                     else if (input == 11) page = (page == 1 ? 1 : page - 1);

@@ -29,7 +29,7 @@ namespace SpartaDungeon
         public int healthPoint
         {
             get { return HealthPoint; }
-            set { if (value > maxhealthPoint + equipMaxhealthPoint) HealthPoint = maxhealthPoint + equipMaxhealthPoint; }
+            set { if (value > maxhealthPoint + equipMaxhealthPoint) HealthPoint = maxhealthPoint + equipMaxhealthPoint; else HealthPoint = value; }
         }
         public int gold = 1500;
         public int exp = 0;
@@ -248,7 +248,7 @@ namespace SpartaDungeon
                     strikePower = 10;
                     defensivePower = 5;
                     maxhealthPoint = 200;
-                    healthPoint = 200;
+                    HealthPoint = 200;
                     exp = 0;
                     maxExp = 50;
                     manaPoint = 50;
