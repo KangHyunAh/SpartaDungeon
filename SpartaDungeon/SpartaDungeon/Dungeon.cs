@@ -459,8 +459,11 @@ namespace SpartaDungeon
 
             foreach (int questId in questManager.acceptedQuests)
             {
-                questManager.UpdateQuestProgress(questId, 1, gm.player);
-                Console.WriteLine($"퀘스트 진행도 업데이트됨: {questId}");
+                if (monster.Name.Contains(gm.questManager.quests[questId].Target))
+                {
+                    questManager.UpdateQuestProgress(questId, 1, gm.player);
+                    Console.WriteLine($"퀘스트 진행도 업데이트됨: {questId}");
+                }
             }
         }
 

@@ -82,13 +82,22 @@ namespace SpartaDungeon
 
         public bool AcceptQuest(int questId)
         {
-            if (quests.TryGetValue(questId, out Quest quest) && !acceptedQuests.Contains(questId))
+            if (quests.TryGetValue(questId, out Quest quest) && !acceptedQuests.Contains(questId) && !quests[questId].IsAccepted && !quests[questId].IsCompleted)
             {
                 acceptedQuests.Add(questId);
                 quest.Status = QuestStatus.Accepted;
                 Console.WriteLine($"[퀘스트 수락] {quest.Title}");
                 return true;
             }
+            if (quests[questId].IsCompleted)
+            {
+                Console.WriteLine("이미 완료된 퀘스트 입니다.");
+            }
+            else if (quests[questId].IsAccepted)
+            {
+                Console.WriteLine("이미 수락된 퀘스트 입니다.");
+            }
+
             return false;
         }
 
@@ -110,17 +119,20 @@ namespace SpartaDungeon
                     return false;
                 }
 
-                    acceptedQuests.Remove(questId);
-                    completedQuests.Add(questId);
+                acceptedQuests.Remove(questId);
+                completedQuests.Add(questId);
 
-                    player.gold += quest.RewardGold;
-                    player.exp += quest.RewardExp;
+                quest.IsCompleted = true;
+                quest.IsAccepted = false;
 
-                    Console.WriteLine($"[보상 지급] 골드: {quest.RewardGold}, 경험치: {quest.RewardExp}");
-                    Console.WriteLine($"퀘스트 {quest.Title} 완료 처리됨.");
-                    return true;
-                
-               
+                player.gold += quest.RewardGold;
+                player.exp += quest.RewardExp;
+
+                Console.WriteLine($"[보상 지급] 골드: {quest.RewardGold}, 경험치: {quest.RewardExp}");
+                Console.WriteLine($"퀘스트 {quest.Title} 완료 처리됨.");
+                return true;
+
+
             }
             return false;
         }

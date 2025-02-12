@@ -18,11 +18,11 @@ namespace SpartaDungeon
         public bool IsAccepted { get; set; }
         public int RewardGold { get; }
         public int RewardExp { get; }
-
+        public string Target { get; set; }
 
         public QuestStatus Status { get; set; }
 
-        public Quest(int id, string title, string description, int goalCount, int rewardGold, int rewardExp )
+        public Quest(int id, string title, string description, string target, int goalCount, int rewardGold, int rewardExp )
 
         {
             QuestId = id;
@@ -32,6 +32,7 @@ namespace SpartaDungeon
             Status = QuestStatus.Availble;
             GoalCount = goalCount;
             CurrentProgress = 0;
+            Target = target;
 
             RewardGold = rewardGold;
             RewardExp = rewardExp;
