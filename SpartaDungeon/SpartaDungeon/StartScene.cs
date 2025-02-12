@@ -16,7 +16,6 @@ namespace SpartaDungeon
             DataManager dataManager = new DataManager();
             Dungeon dungeonManager = new Dungeon(questManager, player);
 
-            int padding = 0;
 
             while (true)
             {
@@ -24,8 +23,6 @@ namespace SpartaDungeon
                     ReviveEvent(gm);
 
                 dataManager.SaveData(gm);
-
-                padding = gm.player.dungeonLevel < 100 ? 2 : 3;
 
                 Console.Clear();
 
@@ -48,6 +45,7 @@ namespace SpartaDungeon
                 Console.WriteLine("│                                                      │");
                 Console.WriteLine("│ 3. 상점                                              │");
                 Console.WriteLine("│                                                      │");
+                int padding = gm.player.dungeonLevel < 100 ? 2 : 3;
                 Console.WriteLine($"│ 4. 던전 입장({gm.player.dungeonLevel.ToString($"D{padding}")}층){new string(' ', 37 - padding)}│");
                 Console.WriteLine("│                                                      │");
                 Console.WriteLine("│ 5. 퀘스트                                            │");
