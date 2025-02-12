@@ -65,6 +65,11 @@ namespace SpartaDungeon
             MonsterInfo();
 
             Console.WriteLine();
+            Console.WriteLine("[내 정보]");
+            Console.WriteLine();
+            Console.WriteLine($"Lv. {player.level} {player.name}({player.chad})");
+            Console.WriteLine($"Atk : {player.strikePower + player.equipStrikePower} ({player.strikePower}+{player.equipStrikePower})");
+            Console.WriteLine($"Def : {player.defensivePower + player.equipDefensivePower} ({player.defensivePower}+{player.equipDefensivePower})");
             gm.player.DisplayHpBar();
             Console.WriteLine();
             gm.player.DisplayMpBar();
