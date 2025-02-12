@@ -463,11 +463,7 @@ namespace SpartaDungeon
 
         public void DefeatMonster(Monster monster)
         {
-
-            Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
-      
-
-
+            //Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
             //Console.WriteLine($"현재 진행 중인 퀘스트 개수: {questManager.acceptedQuests.Count}");
 
             foreach (int questId in questManager.acceptedQuests)
@@ -475,7 +471,7 @@ namespace SpartaDungeon
                 if (monster.Name.Contains(gm.questManager.quests[questId].Target))
                 {
                     questManager.UpdateQuestProgress(questId, 1, gm.player);
-                    Console.WriteLine($"퀘스트 진행도 업데이트됨: {questId}");
+                    //Console.WriteLine($"퀘스트 진행도 업데이트됨: {questId}");
                 }
             }
         }

@@ -48,13 +48,13 @@ namespace SpartaDungeon
 
                 if (quest.IsCompleted)
                 {
-                    Console.WriteLine($"[퀘스트 완료 가능] {quest.Title} 퀘스트 목표를 달성했습니다!");
+                    //Console.WriteLine($"[퀘스트 완료 가능] {quest.Title} 퀘스트 목표를 달성했습니다!");
                     CompleteQuest(questId, player);
                 }
 
                 else
                 {
-                    Console.WriteLine($"아직 목표 미달성: {quest.CurrentProgress} / {quest.GoalCount}");
+                    //Console.WriteLine($"아직 목표 미달성: {quest.CurrentProgress} / {quest.GoalCount}");
                 }
 
             }
