@@ -36,7 +36,6 @@ namespace SpartaDungeon
             }
             else
             {
-                Lv = atk / 10+1;
                 int random = new Random().Next(0, 5);
                 Health = health + random * 3;
                 health = Math.Max(health, 0);
