@@ -114,32 +114,51 @@ namespace SpartaDungeon
                 Console.Write("아무키입력"); Console.ReadLine();
             }
         }
+        public void BuyEquipItem(GameManager gm)
+        {
+            if (Cost > gm.player.gold)
+            {
+                Console.WriteLine("소지금이 부족합니다.");
+                Console.WriteLine($"필요 :{Cost,-5}G  현재 소지금 :{gm.player.gold,6}G");
+            }
+            else
+            {
+                gm.player.gold -= Cost;
+                ItemCount++;
+                Console.WriteLine($"아이템을 구매하였습니다.  -{Cost}G");
+                Console.WriteLine($"현재 소지금 :{gm.player.gold,-6}G");
+                Console.WriteLine();
 
-        public void DisplayEquipItemList(GameManager gm,bool hideCount = false, bool isShop = false, bool isSale = false) //장비아이템 정보 출력 (이름, 부위, 설명 / 개수, 가격, 스텟, 스텟증감, 착욕가능직업)
+            }
+            Console.WriteLine("(아무키입력)");
+            Console.ReadLine();
+        }
+
+        public void DisplayEquipItemList(GameManager gm,bool hideCount = false, bool isBuy = false, bool isSale = false) //장비아이템 정보 출력 (이름, 부위, 설명 / 개수, 가격, 스텟, 스텟증감, 착욕가능직업)
         {   //첫째줄
             if (isEquip) { Console.ForegroundColor = ConsoleColor.Yellow; Console.Write("[E]"); } 
             Utility.RealTabWrite($"{Name}", true, 16); 
-            Utility.RealTabWrite($"|[{(EquipType)Type}]", true, 7); 
-            Console.WriteLine($"|{Description}");
+            Utility.RealTabWrite($"[{(EquipType)Type}] ", true, 7); 
+            Console.WriteLine($" - {Description}");
             if (isEquip) Console.ResetColor();
             
             //둘째줄
             if (ItemCount >= 1 && !hideCount) Console.Write($"  소지X{ItemCount,2} "); else Console.Write("          ");
 
-            if (isShop) 
+            if (isBuy) 
             {
-                if (!isSale)
-                {
-                    Console.ForegroundColor = Cost <= gm.player.gold ? ConsoleColor.White : ConsoleColor.DarkGray;
-                    Utility.RealTabWrite($"{Cost}G |", false, 10); Console.ResetColor();
-                }
-                else { Console.ForegroundColor = ConsoleColor.White; Utility.RealTabWrite($"판매가{Cost / 2,5}G |", false, 15); Console.ResetColor(); }
-            } 
-            else Console.Write("          ");
-            if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9);    //스텟
-            if (Def != 0) Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 9);
-            if (MaxHp != 0) Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 10);
-            Console.Write("  ");
+                Console.ForegroundColor = Cost <= gm.player.gold ? ConsoleColor.White : ConsoleColor.DarkGray;
+                Utility.RealTabWrite($"{Cost}G |", false, 10); Console.ResetColor();
+            }
+            else if (isSale)
+            {
+                Console.ForegroundColor = ConsoleColor.White; Utility.RealTabWrite($"판매가{Cost / 2,5}G |", false, 15); Console.ResetColor();
+            }
+            else Console.Write("         |");
+            if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9); else Console.Write("         ");   //스텟
+            if (Def != 0) Utility.RealTabWrite($"[def{Def,3:+0;-0}]", true, 9); else Console.Write("         ");
+            if (MaxHp != 0) Utility.RealTabWrite($"[maxHP{MaxHp,4:+0;-0}]", true, 10); else Console.Write("          ");
+            Console.Write("|");
             int deltaAtk, deltaDef, deltaMaxHp;
             EquipItem equipedItem = gm.equipItemList.FirstOrDefault(item => item.isEquip == true && item.Type == Type);
             if (equipedItem == null)
@@ -150,7 +169,6 @@ namespace SpartaDungeon
             {
                 deltaAtk = Atk - equipedItem.Atk; deltaDef = Def - equipedItem.Def; deltaMaxHp = MaxHp - equipedItem.MaxHp;
             }
-            Console.Write("   ");
             if (deltaAtk == 0) Utility.ColorText(ConsoleColor.DarkGray, $"[atk +0] ", Text.Write);
             else if (deltaAtk > 0) Utility.ColorText(ConsoleColor.Cyan, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
             else Utility.ColorText(ConsoleColor.Red, $"[atk{deltaAtk,3:+0;-0}] ", Text.Write);
@@ -258,11 +276,33 @@ namespace SpartaDungeon
 
                 
             }
+            public void BuyConsumItem(Player player)
+            {
+                if (Cost > player.gold)
+                {
+                    Console.WriteLine("소지금이 부족합니다.");
+                    Console.WriteLine($"필요 :{Cost,-5}G  현재 소지금 :{player.gold,6}G");
+                }
+                else
+                {
+                    player.gold -= Cost;
+                    ItemCount++;
+                    Console.WriteLine($"아이템을 구매하였습니다.  -{Cost}G");
+                    Console.WriteLine($"현재 소지금 :{player.gold,-6}G");
+                    Console.WriteLine();
+
+                }
+                Console.WriteLine("(아무키입력)");
+                Console.ReadLine();
+            }
             public void SaleConsumItem(Player player)
             {
                 Console.Clear();
+                Console.WriteLine();
                 Console.WriteLine($"{Name}을(를) 판매합니다.");
-                Console.WriteLine($"판매가 {Cost / 2}G |소지수 {ItemCount} |소지금 {player.gold}G");
+                Console.WriteLine();
+                Utility.ColorText(ConsoleColor.White, $"판매가 {Cost / 2}G",Text.Write); Console.Write($" |소지수 {ItemCount} |"); Utility.ColorText(ConsoleColor.Yellow, $"소지금 {player.gold}G");
+                Console.WriteLine();
                 Console.WriteLine($"판매할 개수를 입력해주세요. (최대 {ItemCount})     0.판매취소");
                 Console.WriteLine();
                 int input = Utility.GetInput(0, ItemCount);

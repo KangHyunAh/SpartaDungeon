@@ -15,6 +15,7 @@ namespace SpartaDungeon
         private int EnterHp { get; set; }
         private int EnterMp {  get; set; }
         public int ItemLimits { get; set; }
+        private bool testsetting {  get; set; }
         GameManager gm { get; set; }
         Random random = new Random();
 
@@ -30,7 +31,7 @@ namespace SpartaDungeon
 
 
 
-        internal void Battle(GameManager gm)
+        internal void Battle(GameManager gm, bool _setting = false)
         {
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
@@ -53,12 +54,15 @@ namespace SpartaDungeon
                 {
                     monster.Health = monster.MaxHealth;
                 }
+            testsetting = _setting;
             ReadyBattle();
         }
         public void ReadyBattle()
         {
-
-            ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
+            if(testsetting)
+                ScreenText($"Battle!!(답답모드) - {gm.player.dungeonLevel}층");
+            else
+                ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
             Console.WriteLine("[몬스터 정보]");
             Console.WriteLine();
 
@@ -352,9 +356,11 @@ namespace SpartaDungeon
         {
             ScreenText("Battle!! - Monster의 턴");
 
-
             foreach (Monster monster in gm.monsters)
             {
+                if(testsetting)
+                    ScreenText("Battle!! - Monster의 턴");
+
                 int playerHp = gm.player.healthPoint;
                 if (monster.Health > 0)
                 {
@@ -428,11 +434,19 @@ namespace SpartaDungeon
 
                         }
                         Console.WriteLine();
-                        Console.WriteLine();
+                        if(testsetting)
+                        {
+                            Console.WriteLine("0. 다음");
+                            Utility.GetInput(0, 0);
+                        }
                     }
                 }
             }
-
+            if (testsetting)
+            {
+                Console.WriteLine();
+                Console.WriteLine("몬스터의 턴이 종료되었습니다.");
+            }
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
@@ -450,14 +464,15 @@ namespace SpartaDungeon
 
         public void DefeatMonster(Monster monster)
         {
-            //Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
-            //Console.WriteLine("DefeatMonster 호출됨");
+
+            Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
+      
+
 
             //Console.WriteLine($"현재 진행 중인 퀘스트 개수: {questManager.acceptedQuests.Count}");
 
             foreach (int questId in questManager.acceptedQuests)
             {
-                Console.WriteLine($"퀘스트 진행 업데이트 시도: {questId}");
                 questManager.UpdateQuestProgress(questId, 1, player);
                 Console.WriteLine($"퀘스트 진행도 업데이트됨: {questId}");
             }
@@ -544,8 +559,10 @@ namespace SpartaDungeon
                 Console.WriteLine("1. 다음층으로");
                 Console.WriteLine();
                 int input = Utility.GetInput(0, 1);
-                if (input == 1)
+                if (input == 1 && !testsetting)
                     Battle(gm);
+                else
+                    Battle(gm,true);
             }
             else
             {
