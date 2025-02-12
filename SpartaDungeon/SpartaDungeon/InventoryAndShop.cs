@@ -121,7 +121,7 @@ namespace SpartaDungeon
                 //소모품일경우 장착슬롯 10 입력불가
                 int input;
                 if(ListItemType!=106) input = Utility.GetInputPlus(0, displayItemList.Count-((page-1)*5)>5 ? 5 : displayItemList.Count - ((page - 1) * 5), new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
-                else input = Utility.GetInputPlus(0, displayConsumList.Count - ((page - 1) * 6) > 5 ? 5 : displayConsumList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
+                else input = Utility.GetInputPlus(0, displayConsumList.Count - ((page - 1) * 6) > 6 ? 6 : displayConsumList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
                 if (input == 0) break;
                 else if (input > 100) { ListItemType = input; page = 1; }
                 else if (input == 10)
@@ -302,7 +302,7 @@ namespace SpartaDungeon
                     //소모품일경우 장착슬롯 10 입력불가
                     int input;
                     if (ListItemType != 106) input = Utility.GetInputPlus(0, displayItemList.Count - ((page - 1) * 5) > 5 ? 5 : displayItemList.Count - ((page - 1) * 5), new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
-                    else input = Utility.GetInputPlus(0, displayConsumList.Count - ((page - 1) * 6) > 5 ? 5 : displayConsumList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
+                    else input = Utility.GetInputPlus(0, displayConsumList.Count - ((page - 1) * 6) > 6 ? 6 : displayConsumList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
                     if (input == 0) break;
                     else if (input > 100) { ListItemType = input; page = 1; }
                     else if (input == 10)
@@ -318,7 +318,7 @@ namespace SpartaDungeon
                             Console.WriteLine("\n1.해제 후 판매      0.취소");
                             if (Utility.GetInput(0, 1) == 1)
                             {
-                                equipedItem.isEquip = false; gm.player.gold += (displayItemList[input - 1].Cost / 2);
+                                equipedItem.isEquip = false; gm.player.gold += (equipedItem.Cost / 2);
                                 Console.Write("판매완료  소지금 "); Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold,5}G ", Text.Write); Utility.ColorText(ConsoleColor.Green, $"+{equipedItem.Cost / 2}");
                                 Console.Write("아무키입력"); Console.ReadLine();
                             }
@@ -412,8 +412,8 @@ namespace SpartaDungeon
                     Console.WriteLine();
 
                     int input;
-                    if (ListItemType != 106) input = Utility.GetInputPlus(0, displayItemList.Count - ((page - 1) * 5) > 5 ? 5 : displayItemList.Count - ((page - 1) * 5), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
-                    else input = Utility.GetInputPlus(0, gm.consumableItemsList.Count - ((page - 1) * 6) > 5 ? 5 : gm.consumableItemsList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
+                    if (ListItemType != 106) input = Utility.GetInputPlus(0, displayItemList.Count - ((page - 1) * 6) > 6 ? 6 : displayItemList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
+                    else input = Utility.GetInputPlus(0, gm.consumableItemsList.Count - ((page - 1) * 6) > 6 ? 6 : gm.consumableItemsList.Count - ((page - 1) * 6), new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
                     if (input == 0) break;
                     else if (input > 100) { ListItemType = input; page = 1; }
                     else if (input == 11) page = (page == 1 ? 1 : page - 1);
