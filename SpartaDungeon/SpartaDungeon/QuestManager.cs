@@ -110,15 +110,6 @@ namespace SpartaDungeon
                     return false;
                 }
 
-
-                if (quest.Status == QuestStatus.Completed)
-                {
-                    if (completedQuests.Contains(questId))
-                    {
-                        Console.WriteLine($"[오류] 해당 퀘스트(ID: {questId})는 이미 완료되었습니다.");
-                        return false;
-                    }
-
                     acceptedQuests.Remove(questId);
                     completedQuests.Add(questId);
 
@@ -128,15 +119,9 @@ namespace SpartaDungeon
                     Console.WriteLine($"[보상 지급] 골드: {quest.RewardGold}, 경험치: {quest.RewardExp}");
                     Console.WriteLine($"퀘스트 {quest.Title} 완료 처리됨.");
                     return true;
-                }
-                else
-                {
-                    Console.WriteLine($"[오류] 퀘스트(ID: {questId})는 아직 완료되지 않았습니다.");
-                    return false;
-                }
+                
+               
             }
-
-            Console.WriteLine($"[오류] 존재하지 않는 퀘스트 (ID: {questId})");
             return false;
         }
     }

@@ -124,13 +124,18 @@ namespace SpartaDungeon
 
                     else
                     {
-                        Console.WriteLine("잘못된 입력입니다");
+                        Console.WriteLine("잘못된 입력입니다.");
                     }
+                }
+
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
                 }
 
         
                 
-                Console.WriteLine("\n아무키나 누르면 돌아갑니다");
+                Console.WriteLine("\n아무키나 누르면 돌아갑니다.");
                 Console.ReadKey();
             }
         }
