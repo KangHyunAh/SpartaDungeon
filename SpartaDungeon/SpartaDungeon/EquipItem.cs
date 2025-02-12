@@ -115,7 +115,7 @@ namespace SpartaDungeon
             }
         }
 
-        public void ShowEquipItemList(GameManager gm,bool hideCount = false, bool isShop = false, bool isSale = false) //장비아이템 정보 출력 (이름, 부위, 설명 / 개수, 가격, 스텟, 스텟증감, 착욕가능직업)
+        public void DisplayEquipItemList(GameManager gm,bool hideCount = false, bool isShop = false, bool isSale = false) //장비아이템 정보 출력 (이름, 부위, 설명 / 개수, 가격, 스텟, 스텟증감, 착욕가능직업)
         {   //첫째줄
             if (isEquip) { Console.ForegroundColor = ConsoleColor.Yellow; Console.Write("[E]"); } 
             Utility.RealTabWrite($"{Name}", true, 16); 
@@ -133,7 +133,7 @@ namespace SpartaDungeon
                     Console.ForegroundColor = Cost <= gm.player.gold ? ConsoleColor.White : ConsoleColor.DarkGray;
                     Utility.RealTabWrite($"{Cost}G |", false, 10); Console.ResetColor();
                 }
-                else { Console.ForegroundColor = ConsoleColor.White; Utility.RealTabWrite($"판매가{Cost / 2}G  ", false, 10); Console.ResetColor(); }
+                else { Console.ForegroundColor = ConsoleColor.White; Utility.RealTabWrite($"판매가{Cost / 2,5}G |", false, 15); Console.ResetColor(); }
             } 
             else Console.Write("          ");
             if (Atk != 0) Utility.RealTabWrite($"[atk{Atk,3:+0;-0}]", true, 9);    //스텟
@@ -213,37 +213,67 @@ namespace SpartaDungeon
            
             public void Use(Player player)
             {
-                if (ItemCount > 0)
+                Console.WriteLine($"{Name}을(를) 사용하시겠습니까?");
+                player.DisplayHpBar();
+                if (Type == PotionType.Health)
                 {
-                    switch (Type)
-                    {
-                        case PotionType.Health:
-                            if (player.healthPoint + EffectAmount > player.maxhealthPoint + player.equipMaxhealthPoint) player.healthPoint = player.maxhealthPoint + player.equipMaxhealthPoint; else player.healthPoint += EffectAmount;
-                            player.DisplayHpBar();
-                            Console.WriteLine($"\n{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
-                            break;
-                        case PotionType.Mana:
-                            if (player.manaPoint + EffectAmount > player.maxManaPoint) player.manaPoint = player.maxManaPoint; else player.healthPoint += EffectAmount;
-                            player.DisplayMpBar();
-                            Console.WriteLine($"\n{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
-                            break;
-                    }
-                    ItemCount--;
-                    Console.WriteLine("아무키 입력");
-                    Console.ReadLine();
+                    Utility.ColorText(ConsoleColor.Green, $"{EffectAmount:+0;-0;}", Text.Write);
                 }
 
-                else
+                Console.WriteLine();
+
+                player.DisplayMpBar();
+                if (Type == PotionType.Mana)
                 {
-                    Console.WriteLine("포션이 부족합니다!");
+                    Utility.ColorText(ConsoleColor.Green, $"{EffectAmount:+0;-0;}", Text.Write);
                 }
+                Console.WriteLine("\n1.사용     0.취소");
+
+                if (Utility.GetInput(0, 1) == 1)
+                {
+                    if (ItemCount > 0)
+                    {
+                        switch (Type)
+                        {
+                            case PotionType.Health:
+                                if (player.healthPoint + EffectAmount > player.maxhealthPoint + player.equipMaxhealthPoint) player.healthPoint = player.maxhealthPoint + player.equipMaxhealthPoint; else player.healthPoint += EffectAmount;
+                                player.DisplayHpBar();
+                                Console.WriteLine($"\n{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
+                                break;
+                            case PotionType.Mana:
+                                if (player.manaPoint + EffectAmount > player.maxManaPoint) player.manaPoint = player.maxManaPoint; else player.healthPoint += EffectAmount;
+                                player.DisplayMpBar();
+                                Console.WriteLine($"\n{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
+                                break;
+                        }
+                        ItemCount--;
+                        Console.WriteLine("아무키 입력");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("포션이 부족합니다!");
+                    }
+                }
+
+                
+            }
+            public void SaleConsumItem(Player player)
+            {
+                Console.Clear();
+                Console.WriteLine($"{Name}을(를) 판매합니다.");
+                Console.WriteLine($"판매가 {Cost / 2}G |소지수 {ItemCount} |소지금 {player.gold}G");
+                Console.WriteLine($"판매할 개수를 입력해주세요. (최대 {ItemCount})     0.판매취소");
+                Console.WriteLine();
+                int input = Utility.GetInput(0, ItemCount);
+                if (input != 0 ) { player.gold += (Cost / 2)*input; ItemCount-=input; }
             }
 
-            public void DisplayItem()
+            public void DisplayItem(bool isSale=false)
             {
                 Console.WriteLine($"[P]{Name} | 효과:{EffectAmount,3} | 설명: {Description}");
-                Console.Write("       |가격 "); 
-                Utility.ColorText(ConsoleColor.White, $"{Cost,5}G ", Text.Write); 
+                Console.Write(!isSale ? "       |가격 " : "       |판매가 "); 
+                Utility.ColorText(ConsoleColor.White, $"{(!isSale ? Cost : Cost/2 ),5}G ", Text.Write); 
                 Console.WriteLine($"|소지 X{ItemCount,2}");
             }
         }

@@ -34,12 +34,12 @@ namespace SpartaDungeon
         {
             if (exp >= maxExp) //경험치가 최대치를 넘거나 동일해졌을 때
             {
+                level++; 
                 exp = exp - maxExp;
                 maxExp = (int)(1.1 * maxExp);
-                strikePower = (int)(1.1 * strikePower);
-                defensivePower = (int)(1.2 * defensivePower);
+                strikePower = (int)(level+ strikePower);
+                defensivePower = (int)(level + defensivePower);
                 maxhealthPoint = (int)(1.03 * maxhealthPoint);
-                level++;
                 Utility.ColorText(ConsoleColor.Yellow, "레벨 업!");
                 if (exp >= maxExp)
                 {
