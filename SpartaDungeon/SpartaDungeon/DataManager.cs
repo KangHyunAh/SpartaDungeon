@@ -404,7 +404,7 @@ namespace SpartaDungeon
                 ICryptoTransform encrpytor = aes.CreateEncryptor(aes.Key, aes.IV);
 
                 // Key와 IV 값 암호화 후 정해진 경로에 파일 저장
-                // 사용자의 운영체제가 윈도우라면 Key/IV 암호화, 윈도우가 아니라면 그대로 저장
+                // 사용자의 운영체제가 윈도우/맥 이라면 Key/IV 암호화, 윈도우/맥이 아니라면 그대로 저장
                 try
                 {
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -555,7 +555,7 @@ namespace SpartaDungeon
             // 키체인에서 항목 검색 후 status에 결과 추가, result에 값 넣어주기
             SecRecord result = SecKeyChain.QueryAsRecord(secRecord, out status);
 
-            // result에 값이 제대로 들어갔다면 byte[]로 변환 후 리턴
+            // result에 값이 들어갔다면 byte[]로 변환 후 리턴
             if (status == SecStatusCode.Success)
             {
                 return result.ValueData.ToArray();
