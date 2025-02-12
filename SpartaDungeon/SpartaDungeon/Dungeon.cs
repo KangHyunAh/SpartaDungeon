@@ -562,15 +562,17 @@ namespace SpartaDungeon
                 Console.WriteLine("1. 다음층으로");
                 Console.WriteLine();
                 int input = Utility.GetInput(0, 1);
-                if (input == 1 && !testsetting)
+                if (input == 0)
+                    return;
+                else if (input == 1 && !testsetting)
                     Battle(gm);
                 else
-                    Battle(gm,true);
+                    Battle(gm, true);
             }
             else
             {
                 Console.WriteLine();
-                int input = Utility.GetInput(0, 0);
+                Utility.GetInput(0, 0);
                 return;
             }
 
