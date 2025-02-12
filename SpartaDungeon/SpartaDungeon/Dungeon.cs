@@ -15,9 +15,9 @@ namespace SpartaDungeon
         private int EnterHp { get; set; }
         private int EnterMp {  get; set; }
         public int ItemLimits { get; set; }
+        private bool setting { get; set; }
         GameManager gm { get; set; }
         Random random = new Random();
-
 
         private QuestManager questManager;
         private Player player;
@@ -28,9 +28,7 @@ namespace SpartaDungeon
             this.player = player;
         }
 
-
-
-        internal void Battle(GameManager gm)
+        internal void Battle(GameManager gm, bool _setting = false)
         {
             this.gm = gm;
             EnterHp = gm.player.healthPoint;
@@ -53,12 +51,15 @@ namespace SpartaDungeon
                 {
                     monster.Health = monster.MaxHealth;
                 }
+            setting = _setting;
             ReadyBattle();
         }
         public void ReadyBattle()
         {
-
-            ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
+            if(setting)
+                ScreenText($"Battle!!(답답모드) - {gm.player.dungeonLevel}층");
+            else
+                ScreenText($"Battle!! - {gm.player.dungeonLevel}층");
             Console.WriteLine("[몬스터 정보]");
             Console.WriteLine();
 
@@ -67,9 +68,9 @@ namespace SpartaDungeon
             Console.WriteLine();
             Console.WriteLine("[내 정보]");
             Console.WriteLine();
-            Console.WriteLine($"Lv. {player.level} {player.name}({player.chad})");
-            Console.WriteLine($"Atk : {player.strikePower + player.equipStrikePower} ({player.strikePower}+{player.equipStrikePower})");
-            Console.WriteLine($"Def : {player.defensivePower + player.equipDefensivePower} ({player.defensivePower}+{player.equipDefensivePower})");
+            Console.WriteLine($"Lv. {gm.player.level} {gm.player.name}({gm.player.chad})");
+            Console.WriteLine($"Atk : {gm.player.strikePower + gm.player.equipStrikePower} ({gm.player.strikePower}+{gm.player.equipStrikePower})");
+            Console.WriteLine($"Def : {gm.player.defensivePower + gm.player.equipDefensivePower} ({gm.player.defensivePower}+{gm.player.equipDefensivePower})");
             gm.player.DisplayHpBar();
             Console.WriteLine();
             gm.player.DisplayMpBar();
@@ -355,9 +356,10 @@ namespace SpartaDungeon
 
         public void MonsterAttack()
         {
-            ScreenText("Battle!! - Monster의 턴");
-
-
+            if(!setting)
+                ScreenText("Battle!! - Monster의 턴");
+            else
+                ScreenText("Battle!! - Monster의 턴");
             foreach (Monster monster in gm.monsters)
             {
                 int playerHp = gm.player.healthPoint;
@@ -433,22 +435,33 @@ namespace SpartaDungeon
 
                         }
                         Console.WriteLine();
-                        Console.WriteLine();
+                        if(setting)
+                        {
+                            Console.WriteLine("0. 다음");
+                            Utility.GetInput(0, 0);
+                        }
                     }
                 }
             }
-
-            Console.WriteLine();
-            Console.WriteLine("0. 다음");
-            Console.WriteLine();
-            if (Utility.GetInput(0, 0) == 0)
+            if (!setting)
             {
-                int livemonsters = gm.monsters.Count(m => m.Health > 0);
-                if (!(gm.player.healthPoint > 0 && livemonsters > 0))
-                    BattleResult();
-                else
-                    ReadyBattle();
+                Console.WriteLine();
+                Console.WriteLine("0. 다음");
+                Console.WriteLine();
+                Utility.GetInput(0, 0);
             }
+            else
+            {
+                Console.WriteLine("몬스터의 턴이 끝났습니다.\n");
+                Console.WriteLine("0. 다음");
+                Utility.GetInput(0, 0);
+            }
+            int livemonsters = gm.monsters.Count(m => m.Health > 0);
+            if (!(gm.player.healthPoint > 0 && livemonsters > 0))
+                BattleResult();
+            else
+                ReadyBattle();
+
 
 
         }
@@ -569,17 +582,23 @@ namespace SpartaDungeon
             {
                 Monster monster = monsterList[random.Next(0, monsterList.Count)];
                 Monster Addmonster = monster.Spawn();
-                if (Addmonster.MonsterType != "이벤트")
-                {
-                    Addmonster.Atk += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3));
-                    Addmonster.Health += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3) * 3);
-                    Addmonster.MaxHealth += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3) * 3);
-                }
-                else
+                if (Addmonster.MonsterType == "이벤트")
                 {
                     Addmonster.Atk += gm.player.dungeonLevel;
                     Addmonster.Health += gm.player.dungeonLevel;
                     Addmonster.MaxHealth += gm.player.dungeonLevel;
+                }
+                else if (Addmonster.MonsterType == "보스")
+                {
+                    Addmonster.Atk += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 2));
+                    Addmonster.Health += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 2) * 3);
+                    Addmonster.MaxHealth += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 2) * 3);
+                }
+                else
+                {
+                    Addmonster.Atk += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3));
+                    Addmonster.Health += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3) * 3);
+                    Addmonster.MaxHealth += (int)(gm.player.dungeonLevel * (gm.player.dungeonLevel / 3) * 3);
                 }
                 Addmonster.Lv = Addmonster.Atk / 10+1;
                 gm.monsters.Add(Addmonster);
@@ -599,9 +618,6 @@ namespace SpartaDungeon
             {
                 if (gm.monsters[i].Health > 0)
                 {
-                    if (gm.monsters[i].MonsterType == "보스")
-                        Utility.ColorText(ConsoleColor.White, $"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} \n     Hp : {gm.monsters[i].Health} Atk : {gm.monsters[i].Atk}");
-                    else
                         Console.WriteLine($"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} \n     Hp : {gm.monsters[i].Health} Atk : {gm.monsters[i].Atk}");
                 }
                 else
