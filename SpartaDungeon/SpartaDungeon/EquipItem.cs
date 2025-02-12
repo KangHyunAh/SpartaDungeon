@@ -250,29 +250,29 @@ namespace SpartaDungeon
 
                 if (Utility.GetInput(0, 1) == 1)
                 {
-                    if (ItemCount > 0)
+                    switch (Type)
                     {
-                        switch (Type)
-                        {
-                            case PotionType.Health:
-                                if (player.healthPoint + EffectAmount > player.maxhealthPoint + player.equipMaxhealthPoint) player.healthPoint = player.maxhealthPoint + player.equipMaxhealthPoint; else player.healthPoint += EffectAmount;
+                        case PotionType.Health:
+                            if (player.healthPoint < player.maxhealthPoint + player.equipMaxhealthPoint)
+                            {
+                                player.healthPoint += EffectAmount; ItemCount--;
                                 player.DisplayHpBar();
                                 Console.WriteLine($"\n{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
-                                break;
-                            case PotionType.Mana:
-                                if (player.manaPoint + EffectAmount > player.maxManaPoint) player.manaPoint = player.maxManaPoint; else player.healthPoint += EffectAmount;
+                            }
+                            else Console.WriteLine("이미 최대체력입니다!");
+                            break;
+                        case PotionType.Mana:
+                            if (player.manaPoint < player.maxManaPoint)
+                            {
+                                player.manaPoint += EffectAmount; ItemCount--;
                                 player.DisplayMpBar();
                                 Console.WriteLine($"\n{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
-                                break;
-                        }
-                        ItemCount--;
-                        Console.WriteLine("아무키 입력");
-                        Console.ReadLine();
+                            }
+                            else Console.WriteLine("이미 최대마나입니다!");
+                            break;
                     }
-                    else
-                    {
-                        Console.WriteLine("포션이 부족합니다!");
-                    }
+                    Console.WriteLine("아무키 입력");
+                    Console.ReadLine();
                 }
 
                 
@@ -285,7 +285,7 @@ namespace SpartaDungeon
                 Console.WriteLine();
                 Utility.ColorText(ConsoleColor.White, $"가격 {Cost}G", Text.Write); Console.Write($" |소지수 {ItemCount} |"); Utility.ColorText(ConsoleColor.Yellow, $"소지금 {player.gold}G");
                 Console.WriteLine();
-                Console.WriteLine($"판매할 개수를 입력해주세요. (최대 {player.gold/Cost})     0.판매취소");
+                Console.WriteLine($"구매할 개수를 입력해주세요. (최대 {player.gold/Cost})     0.판매취소");
                 Console.WriteLine();
                 int input = Utility.GetInput(0, player.gold/Cost);
                 if (input != 0) { player.gold -= Cost * input; ItemCount += input; }

@@ -19,8 +19,18 @@ namespace SpartaDungeon
         public int defensivePower = 5;
         public int equipDefensivePower = 0;
         public int maxhealthPoint = 100;
-        public int equipMaxhealthPoint = 0;
-        public int healthPoint = 100;
+        private int EquipMaxHealthPoint = 0;
+        public int equipMaxhealthPoint
+        {
+            get { return EquipMaxHealthPoint; }
+            set { healthPoint = (int)((float)healthPoint * ((float)(value+maxhealthPoint)/(EquipMaxHealthPoint+maxhealthPoint))); EquipMaxHealthPoint = value; }
+        }
+        private int HealthPoint=100;
+        public int healthPoint
+        {
+            get { return HealthPoint; }
+            set { if (value > maxhealthPoint + equipMaxhealthPoint) HealthPoint = maxhealthPoint + equipMaxhealthPoint; }
+        }
         public int gold = 1500;
         public int exp = 0;
         public int maxExp = 50;
@@ -47,7 +57,7 @@ namespace SpartaDungeon
                 }
             }
         }
-        public void DisplayHpBar()    //체력,마나 막대 표시
+        public void DisplayHpBar()    //체력 막대 표시
         {
             Console.Write($"HP {healthPoint,4}/{(maxhealthPoint + equipMaxhealthPoint),4}({maxhealthPoint}+{equipMaxhealthPoint})\n");
             for (int i = 0; i < 10; i++)
@@ -56,7 +66,7 @@ namespace SpartaDungeon
                 else Console.Write("□");
             }
         }
-        public void DisplayMpBar()    //체력,마나 막대 표시
+        public void DisplayMpBar()    //마나 막대 표시
         {
             Console.Write($"MP {manaPoint,4}/{maxManaPoint,4} \n");
             for (int i = 0; i < 10; i++)
