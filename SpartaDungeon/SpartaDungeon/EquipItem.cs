@@ -229,8 +229,9 @@ namespace SpartaDungeon
             }
 
            
-            public void Use(Player player)
+            public bool Use(Player player)
             {
+                bool useSuccess=false;
                 Console.Clear();
                 Console.WriteLine($"{Name}을(를) 사용하시겠습니까?");
                 player.DisplayHpBar();
@@ -258,6 +259,7 @@ namespace SpartaDungeon
                                 player.healthPoint += EffectAmount; ItemCount--;
                                 player.DisplayHpBar();
                                 Console.WriteLine($"\n{Name}을 사용하여 체력을 {EffectAmount} 회복했습니다");
+                                useSuccess = true;
                             }
                             else Console.WriteLine("이미 최대체력입니다!");
                             break;
@@ -267,15 +269,17 @@ namespace SpartaDungeon
                                 player.manaPoint += EffectAmount; ItemCount--;
                                 player.DisplayMpBar();
                                 Console.WriteLine($"\n{Name}을 사용하여 마나를 {EffectAmount} 회복했습니다");
+                                useSuccess = true;
                             }
                             else Console.WriteLine("이미 최대마나입니다!");
                             break;
                     }
                     Console.WriteLine("아무키 입력");
                     Console.ReadLine();
+                    
                 }
+                return useSuccess;
 
-                
             }
             public void BuyConsumItem(Player player)
             {

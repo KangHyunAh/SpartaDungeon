@@ -153,6 +153,7 @@ namespace SpartaDungeon
 
         public void ConsumableItemInventoryScreen(GameManager gm,bool isDungeon = false)
         {
+            bool useSuccess=false;
             while (true)
             {
                 List<ConsumableItem> consumableItemInventoryList = new List<ConsumableItem>();
@@ -184,8 +185,8 @@ namespace SpartaDungeon
                 }
                 else
                 {
-                    consumableItemInventoryList[input - 1].Use(gm.player);
-                    if (isDungeon) { gm.dungeon.ItemLimits--; gm.dungeon.ReadyBattle(); return; }
+                    useSuccess = consumableItemInventoryList[input - 1].Use(gm.player);
+                    if (isDungeon) { if (useSuccess) { gm.dungeon.ItemLimits--; gm.dungeon.ReadyBattle(); return; } }
                 }
             }
 
