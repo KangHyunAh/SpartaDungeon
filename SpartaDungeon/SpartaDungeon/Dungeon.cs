@@ -488,7 +488,7 @@ namespace SpartaDungeon
                 }
 
 
-                Utility.ColorText(ConsoleColor.Yellow, "Victory");
+                Utility.ColorText(ConsoleColor.Yellow, "Victory!");
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {gm.monsters.Count}마리를 잡았습니다.");
 
@@ -525,7 +525,7 @@ namespace SpartaDungeon
                 gm.player.dungeonLevel += 1;
             }
             else
-                Console.WriteLine("You Lose");
+                Utility.ColorText(ConsoleColor.DarkRed, "You Lose.");
 
             Console.WriteLine();
             Console.WriteLine($"Lv. {gm.player.level} {gm.player.name}");
@@ -594,7 +594,12 @@ namespace SpartaDungeon
             for (int i = 0; i < gm.monsters.Count; i++)
             {
                 if (gm.monsters[i].Health > 0)
-                    Console.WriteLine($"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} \n     Hp : {gm.monsters[i].Health} Atk : {gm.monsters[i].Atk}");
+                {
+                    if (gm.monsters[i].MonsterType == "보스")
+                        Utility.ColorText(ConsoleColor.White, $"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} [Dead]");
+                    else
+                        Console.WriteLine($"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} \n     Hp : {gm.monsters[i].Health} Atk : {gm.monsters[i].Atk}");
+                }
                 else
                 {
                     Utility.ColorText(ConsoleColor.DarkGray, $"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} [Dead]");
@@ -602,36 +607,36 @@ namespace SpartaDungeon
                 Console.WriteLine();
             }
         }
-        public void Hpbar()
-        {
-            int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint) / 10));
-            viewHp = Math.Min(viewHp, 10);
-            Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint}");
-            for (int i = 0; i < viewHp; i++)
-            {
-                Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
-            }
-            for (int i = 0; i < 10 - viewHp; i++)
-            {
-                Console.Write("□");
-            }
+        //public void Hpbar()
+        //{
+        //    int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint) / 10));
+        //    viewHp = Math.Min(viewHp, 10);
+        //    Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint}");
+        //    for (int i = 0; i < viewHp; i++)
+        //    {
+        //        Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
+        //    }
+        //    for (int i = 0; i < 10 - viewHp; i++)
+        //    {
+        //        Console.Write("□");
+        //    }
 
-        }
-        public void Mpbar()
-        {
-            Console.WriteLine();
-            int viewMp = (int)((float)gm.player.manaPoint / (gm.player.maxManaPoint / 10));
-            viewMp = Math.Min(viewMp, 10);
-            Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
-            for (int i = 0; i < viewMp; i++)
-            {
-                Utility.ColorText(ConsoleColor.Blue, "■", Text.Write);
-            }
-            for (int i = 0; i < 10 - viewMp; i++)
-            {
-                Console.Write("□");
-            }
-            Console.WriteLine();
-        }
+        //}
+        //public void Mpbar()
+        //{
+        //    Console.WriteLine();
+        //    int viewMp = (int)((float)gm.player.manaPoint / (gm.player.maxManaPoint / 10));
+        //    viewMp = Math.Min(viewMp, 10);
+        //    Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
+        //    for (int i = 0; i < viewMp; i++)
+        //    {
+        //        Utility.ColorText(ConsoleColor.Blue, "■", Text.Write);
+        //    }
+        //    for (int i = 0; i < 10 - viewMp; i++)
+        //    {
+        //        Console.Write("□");
+        //    }
+        //    Console.WriteLine();
+        //}
     }
 }

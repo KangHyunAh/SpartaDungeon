@@ -101,7 +101,7 @@ namespace SpartaDungeon
             };
             bossmonsterList = new List<Monster>
             {
-                new Monster("영웅의 기억",50,30,10,10,"보스"),
+                new Monster("[Boss]영웅의 기억",50,30,10,10,"보스"),
             };
 
            
