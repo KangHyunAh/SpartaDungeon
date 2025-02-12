@@ -480,11 +480,11 @@ namespace SpartaDungeon
                 for (int i = 0; i < gm.monsters.Count; i++)
                 {
                     if (gm.monsters[i].MonsterType == "보스")
-                        getAtk += (float)gm.monsters[i].Atk / 5;
+                        getAtk += (float)gm.monsters[i].Atk / 50;
                     else if (gm.monsters[i].MonsterType == gm.player.chad)
-                        getAtk += (float)gm.monsters[i].Atk / 10;
+                        getAtk += (float)gm.monsters[i].Atk / 50;
                     else
-                        getAtk += (float)gm.monsters[i].Atk / 20;
+                        getAtk += (float)gm.monsters[i].Atk / 100;
 
                     gm.player.gold += gm.monsters[i].Rewards;
                     goldSum += gm.monsters[i].Rewards;
