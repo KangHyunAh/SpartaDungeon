@@ -412,10 +412,18 @@ namespace SpartaDungeon
                         LockKeyOrIV(keyPath, aes.Key);
                         LockKeyOrIV(ivPath, aes.IV);
                     }
-                    else if (OperatingSystem.IsMacOS())
+
+                    // 테스트 불가능
+                    //else if (OperatingSystem.IsMacOS())
+                    //{
+                    //    AddToKeyOrIVForMac("AESKey", aes.Key);
+                    //    AddToKeyOrIVForMac("AESIV", aes.IV);
+                    //}
+
+                    else
                     {
-                        AddToKeyOrIVForMac("AESKey", aes.Key);
-                        AddToKeyOrIVForMac("AESIV", aes.IV);
+                        File.WriteAllBytes(keyPath, aes.Key);
+                        File.WriteAllBytes(ivPath, aes.IV);
                     }
                 }
                 catch
@@ -472,11 +480,16 @@ namespace SpartaDungeon
                         aes.Key = UnLockKeyOrIV(keyPath);
                         aes.IV = UnLockKeyOrIV(ivPath);
                     }
-                    // 사용자의 운영체제가 MacOS 일 경우
-                    else if (OperatingSystem.IsMacOS())
+                    // 사용자의 운영체제가 MacOS 일 경우 (테스트 불가능)
+                    //else if (OperatingSystem.IsMacOS())
+                    //{
+                    //    aes.Key = SearchToKeyOrIVForMac("AESKey");
+                    //    aes.IV = SearchToKeyOrIVForMac("AESIV");
+                    //}
+                    else
                     {
-                        aes.Key = SearchToKeyOrIVForMac("AESKey");
-                        aes.IV = SearchToKeyOrIVForMac("AESIV");
+                        aes.Key = File.ReadAllBytes(keyPath);
+                        aes.IV = File.ReadAllBytes(ivPath);
                     }
                 }
                 catch (Exception ex)
@@ -520,53 +533,53 @@ namespace SpartaDungeon
             File.WriteAllBytes(path, lockData);
         }
 
-        // Key,IV 키체인에 추가 (Mac)
-        private void AddToKeyOrIVForMac(string name, byte[] data)
-        {
-            SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
-            {
-                Service = "SpartaTextRPG05", // 키체인 서비스 이름 설정
-                Account = name, // 계정 이름 설정 (Key, IV 식별자)
-                ValueData = NSData.FromArray(data) // 넣을 데이터(Key 또는 IV)
-            };
+        //// Key,IV 키체인에 추가 (Mac) (테스트 불가능)
+        //private void AddToKeyOrIVForMac(string name, byte[] data)
+        //{
+        //    SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
+        //    {
+        //        Service = "SpartaTextRPG05", // 키체인 서비스 이름 설정
+        //        Account = name, // 계정 이름 설정 (Key, IV 식별자)
+        //        ValueData = NSData.FromArray(data) // 넣을 데이터(Key 또는 IV)
+        //    };
 
-            // 키체인에 새 항목 추가
-            SecStatusCode result = SecKeyChain.Add(secRecord);
+        //    // 키체인에 새 항목 추가
+        //    SecStatusCode result = SecKeyChain.Add(secRecord);
 
-            // 새항목 추가 시 이미 동일한 항목이 존재한다면 기존 항목 업데이트
-            if (result == SecStatusCode.DuplicateItem)
-            {
-                SecRecord record = new SecRecord(SecKind.GenericPassword)
-                {
-                    Service = "SpartaTextRPG05",
-                    Account = name,
-                };
-                SecStatusCode updateResult = SecKeyChain.Update(record, secRecord);
-            }
-        }
+        //    // 새항목 추가 시 이미 동일한 항목이 존재한다면 기존 항목 업데이트
+        //    if (result == SecStatusCode.DuplicateItem)
+        //    {
+        //        SecRecord record = new SecRecord(SecKind.GenericPassword)
+        //        {
+        //            Service = "SpartaTextRPG05",
+        //            Account = name,
+        //        };
+        //        SecStatusCode updateResult = SecKeyChain.Update(record, secRecord);
+        //    }
+        //}
 
-        // 키체인에서 Key,IV 가져오기 (Mac)
-        private byte[] SearchToKeyOrIVForMac(string name)
-        {
-            SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
-            {
-                Service = "SpartaTextRPG05",
-                Account = name
-            };
+        //// 키체인에서 Key,IV 가져오기 (Mac) (테스트 불가능)
+        //private byte[] SearchToKeyOrIVForMac(string name)
+        //{
+        //    SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
+        //    {
+        //        Service = "SpartaTextRPG05",
+        //        Account = name
+        //    };
 
-            SecStatusCode status;
-            // 키체인에서 항목 검색 후 status에 결과 추가, result에 값 넣어주기
-            SecRecord result = SecKeyChain.QueryAsRecord(secRecord, out status);
+        //    SecStatusCode status;
+        //    // 키체인에서 항목 검색 후 status에 결과 추가, result에 값 넣어주기
+        //    SecRecord result = SecKeyChain.QueryAsRecord(secRecord, out status);
 
-            // result에 값이 들어갔다면 byte[]로 변환 후 리턴
-            if (status == SecStatusCode.Success)
-            {
-                return result.ValueData.ToArray();
-            }
-            else
-            {
-                throw new Exception("키체인에서 값을 찾지 못했습니다.");
-            }
-        }
+        //    // result에 값이 들어갔다면 byte[]로 변환 후 리턴
+        //    if (status == SecStatusCode.Success)
+        //    {
+        //        return result.ValueData.ToArray();
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("키체인에서 값을 찾지 못했습니다.");
+        //    }
+        //}
     }
 }
