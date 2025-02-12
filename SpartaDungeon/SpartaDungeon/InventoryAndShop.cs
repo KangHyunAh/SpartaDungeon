@@ -407,7 +407,7 @@ namespace SpartaDungeon
                     Console.WriteLine("0. 뒤로가기");
                     Console.WriteLine();
 
-                    int input = Utility.GetInputPlus(0, 5,new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
+                    int input = Utility.GetInputPlus(0, 6,new int[] { 11, 33, 101, 102, 103, 104, 105, 106 });
                     if (input == 0) break;
                     else if (input > 100) { ListItemType = input; page = 1; }
                     else if (input == 11) page = (page == 1 ? 1 : page - 1);

@@ -231,6 +231,7 @@ namespace SpartaDungeon
            
             public void Use(Player player)
             {
+                Console.Clear();
                 Console.WriteLine($"{Name}을(를) 사용하시겠습니까?");
                 player.DisplayHpBar();
                 if (Type == PotionType.Health)
@@ -278,22 +279,16 @@ namespace SpartaDungeon
             }
             public void BuyConsumItem(Player player)
             {
-                if (Cost > player.gold)
-                {
-                    Console.WriteLine("소지금이 부족합니다.");
-                    Console.WriteLine($"필요 :{Cost,-5}G  현재 소지금 :{player.gold,6}G");
-                }
-                else
-                {
-                    player.gold -= Cost;
-                    ItemCount++;
-                    Console.WriteLine($"아이템을 구매하였습니다.  -{Cost}G");
-                    Console.WriteLine($"현재 소지금 :{player.gold,-6}G");
-                    Console.WriteLine();
-
-                }
-                Console.WriteLine("(아무키입력)");
-                Console.ReadLine();
+                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine($"{Name}을(를) 구매합니다.");
+                Console.WriteLine();
+                Utility.ColorText(ConsoleColor.White, $"가격 {Cost}G", Text.Write); Console.Write($" |소지수 {ItemCount} |"); Utility.ColorText(ConsoleColor.Yellow, $"소지금 {player.gold}G");
+                Console.WriteLine();
+                Console.WriteLine($"판매할 개수를 입력해주세요. (최대 {player.gold/Cost})     0.판매취소");
+                Console.WriteLine();
+                int input = Utility.GetInput(0, player.gold/Cost);
+                if (input != 0) { player.gold -= Cost * input; ItemCount += input; }
             }
             public void SaleConsumItem(Player player)
             {
