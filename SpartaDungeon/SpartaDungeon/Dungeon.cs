@@ -431,13 +431,13 @@ namespace SpartaDungeon
 
                         }
                         Console.WriteLine();
-                        Thread.Sleep(300);
-
                         if(testsetting)
                         {
                             Console.WriteLine("0. 다음");
                             Utility.GetInput(0, 0);
                         }
+                        else
+                            Thread.Sleep(300);
                     }
                 }
             }
