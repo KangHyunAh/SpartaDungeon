@@ -18,6 +18,18 @@ namespace SpartaDungeon
         GameManager gm { get; set; }
         Random random = new Random();
 
+
+        private QuestManager questManager;
+        private Player player;
+
+        public Dungeon(QuestManager questManager, Player player)
+        {
+            this.questManager = questManager;
+            this.player = player;
+        }
+
+
+
         internal void Battle(GameManager gm)
         {
             this.gm = gm;
@@ -259,6 +271,7 @@ namespace SpartaDungeon
                 else
                 {
                     Utility.ColorText(ConsoleColor.DarkGray, $"-[{i + 1}] Lv. {livemonster[i].Lv} {livemonster[i].Name} [Dead]");
+                    DefeatMonster(livemonster[i]);
                 }
             }
             livemonster.Clear();
@@ -316,8 +329,11 @@ namespace SpartaDungeon
                 {
                     Console.WriteLine($"Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name}");
                     Console.WriteLine($"HP. {monsternum[i]} => Dead");
+                    DefeatMonster(gm.monsters[target]);
                 }
             }
+
+
 
             Console.WriteLine();
             Console.WriteLine("0. 다음");
@@ -430,6 +446,21 @@ namespace SpartaDungeon
             }
 
 
+        }
+
+        public void DefeatMonster(Monster monster)
+        {
+            Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
+            Console.WriteLine("DefeatMonster 호출됨");
+
+            Console.WriteLine($"현재 진행 중인 퀘스트 개수: {questManager.acceptedQuests.Count}");
+
+            foreach (int questId in questManager.acceptedQuests)
+            {
+                Console.WriteLine($"퀘스트 진행 업데이트 시도: {questId}");
+                questManager.UpdateQuestProgress(questId, 1, player);
+                Console.WriteLine($"퀘스트 진행도 업데이트됨: {questId}");
+            }
         }
 
         public void BattleResult()

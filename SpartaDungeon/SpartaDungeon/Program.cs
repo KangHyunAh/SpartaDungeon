@@ -10,6 +10,10 @@ namespace SpartaDungeon
         static void Main(string[] args)     //메인게임진행
         {
             GameManager gm = new GameManager();
+
+            
+            StartScene start = new StartScene();
+
             gm.player = new DataManager().LoadData(gm);
             gm.startScene.Lobby(gm);
         }
@@ -20,8 +24,11 @@ namespace SpartaDungeon
         public StartScene startScene = new StartScene();
         public InventoryAndShop inventoryAndShop = new InventoryAndShop();
         public Player player = new Player();
+        public Dungeon dungeon;
+        public QuestManager questManager = new QuestManager();
 
-        public Dungeon dungeon = new Dungeon();
+
+
         public List<Monster> monsters = new List<Monster>();
         public List<Monster> monsterList;
         public List<Monster> bossmonsterList;
@@ -29,21 +36,23 @@ namespace SpartaDungeon
         public List<EquipItem> equipItemList;
         public List<ConsumableItem> consumableItemsList;
 
-        public QuestManager QuestManager;
+        
 
         public GameManager()        //게임매니저 생성자
         {
-            QuestManager = new QuestManager();
+            questManager = new QuestManager();
+            player = new Player();
+            dungeon = new Dungeon(questManager, player);
 
             //장비아이템 리스트
-            equipItemList = new List<EquipItem>     //  string 이름, EquipType 장착부위, int 공격력, int 방어력, int 쵀대채력, string 설명, int 가격
+            equipItemList = new List<EquipItem>     //  string 이름, EquipType 장착부위, int 공격력, int 방어력, int 쵀대채력, string 설명,string[] 착용가능 직업목록, int 가격,bool 보스아이템 여부
             {
             //무기 목록 EquipType.Weapon
                 new EquipItem("낡은 검", EquipType.무기, 5,0,0, "쉽게 볼 수 있는 낡은 검 입니다. ",new string []{"나이트","검사","광전사" }, 500,false),
                 new EquipItem("청동 도끼", EquipType.무기, 10,0,0, "어디선가 사용됐던거 같은 도끼입니다. ",new string []{"나이트","검사","광전사" }, 1500,false),
                 new EquipItem("스파르타의 창", EquipType.무기, 20,0,0, "스파르타의 전사들이 사용했다는 전설의 창입니다. ",new string []{"나이트","검사","광전사" }, 2500,false),
                 new EquipItem("기사의 장창", EquipType.무기, 10,10,0, "기사들이 사용하는 크고묵직한 창입니다. ",new string []{"나이트"}, 2500,false),
-                new EquipItem("전사의 장검", EquipType.무기, 15,5,0, "길어서 다루는데 기술이 필요한 장검입니다. ",new string []{"검사"}, 2500,false),
+                new EquipItem("검사의 장검", EquipType.무기, 15,5,0, "길어서 다루는데 기술이 필요한 장검입니다. ",new string []{"검사"}, 2500,false),
                 new EquipItem("광전사의 도끼", EquipType.무기, 20,0,0, "오로지 높은 공격력을 위한 도끼입니다. ",new string []{"광전사"}, 2500,false),
             //보조 목록 EquipType.SubWeapon
                 new EquipItem("나무방패", EquipType.보조, 0,2,0, "나무로 만들어진 기본적인 방패입니다. ",new string []{"나이트","검사","광전사" }, 500,false),
@@ -95,8 +104,11 @@ namespace SpartaDungeon
                 new Monster("영웅의 기억",50,30,10,10,"보스"),
             };
 
-            //QuestManager.AddQuest(new Quest(1, "흔적 퇴치", "5마리의 흔적을 잡으세요", 5, 50, 80));
-            //QuestManager.AddQuest(new Quest(2, "보스 퇴치", "영웅의 기억을 잡으세요", 1, 200, 300));
+           
+            
+            questManager.AddQuest(new Quest(1, "흔적 퇴치", "5마리의 흔적을 잡으세요", 5, 50, 80));
+            questManager.AddQuest(new Quest(2, "보스 퇴치", "영웅의 기억을 잡으세요", 1, 200, 300 ));
+
 
         }
 
