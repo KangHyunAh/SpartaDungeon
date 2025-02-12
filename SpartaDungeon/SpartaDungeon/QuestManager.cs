@@ -93,7 +93,7 @@ namespace SpartaDungeon
             {
                 Console.WriteLine("이미 완료된 퀘스트 입니다.");
             }
-            else if (quests[questId].IsAccepted)
+            else if (quests[questId].Status == QuestStatus.Accepted)
             {
                 Console.WriteLine("이미 수락된 퀘스트 입니다.");
             }
