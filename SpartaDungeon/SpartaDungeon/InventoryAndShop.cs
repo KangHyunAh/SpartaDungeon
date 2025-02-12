@@ -60,10 +60,10 @@ namespace SpartaDungeon
                 Console.WriteLine(!isSaleScreen ? "보유중인 아이템을 관리할 수 있습니다." : "아이템을 판매합니다. (판매가는 원래 가격의 절반이 됩니다.)");
                 Console.WriteLine(ListItemType != 106 ? $"[{(EquipType)(ListItemType - 100 - 1)}]" : $"[소모품]");
 
-                if (ListItemType != 106)
+                if (ListItemType != 106)                                         //아이템 타입이 106이 아닌경우 타입에 맞는 장비목록 출력
                 {
-                    Console.WriteLine("[장착중]");
-                    Console.Write("11.");
+                    Console.WriteLine("[장착중]");                                     //장착중인 장비 출력 ( 없을시 '빈슬롯' 출력 )
+                    Console.Write("10.");
                     if (equipedItem == null) Utility.ColorText(ConsoleColor.DarkGray, $"   [{(EquipType)(ListItemType - 100 - 1)}] 빈 슬롯\n");
                     else equipedItem.DisplayEquipItemList(gm, true);
 
@@ -81,7 +81,7 @@ namespace SpartaDungeon
                         else Console.WriteLine("\n\n");
                     }
                 }
-                else
+                else                                                             //아이템 타입이 106일경우 소모품 인벤토리 목록 출력
                 {
                     Console.WriteLine();
                     Console.WriteLine("[소모품 인벤토리 목록]");
@@ -98,15 +98,15 @@ namespace SpartaDungeon
 
                 }
 
-                if (ListItemType != 106)
+                if (ListItemType != 106)                //장비,인벤토리 여부에따라 페이지당 출력개수 차이로 구별해서 출력 (<<이전페이지   페이지수1/2   다음페이지>>)
                 {
-                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(22)", Text.Write);
+                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(11)", Text.Write);
                     Utility.ColorText(ConsoleColor.White, $"    페이지 {page,2}/{(displayItemList.Count / 5) + 1 - (displayItemList.Count != 0 && displayItemList.Count % 5 == 0 ? 1 : 0),2}    ", Text.Write);
                     Utility.ColorText(page == (displayItemList.Count / 5) + 1 - (displayItemList.Count != 0 && displayItemList.Count % 5 == 0 ? 1 : 0) ? ConsoleColor.DarkGray : ConsoleColor.White, "    (33)다음페이지>>", Text.Write);
                 }
                 else
                 {
-                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(22)", Text.Write);
+                    Utility.ColorText(page == 1 ? ConsoleColor.DarkGray : ConsoleColor.White, "            <<이전페이지(11)", Text.Write);
                     Utility.ColorText(ConsoleColor.White, $"    페이지 {page,2}/{(displayConsumList.Count / 6) + 1 - (displayConsumList.Count != 0 && displayConsumList.Count % 6 == 0 ? 1 : 0),2}    ", Text.Write);
                     Utility.ColorText(page == (displayConsumList.Count / 6) + 1 - ((displayConsumList.Count !=0 && displayConsumList.Count % 6 == 0)? 1 : 0) ? ConsoleColor.DarkGray : ConsoleColor.White, "    (33)다음페이지>>", Text.Write);
 
@@ -117,11 +117,11 @@ namespace SpartaDungeon
                 Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발   106.소모품");
                 Console.WriteLine("0. 뒤로가기");
                 Console.WriteLine();
-
-                int input = Utility.GetInputPlus(0, 5, ListItemType == 106 ? new int[] { 22, 33, 101, 102, 103, 104, 105, 106 } : new int[] { 11, 22, 33, 101, 102, 103, 104, 105, 106 });
+                                                        //소모품일경우 장착슬롯 10 입력불가
+                int input = Utility.GetInputPlus(0, 5, ListItemType == 106 ? new int[] { 11, 33, 101, 102, 103, 104, 105, 106 } : new int[] { 10, 11, 33, 101, 102, 103, 104, 105, 106 });
                 if (input == 0) break;
                 else if (input > 100) { ListItemType = input; page = 1; }
-                else if (input == 11)
+                else if (input == 10)
                 {
                     if (equipedItem != null)
                     {
@@ -144,7 +144,7 @@ namespace SpartaDungeon
                         }
                     }
                 }
-                else if (input == 22) page = (page == 1 ? 1 : page - 1);
+                else if (input == 11) page = (page == 1 ? 1 : page - 1);
                 else if (input == 33)
                 {
                     if (ListItemType != 106) page = (page == ((displayItemList.Count / 5) + 1 - (displayItemList.Count!=0 && displayItemList.Count % 5 == 0 ? 1 : 0)) ? page : page + 1);
