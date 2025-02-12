@@ -18,7 +18,7 @@ namespace SpartaDungeon
     internal class DataManager
     {
         private readonly string folderPath = "./Save";            // 세이브파일이 존재할 폴더의 위치
-        //private const string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
+        //private readonly string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
         private readonly string filePath = "./Save/testSaveData.json";     // 세이브파일의 위치
 
         private readonly string decrypteFolderPath = "./Decrypt"; // 복호화 시 필요한 파일들이 존재할 폴더의 위치
@@ -237,7 +237,7 @@ namespace SpartaDungeon
             JObject questData = new JObject();
             JArray acceptQuestData = new JArray();
             JArray clearQuestData = new JArray();
- 
+
             try
             {
                 // 암호화 된 json파일 => 스트링으로 변환
@@ -423,6 +423,7 @@ namespace SpartaDungeon
                     File.WriteAllBytes(keyPath, aes.Key);
                     File.WriteAllBytes(ivPath, aes.IV);
                 }
+
                 // 스트림 : 데이터가 연속적으로 이동하는 통로
                 // MemoryStream : 메모리 내 바이트 배열을 스트림으로 다루기 위한 클래스 // IDisposable
                 using (MemoryStream ms = new MemoryStream())
@@ -478,8 +479,10 @@ namespace SpartaDungeon
                         aes.IV = SearchToKeyOrIVForMac("AESIV");
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Console.WriteLine($"키 또는 IV를 가져오는 데 실패했습니다. : {ex.Message}");
+
                     aes.Key = File.ReadAllBytes(keyPath);
                     aes.IV = File.ReadAllBytes(ivPath);
                 }
@@ -522,7 +525,7 @@ namespace SpartaDungeon
         {
             SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
             {
-                Service = "Test", // 키체인 서비스 이름 설정
+                Service = "SpartaTextRPG05", // 키체인 서비스 이름 설정
                 Account = name, // 계정 이름 설정 (Key, IV 식별자)
                 ValueData = NSData.FromArray(data) // 넣을 데이터(Key 또는 IV)
             };
@@ -535,7 +538,7 @@ namespace SpartaDungeon
             {
                 SecRecord record = new SecRecord(SecKind.GenericPassword)
                 {
-                    Service = "Test",
+                    Service = "SpartaTextRPG05",
                     Account = name,
                 };
                 SecStatusCode updateResult = SecKeyChain.Update(record, secRecord);
@@ -547,7 +550,7 @@ namespace SpartaDungeon
         {
             SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
             {
-                Service = "Test",
+                Service = "SpartaTextRPG05",
                 Account = name
             };
 
@@ -560,8 +563,10 @@ namespace SpartaDungeon
             {
                 return result.ValueData.ToArray();
             }
-
-            return null;
+            else
+            {
+                throw new Exception("키체인에서 값을 찾지 못했습니다.");
+            }
         }
     }
 }
