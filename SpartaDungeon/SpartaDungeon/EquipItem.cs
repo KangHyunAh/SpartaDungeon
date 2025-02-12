@@ -260,8 +260,11 @@ namespace SpartaDungeon
             public void SaleConsumItem(Player player)
             {
                 Console.Clear();
+                Console.WriteLine();
                 Console.WriteLine($"{Name}을(를) 판매합니다.");
-                Console.WriteLine($"판매가 {Cost / 2}G |소지수 {ItemCount} |소지금 {player.gold}G");
+                Console.WriteLine();
+                Utility.ColorText(ConsoleColor.White, $"판매가 {Cost / 2}G",Text.Write); Console.Write($" |소지수 {ItemCount} |"); Utility.ColorText(ConsoleColor.Yellow, $"소지금 {player.gold}G");
+                Console.WriteLine();
                 Console.WriteLine($"판매할 개수를 입력해주세요. (최대 {ItemCount})     0.판매취소");
                 Console.WriteLine();
                 int input = Utility.GetInput(0, ItemCount);
