@@ -9,13 +9,16 @@ using SpartaDungeon.PotionNamespace;
 using System.IO;
 using System.Security.Cryptography;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
+using Security;
+using Foundation;
 
 namespace SpartaDungeon
 {
     internal class DataManager
     {
         private readonly string folderPath = "./Save";            // 세이브파일이 존재할 폴더의 위치
-        //private const string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
+        //private readonly string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
         private readonly string filePath = "./Save/testSaveData.json";     // 세이브파일의 위치
 
         private readonly string decrypteFolderPath = "./Decrypt"; // 복호화 시 필요한 파일들이 존재할 폴더의 위치
@@ -24,7 +27,7 @@ namespace SpartaDungeon
 
 
         // 캐릭터 생성
-        public Player CreateCharacter()
+        private Player CreateCharacter()
         {
             Player player = new Player();
 
@@ -129,17 +132,17 @@ namespace SpartaDungeon
             catch { Utility.ColorText(ConsoleColor.Red, "아이템 데이터를 저장하는 중 오류가 발생했습니다."); Thread.Sleep(1000); return; }
 
 
-            //string questDataString = string.Empty;
-            //string acceptQuestString = string.Empty;
-            //string completeQuestString = string.Empty;
+            string questDataString = string.Empty;
+            string acceptQuestString = string.Empty;
+            string completeQuestString = string.Empty;
 
-            //try
-            //{
-            //    questDataString = JsonConvert.SerializeObject(gm.QuestManager.quests);
-            //    acceptQuestString = JsonConvert.SerializeObject(gm.QuestManager.acceptedQuests);
-            //    completeQuestString = JsonConvert.SerializeObject(gm.QuestManager.completedQuests);
-            //}
-            //catch { Utility.ColorText(ConsoleColor.Red, "퀘스트 데이터를 저장하는 중 오류가 발생했습니다."); Thread.Sleep(1000); return; }
+            try
+            {
+                questDataString = JsonConvert.SerializeObject(gm.questManager.quests);
+                acceptQuestString = JsonConvert.SerializeObject(gm.questManager.acceptedQuests);
+                completeQuestString = JsonConvert.SerializeObject(gm.questManager.completedQuests);
+            }
+            catch { Utility.ColorText(ConsoleColor.Red, "퀘스트 데이터를 저장하는 중 오류가 발생했습니다."); Thread.Sleep(1000); return; }
 
 
             // 직렬화 한 데이터들을 담을 배열
@@ -149,31 +152,31 @@ namespace SpartaDungeon
             //   배열  JArray로 변환
             JObject playerJson = JObject.Parse(playerDataString);
             JObject itemJson = JObject.Parse(itemDataString);
-            //JObject questListJson = JObject.Parse(questDataString);
+            JObject questListJson = JObject.Parse(questDataString);
 
-            //JArray acceptQuestJson = new JArray();
-            //JArray completeQuestJson = new JArray();
+            JArray acceptQuestJson = new JArray();
+            JArray completeQuestJson = new JArray();
 
-            //// 수락한 퀘스트가 있다면
-            //if (gm.QuestManager.acceptedQuests.Count > 0)
-            //    acceptQuestJson = JArray.Parse(acceptQuestString);
+            // 수락한 퀘스트가 있다면
+            if (gm.questManager.acceptedQuests.Count > 0)
+                acceptQuestJson = JArray.Parse(acceptQuestString);
 
-            //// 완료한 퀘스트가 있다면
-            //if (gm.QuestManager.completedQuests.Count > 0)
-            //    completeQuestJson = JArray.Parse(completeQuestString);
+            // 완료한 퀘스트가 있다면
+            if (gm.questManager.completedQuests.Count > 0)
+                completeQuestJson = JArray.Parse(completeQuestString);
 
             // 배열에 추가
             jsonArr.Add(playerJson);
             jsonArr.Add(itemJson);
-            //jsonArr.Add(questListJson);
+            jsonArr.Add(questListJson);
 
-            //// 수락한 퀘스트가 있다면
-            //if(acceptQuestJson != null)
-            //    jsonArr.Add(acceptQuestJson);
+            // 수락한 퀘스트가 있다면
+            if (acceptQuestJson != null)
+                jsonArr.Add(acceptQuestJson);
 
-            //// 완료한 퀘스트가 있다면
-            //if(completeQuestJson != null)
-            //    jsonArr.Add(completeQuestJson);
+            // 완료한 퀘스트가 있다면
+            if (completeQuestJson != null)
+                jsonArr.Add(completeQuestJson);
 
             // 데이터를 저장한 배열 암호화
             string encodingJson = Aes256Encrypt(jsonArr.ToString());
@@ -222,10 +225,18 @@ namespace SpartaDungeon
         }
 
         // 데이터 불러오기, 불러온 데이터 파싱
-        public void DataParsing(Player user, GameManager gm)
+        private void DataParsing(Player user, GameManager gm)
         {
             string data = string.Empty;
             string decryptData = string.Empty;
+
+            JArray jsonArr = new JArray();
+
+            JObject playerData = new JObject();
+            JObject itemData = new JObject();
+            JObject questData = new JObject();
+            JArray acceptQuestData = new JArray();
+            JArray clearQuestData = new JArray();
 
             try
             {
@@ -233,6 +244,16 @@ namespace SpartaDungeon
                 data = File.ReadAllText(filePath);
                 // 복호화
                 decryptData = Aes256Decrypt(data);
+
+                // 문자열 JArray로 변환
+                jsonArr = JArray.Parse(decryptData);
+
+                // 배열에 있는 데이터 JObject/JArray로 변환하여 변수에 하나씩 넣어주기
+                playerData = (JObject)jsonArr[0];
+                itemData = (JObject)jsonArr[1];
+                questData = (JObject)jsonArr[2];
+                acceptQuestData = (JArray)jsonArr[3];
+                clearQuestData = (JArray)jsonArr[4];
             }
             catch (Exception e)
             {
@@ -241,18 +262,6 @@ namespace SpartaDungeon
                 Thread.Sleep(1000);
                 user = CreateCharacter();
             }
-
-
-
-            // 문자열 JArray로 변환
-            JArray jsonArr = JArray.Parse(decryptData);
-
-            // 배열에 있는 데이터 JObject/JArray로 변환하여 변수에 하나씩 넣어주기
-            JObject playerData = (JObject)jsonArr[0];
-            JObject itemData = (JObject)jsonArr[1];
-            //JObject questData = (JObject)jsonArr[2];
-            //JArray acceptQuestData = (JArray)jsonArr[3];
-            //JArray clearQuestData = (JArray)jsonArr[4];
 
             // 데이터 적용
             try
@@ -322,52 +331,53 @@ namespace SpartaDungeon
 
             // 퀘스트 불러오기
             // JObject => Dictionary<int, Quest> 변환
-            //Dictionary<int, Quest> questDict = questData.ToObject<Dictionary<int, Quest>>();
+            Dictionary<int, Quest> questDict = questData.ToObject<Dictionary<int, Quest>>();
 
-            //// where로 꺼내올 퀘스트 담을 인스턴스
-            //Quest tempQuest = new Quest(5555, " ", " ", 1, 1, 1);
+            // where로 꺼내올 퀘스트 담을 인스턴스
+            Quest tempQuest = new Quest(5555, " ", " ", 1, 1, 1);
 
-            //foreach (KeyValuePair<int, Quest> quest in questDict)
-            //{
-            //    tempQuest = gm.QuestManager.quests.Where(i => i.Key == quest.Key).OfType<Quest>().FirstOrDefault();
+            foreach (KeyValuePair<int, Quest> quest in questDict)
+            {
+                tempQuest = gm.questManager.quests.Where(i => i.Key == quest.Key).Select(i => i.Value as Quest).FirstOrDefault();
 
-            //    if (tempQuest == null)
-            //        continue;
+                if (tempQuest == null)
+                    continue;
 
-            //    // JObject에 담겨있던 카운트와 완료여부 저장
-            //    tempQuest.CurrentCount = quest.Value.CurrentCount;
-            //    tempQuest.IsCompleted = quest.Value.IsCompleted;
-            //    tempQuest.IsAccepted = quest.Value.IsAccepted;
-            //}
+                // JObject에 담겨있던 카운트와 완료여부 저장
+                tempQuest.CurrentProgress = quest.Value.CurrentProgress;
+                tempQuest.IsCompleted = quest.Value.IsCompleted;
+                tempQuest.IsAccepted = quest.Value.IsAccepted;
+                tempQuest.Status = quest.Value.Status;
+            }
 
-            //// JArray => HashSet<int> 변환(수락한 퀘스트 목록)
-            //HashSet<int> acceptList = acceptQuestData.ToObject<HashSet<int>>();
+            // JArray => HashSet<int> 변환(수락한 퀘스트 목록)
+            HashSet<int> acceptList = acceptQuestData.ToObject<HashSet<int>>();
 
-            //if (acceptList != null)
-            //{
-            //    foreach (var i in acceptList)
-            //    {
-            //        gm.QuestManager.acceptedQuests.Add(i);
-            //    }
-            //}
+            if (acceptList != null)
+            {
+                foreach (var i in acceptList)
+                {
+                    gm.questManager.acceptedQuests.Add(i);
+                }
+            }
 
-            //// JArray => HashSet<int> 변환(클리어한 퀘스트 목록)
-            //HashSet<int> clearList = clearQuestData.ToObject<HashSet<int>>();
+            // JArray => HashSet<int> 변환(클리어한 퀘스트 목록)
+            HashSet<int> clearList = clearQuestData.ToObject<HashSet<int>>();
 
-            //if(clearList != null)
-            //{
-            //    foreach (var i in clearList)
-            //    {
-            //        gm.QuestManager.completedQuests.Add(i);
-            //    }
-            //}
+            if (clearList != null)
+            {
+                foreach (var i in clearList)
+                {
+                    gm.questManager.completedQuests.Add(i);
+                }
+            }
 
         }
 
 
 
         // AES-256 암호화
-        public string Aes256Encrypt(string text)
+        private string Aes256Encrypt(string text)
         {
             byte[] encrypted;
 
@@ -394,13 +404,21 @@ namespace SpartaDungeon
                 ICryptoTransform encrpytor = aes.CreateEncryptor(aes.Key, aes.IV);
 
                 // Key와 IV 값 암호화 후 정해진 경로에 파일 저장
-                // 사용자의 운영체제가 윈도우라면 Key/IV 암호화, 윈도우가 아니라면 그대로 저장
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                // 사용자의 운영체제가 윈도우/맥 이라면 Key/IV 암호화, 윈도우/맥이 아니라면 그대로 저장
+                try
                 {
-                    LockKeyOrIV(keyPath, aes.Key);
-                    LockKeyOrIV(ivPath, aes.IV);
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        LockKeyOrIV(keyPath, aes.Key);
+                        LockKeyOrIV(ivPath, aes.IV);
+                    }
+                    else if (OperatingSystem.IsMacOS())
+                    {
+                        AddToKeyOrIVForMac("AESKey", aes.Key);
+                        AddToKeyOrIVForMac("AESIV", aes.IV);
+                    }
                 }
-                else
+                catch
                 {
                     File.WriteAllBytes(keyPath, aes.Key);
                     File.WriteAllBytes(ivPath, aes.IV);
@@ -431,7 +449,7 @@ namespace SpartaDungeon
         }
 
         // AES-256 복호화
-        public string Aes256Decrypt(string data)
+        private string Aes256Decrypt(string data)
         {
             string result = string.Empty;
             byte[] bytes = Convert.FromBase64String(data);
@@ -446,19 +464,28 @@ namespace SpartaDungeon
 
                 aes.Padding = PaddingMode.PKCS7;
 
-                // PC에 저장된 암호화 된 Key, IV(Initialize Vector) 값을 복호화해서 가져오기
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                try
                 {
-                    aes.Key = UnLockKeyOrIV(keyPath);
-                    aes.IV = UnLockKeyOrIV(ivPath);
+                    // PC에 저장된 암호화 된 Key, IV(Initialize Vector) 값을 복호화해서 가져오기
+                    if (OperatingSystem.IsWindows())
+                    {
+                        aes.Key = UnLockKeyOrIV(keyPath);
+                        aes.IV = UnLockKeyOrIV(ivPath);
+                    }
+                    // 사용자의 운영체제가 MacOS 일 경우
+                    else if (OperatingSystem.IsMacOS())
+                    {
+                        aes.Key = SearchToKeyOrIVForMac("AESKey");
+                        aes.IV = SearchToKeyOrIVForMac("AESIV");
+                    }
                 }
-                // 사용자 운영체제가 윈도우가 아닐경우
-                else
+                catch (Exception ex)
                 {
+                    Console.WriteLine($"키 또는 IV를 가져오는 데 실패했습니다. : {ex.Message}");
+
                     aes.Key = File.ReadAllBytes(keyPath);
                     aes.IV = File.ReadAllBytes(ivPath);
                 }
-
 
                 ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
 
@@ -479,18 +506,67 @@ namespace SpartaDungeon
             return result;
         }
 
-        // 경로에 저장된 암호화 된 Key, IV 복호화
+        // 경로에 저장된 암호화 된 Key, IV 복호화 (윈도우에서만 작동)
         private byte[] UnLockKeyOrIV(string path)
         {
             byte[] data = File.ReadAllBytes(path);
             return ProtectedData.Unprotect(data, null, DataProtectionScope.LocalMachine);
         }
 
-        // 저장 시 생성한 Key, IV 암호화
+        // 저장 시 생성한 Key, IV 암호화 (윈도우에서만 작동)
         private void LockKeyOrIV(string path, byte[] data)
         {
             byte[] lockData = ProtectedData.Protect(data, null, DataProtectionScope.LocalMachine);
             File.WriteAllBytes(path, lockData);
+        }
+
+        // Key,IV 키체인에 추가 (Mac)
+        private void AddToKeyOrIVForMac(string name, byte[] data)
+        {
+            SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
+            {
+                Service = "SpartaTextRPG05", // 키체인 서비스 이름 설정
+                Account = name, // 계정 이름 설정 (Key, IV 식별자)
+                ValueData = NSData.FromArray(data) // 넣을 데이터(Key 또는 IV)
+            };
+
+            // 키체인에 새 항목 추가
+            SecStatusCode result = SecKeyChain.Add(secRecord);
+
+            // 새항목 추가 시 이미 동일한 항목이 존재한다면 기존 항목 업데이트
+            if (result == SecStatusCode.DuplicateItem)
+            {
+                SecRecord record = new SecRecord(SecKind.GenericPassword)
+                {
+                    Service = "SpartaTextRPG05",
+                    Account = name,
+                };
+                SecStatusCode updateResult = SecKeyChain.Update(record, secRecord);
+            }
+        }
+
+        // 키체인에서 Key,IV 가져오기 (Mac)
+        private byte[] SearchToKeyOrIVForMac(string name)
+        {
+            SecRecord secRecord = new SecRecord(SecKind.GenericPassword)
+            {
+                Service = "SpartaTextRPG05",
+                Account = name
+            };
+
+            SecStatusCode status;
+            // 키체인에서 항목 검색 후 status에 결과 추가, result에 값 넣어주기
+            SecRecord result = SecKeyChain.QueryAsRecord(secRecord, out status);
+
+            // result에 값이 들어갔다면 byte[]로 변환 후 리턴
+            if (status == SecStatusCode.Success)
+            {
+                return result.ValueData.ToArray();
+            }
+            else
+            {
+                throw new Exception("키체인에서 값을 찾지 못했습니다.");
+            }
         }
     }
 }

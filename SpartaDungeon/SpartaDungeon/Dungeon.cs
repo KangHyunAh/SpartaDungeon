@@ -450,10 +450,12 @@ namespace SpartaDungeon
 
         public void DefeatMonster(Monster monster)
         {
+
             Console.WriteLine($"'{monster.Name}'을 처치했습니다!");
       
 
-            Console.WriteLine($"현재 진행 중인 퀘스트 개수: {questManager.acceptedQuests.Count}");
+
+            //Console.WriteLine($"현재 진행 중인 퀘스트 개수: {questManager.acceptedQuests.Count}");
 
             foreach (int questId in questManager.acceptedQuests)
             {
@@ -487,7 +489,7 @@ namespace SpartaDungeon
                 }
 
 
-                Utility.ColorText(ConsoleColor.Yellow, "Victory");
+                Utility.ColorText(ConsoleColor.Yellow, "Victory!");
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {gm.monsters.Count}마리를 잡았습니다.");
 
@@ -504,9 +506,8 @@ namespace SpartaDungeon
                     List<EquipItem> bossdrop = gm.equipItemList.Where(x => x.IsBossItem == true).ToList();
                     int dropnum = random.Next(0, bossdrop.Count);
                     bossdrop[dropnum].ItemCount += 1;
-                    Console.WriteLine($"[보스]{gm.monsters[0].Name}에게서 {bossdrop[dropnum].Name}을 획득하였습니다.");
+                    Console.WriteLine($"{gm.monsters[0].Name}에게서 [{(EquipType)bossdrop[dropnum].Type}]{bossdrop[dropnum].Name}을 획득하였습니다.");
                     bossdrop.Clear();
-
                 }
                 foreach (Monster monster in gm.monsters)
                 {
@@ -516,7 +517,7 @@ namespace SpartaDungeon
                         if(!gm.equipItemList[dropnum].IsBossItem)
                         {
                             gm.equipItemList[dropnum].ItemCount += 1;
-                            Console.WriteLine($"{monster.Name}에게서 [{gm.equipItemList[dropnum].Type.ToString()}]{gm.equipItemList[dropnum].Name}을 획득하였습니다.");
+                            Console.WriteLine($"Lv.{monster.Lv} {monster.Name}에게서 [{(EquipType)gm.equipItemList[dropnum].Type}]{gm.equipItemList[dropnum].Name}을 획득하였습니다.");
                         }
                     }
                 }
@@ -524,7 +525,7 @@ namespace SpartaDungeon
                 gm.player.dungeonLevel += 1;
             }
             else
-                Console.WriteLine("You Lose");
+                Utility.ColorText(ConsoleColor.DarkRed, "You Lose.");
 
             Console.WriteLine();
             Console.WriteLine($"Lv. {gm.player.level} {gm.player.name}");
@@ -576,7 +577,7 @@ namespace SpartaDungeon
                     Addmonster.Health += gm.player.dungeonLevel;
                     Addmonster.MaxHealth += gm.player.dungeonLevel;
                 }
-                Addmonster.Lv += Addmonster.Atk / 10;
+                Addmonster.Lv = Addmonster.Atk / 10+1;
                 gm.monsters.Add(Addmonster);
             }
         }
@@ -585,7 +586,7 @@ namespace SpartaDungeon
             Console.Clear();
 
             Console.WriteLine();
-            Console.WriteLine(tag);
+            Utility.ColorText(ConsoleColor.Yellow, tag);
             Console.WriteLine();
         }
         public void MonsterInfo()
@@ -593,44 +594,48 @@ namespace SpartaDungeon
             for (int i = 0; i < gm.monsters.Count; i++)
             {
                 if (gm.monsters[i].Health > 0)
-                    Console.WriteLine($"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} \n     Hp : {gm.monsters[i].Health} Atk : {gm.monsters[i].Atk}");
+                {
+                    if (gm.monsters[i].MonsterType == "보스")
+                        Utility.ColorText(ConsoleColor.White, $"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} \n     Hp : {gm.monsters[i].Health} Atk : {gm.monsters[i].Atk}");
+                    else
+                        Console.WriteLine($"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} \n     Hp : {gm.monsters[i].Health} Atk : {gm.monsters[i].Atk}");
+                }
                 else
                 {
                     Utility.ColorText(ConsoleColor.DarkGray, $"-[{i + 1}] Lv. {gm.monsters[i].Lv} {gm.monsters[i].Name} [Dead]");
                 }
-                Console.WriteLine();
             }
         }
-        public void Hpbar()
-        {
-            int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint) / 10));
-            viewHp = Math.Min(viewHp, 10);
-            Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint}");
-            for (int i = 0; i < viewHp; i++)
-            {
-                Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
-            }
-            for (int i = 0; i < 10 - viewHp; i++)
-            {
-                Console.Write("□");
-            }
+        //public void Hpbar()
+        //{
+        //    int viewHp = (int)((float)gm.player.healthPoint / ((gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint) / 10));
+        //    viewHp = Math.Min(viewHp, 10);
+        //    Console.WriteLine($"Hp. {gm.player.healthPoint} / {gm.player.maxhealthPoint + gm.player.equipMaxhealthPoint}");
+        //    for (int i = 0; i < viewHp; i++)
+        //    {
+        //        Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
+        //    }
+        //    for (int i = 0; i < 10 - viewHp; i++)
+        //    {
+        //        Console.Write("□");
+        //    }
 
-        }
-        public void Mpbar()
-        {
-            Console.WriteLine();
-            int viewMp = (int)((float)gm.player.manaPoint / (gm.player.maxManaPoint / 10));
-            viewMp = Math.Min(viewMp, 10);
-            Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
-            for (int i = 0; i < viewMp; i++)
-            {
-                Utility.ColorText(ConsoleColor.Blue, "■", Text.Write);
-            }
-            for (int i = 0; i < 10 - viewMp; i++)
-            {
-                Console.Write("□");
-            }
-            Console.WriteLine();
-        }
+        //}
+        //public void Mpbar()
+        //{
+        //    Console.WriteLine();
+        //    int viewMp = (int)((float)gm.player.manaPoint / (gm.player.maxManaPoint / 10));
+        //    viewMp = Math.Min(viewMp, 10);
+        //    Console.WriteLine($"Mp. {gm.player.manaPoint} / {gm.player.maxManaPoint}");
+        //    for (int i = 0; i < viewMp; i++)
+        //    {
+        //        Utility.ColorText(ConsoleColor.Blue, "■", Text.Write);
+        //    }
+        //    for (int i = 0; i < 10 - viewMp; i++)
+        //    {
+        //        Console.Write("□");
+        //    }
+        //    Console.WriteLine();
+        //}
     }
 }
