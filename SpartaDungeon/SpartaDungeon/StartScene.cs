@@ -45,7 +45,8 @@ namespace SpartaDungeon
                 Console.WriteLine("│                                                      │");
                 Console.WriteLine("│ 3. 상점                                              │");
                 Console.WriteLine("│                                                      │");
-                Console.WriteLine($"│ 4. 던전 입장({gm.player.dungeonLevel} 층)                                   │");
+                int padding = gm.player.dungeonLevel < 100 ? 2 : 3;
+                Console.WriteLine($"│ 4. 던전 입장({gm.player.dungeonLevel.ToString($"D{padding}")}층){new string(' ', 37 - padding)}│");
                 Console.WriteLine("│                                                      │");
                 Console.WriteLine("│ 5. 퀘스트                                            │");
                 Console.WriteLine("│                                                      │");
