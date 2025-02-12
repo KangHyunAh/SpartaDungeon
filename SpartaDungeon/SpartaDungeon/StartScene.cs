@@ -59,7 +59,7 @@ namespace SpartaDungeon
                 Console.WriteLine("│ 7. 게임종료                                          │");
                 Console.WriteLine("└──────────────────────────────────────────────────────┘");
 
-                int selectNumber = Utility.GetInput(1, 7);
+                int selectNumber = Utility.GetInput(1, 8);
 
                 switch (selectNumber)
                 {
@@ -92,6 +92,17 @@ namespace SpartaDungeon
                     case 7:
                         Environment.Exit(0);
                         return;
+                    case 8:
+                        if (gm.player.healthPoint > 0)
+                            gm.dungeon.Battle(gm,true);
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("현재 체력이 0인 상태입니다. 회복 후 입장해주세요.");
+                            Thread.Sleep(1500);
+                            continue;
+                        }
+                        break;
                 }
             }
         }

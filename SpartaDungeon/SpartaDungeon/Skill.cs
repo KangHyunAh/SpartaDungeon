@@ -5,16 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-public enum SkillType
-{
-    Attack,
-    Heal,
-    Deffence
-}
+using System.Xml.Linq;
 
 namespace SpartaDungeon
 {
+    public enum SkillType
+    {
+        Attack,
+        Heal,
+        Deffence
+    }
+
     public class Skill
     {
         public string Name { get; } // 스킬 이름
