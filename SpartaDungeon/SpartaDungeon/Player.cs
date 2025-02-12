@@ -74,12 +74,18 @@ namespace SpartaDungeon
             Console.WriteLine("Lv. " + level);
             Console.WriteLine("이름 : " + name);
             Console.WriteLine("직업 : " + chad);
+            Console.WriteLine("");
             Console.WriteLine("공격력 : " + (strikePower + equipStrikePower) + "(" + strikePower + " + " + equipStrikePower + ")");
             Console.WriteLine("방어력 : " + (defensivePower + equipDefensivePower) + "(" + defensivePower + " + " + equipDefensivePower + ")");
+            Console.WriteLine("");
             DisplayHpBar(); Console.WriteLine();
+            Console.WriteLine("");
             DisplayMpBar(); Console.WriteLine();
+            Console.WriteLine("");
             Console.WriteLine("경험치 : " + exp + " / " + maxExp);
+            Console.WriteLine("");
             Console.WriteLine("소유 골드 : " + gold + " G");
+            Console.WriteLine("");
             Console.WriteLine("0. 나가기");
             if (Utility.GetInput(0, 0) == 0)
             {
@@ -96,13 +102,16 @@ namespace SpartaDungeon
             Console.WriteLine("100골드를 소모하고 체력과 마나를 최대치만큼 회복합니다.");
             Console.WriteLine(" ");
             Console.WriteLine("현재 체력 : ");
+            Console.WriteLine("");
             DisplayHpBar(); Console.WriteLine();
             Console.WriteLine("현재 마나 : ");
+            Console.WriteLine("");
             DisplayMpBar(); Console.WriteLine();
             Console.WriteLine(" ");
             Console.WriteLine("현재 골드 : "+gold+" G");
             Console.WriteLine(" ");
             Console.WriteLine("실행하시겠습니까?");
+            Console.WriteLine("");
             Console.WriteLine("1. 실행");
             Console.WriteLine("0. 나가기");
             Console.WriteLine(" ");
@@ -131,8 +140,11 @@ namespace SpartaDungeon
                     gold = gold - 100;
                     healthPoint = maxhealthPoint + equipMaxhealthPoint;
                     manaPoint = maxManaPoint;
+                    Console.WriteLine("체력과 마나를 회복했습니다.");
+                    Console.WriteLine("");
                     Console.WriteLine("현재 체력 : ");
                     DisplayHpBar(); Console.WriteLine();
+                    Console.WriteLine("");
                     Console.WriteLine("현재 마나 : ");
                     DisplayMpBar(); Console.WriteLine();
                     Console.WriteLine(" ");

@@ -115,7 +115,7 @@ namespace SpartaDungeon
                     player.skills.Add(new Skill("더블 스트라이크", "랜덤한 적 두명에게 공격력 * 1.3의 데미지를 준다.", SkillType.Attack, 1.3f, 2, 0, 10));
                     break;
                 case "광전사":
-                    player.skills.Add(new Skill("분노 분출", "적 전체에 공격력 * 1.0의 데미지를 준다.", SkillType.Attack, 2.0f, 5, 20, 0));
+                    player.skills.Add(new Skill("분노 분출", "적 전체에 공격력 * 1.0의 데미지를 준다.", SkillType.Attack, 1.0f, 5, 20, 0));
                     player.skills.Add(new Skill("자가 치유", "자신의 최대 HP(장비 스탯 제외)의 30% 를 회복한다.", SkillType.Heal, 0.3f, 1, 0, 20));
                     break;
                 default:
