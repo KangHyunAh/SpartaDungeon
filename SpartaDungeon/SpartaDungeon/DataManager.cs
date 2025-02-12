@@ -27,7 +27,7 @@ namespace SpartaDungeon
 
 
         // 캐릭터 생성
-        public Player CreateCharacter()
+        private Player CreateCharacter()
         {
             Player player = new Player();
 
@@ -225,7 +225,7 @@ namespace SpartaDungeon
         }
 
         // 데이터 불러오기, 불러온 데이터 파싱
-        public void DataParsing(Player user, GameManager gm)
+        private void DataParsing(Player user, GameManager gm)
         {
             string data = string.Empty;
             string decryptData = string.Empty;
@@ -377,7 +377,7 @@ namespace SpartaDungeon
 
 
         // AES-256 암호화
-        public string Aes256Encrypt(string text)
+        private string Aes256Encrypt(string text)
         {
             byte[] encrypted;
 
@@ -449,7 +449,7 @@ namespace SpartaDungeon
         }
 
         // AES-256 복호화
-        public string Aes256Decrypt(string data)
+        private string Aes256Decrypt(string data)
         {
             string result = string.Empty;
             byte[] bytes = Convert.FromBase64String(data);

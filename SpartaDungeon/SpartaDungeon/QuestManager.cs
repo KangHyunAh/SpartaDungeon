@@ -14,7 +14,7 @@ namespace SpartaDungeon
 
         public QuestManager() { }
 
-        public void AddQuest( Quest quest)
+        public void AddQuest(Quest quest)
         {
 
             if (!quests.ContainsKey(quest.QuestId))
@@ -33,14 +33,10 @@ namespace SpartaDungeon
         {
             if (quests.TryGetValue(questId, out Quest quest))
             {
-                Console.WriteLine($"[DEBUG] UpdateQuestProgress 호출됨 - 퀘스트 ID: {questId}, 추가 진행량: {count}");
-                Console.WriteLine($"[DEBUG] 진행 전 상태: {quest.CurrentProgress} / {quest.GoalCount}");
-
-                quest.CurrentProgress += count;
 
                 if (quest.CurrentProgress >= quest.GoalCount)
                 {
-                    quest.CurrentProgress =  quest.GoalCount;
+                    quest.CurrentProgress = quest.GoalCount;
                     Console.WriteLine($"[INFO] 퀘스트 '{quest.Title}' 완료!");
                 }
 
@@ -58,14 +54,14 @@ namespace SpartaDungeon
 
                 else
                 {
-                    Console.WriteLine($"[DEBUG] 아직 목표 미달성: {quest.CurrentProgress} / {quest.GoalCount}");
+                    Console.WriteLine($"아직 목표 미달성: {quest.CurrentProgress} / {quest.GoalCount}");
                 }
 
             }
 
             else
             {
-                Console.WriteLine($"[DEBUG] 퀘스트 ID {questId}가 존재하지 않음.");
+                Console.WriteLine($"퀘스트 ID {questId}가 존재하지 않음.");
             }
         }
 
@@ -89,6 +85,7 @@ namespace SpartaDungeon
             if (quests.TryGetValue(questId, out Quest quest) && !acceptedQuests.Contains(questId))
             {
                 acceptedQuests.Add(questId);
+                quest.Status = QuestStatus.Accepted;
                 Console.WriteLine($"[퀘스트 수락] {quest.Title}");
                 return true;
             }
@@ -99,34 +96,50 @@ namespace SpartaDungeon
         {
             if (quests.TryGetValue(questId, out Quest quest))
             {
-                if (quest.IsCompleted && acceptedQuests.Contains(questId))
+
+                if (!quest.IsCompleted)
                 {
+                    Console.WriteLine($"[오류] 퀘스트(ID: {questId})는 아직 완료되지 않았습니다.");
+                    return false;
+                }
+
+                // 퀘스트가 이미 완료되었을 때 처리
+                if (completedQuests.Contains(questId))
+                {
+                    Console.WriteLine($"[오류] 퀘스트(ID: {questId})는 이미 완료되었습니다.");
+                    return false;
+                }
+
+
+                if (quest.Status == QuestStatus.Completed)
+                {
+                    if (completedQuests.Contains(questId))
+                    {
+                        Console.WriteLine($"[오류] 해당 퀘스트(ID: {questId})는 이미 완료되었습니다.");
+                        return false;
+                    }
+
                     acceptedQuests.Remove(questId);
                     completedQuests.Add(questId);
-                    quest.Status = QuestStatus.Completed;
 
                     player.gold += quest.RewardGold;
                     player.exp += quest.RewardExp;
 
-                    Console.WriteLine($"[퀘스트 완료] {quest.Title}");
                     Console.WriteLine($"[보상 지급] 골드: {quest.RewardGold}, 경험치: {quest.RewardExp}");
-
+                    Console.WriteLine($"퀘스트 {quest.Title} 완료 처리됨.");
                     return true;
                 }
                 else
                 {
-                    Console.WriteLine($"[오류] 완료 조건이 충족되지 않음 (퀘스트 ID: {questId})");
+                    Console.WriteLine($"[오류] 퀘스트(ID: {questId})는 아직 완료되지 않았습니다.");
+                    return false;
                 }
             }
-            else
-            {
-                Console.WriteLine($"[오류] 존재하지 않는 퀘스트 (ID: {questId})");
-            }
+
+            Console.WriteLine($"[오류] 존재하지 않는 퀘스트 (ID: {questId})");
             return false;
         }
-
     }
-
     public enum QuestStatus
     {
         Availble,
@@ -134,3 +147,4 @@ namespace SpartaDungeon
         Completed
     }
 }
+

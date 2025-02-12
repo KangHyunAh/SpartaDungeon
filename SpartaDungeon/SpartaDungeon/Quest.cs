@@ -44,7 +44,7 @@ namespace SpartaDungeon
             
             if (IsCompleted) return;
 
-            Console.WriteLine($"[DEBUG] UpdateProgress 호출됨 - 기존 진행도: {CurrentProgress}, 추가량: {amount}");
+            Console.WriteLine($"[기존 진행도] {CurrentProgress}, 추가량: {amount}");
             CurrentProgress += amount;
             Console.WriteLine($"[진행 중] {Title}: {CurrentProgress} / {GoalCount} 처치");
 
@@ -52,6 +52,7 @@ namespace SpartaDungeon
             {
                 CurrentProgress = GoalCount;
                 Status = QuestStatus.Completed;
+                IsCompleted=true;
                 Console.WriteLine($"[퀘스트 완료] {Title} 퀘스트의 목표를 달성했습니다");
             }
         }
