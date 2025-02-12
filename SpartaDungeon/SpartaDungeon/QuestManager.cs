@@ -82,13 +82,22 @@ namespace SpartaDungeon
 
         public bool AcceptQuest(int questId)
         {
-            if (quests.TryGetValue(questId, out Quest quest) && !acceptedQuests.Contains(questId))
+            if (quests.TryGetValue(questId, out Quest quest) && !acceptedQuests.Contains(questId) && !quests[questId].IsAccepted && !quests[questId].IsCompleted)
             {
                 acceptedQuests.Add(questId);
                 quest.Status = QuestStatus.Accepted;
                 Console.WriteLine($"[퀘스트 수락] {quest.Title}");
                 return true;
             }
+            if (quests[questId].IsCompleted)
+            {
+                Console.WriteLine("이미 완료된 퀘스트 입니다.");
+            }
+            else if (quests[questId].Status == QuestStatus.Accepted)
+            {
+                Console.WriteLine("이미 수락된 퀘스트 입니다.");
+            }
+
             return false;
         }
 
@@ -110,33 +119,21 @@ namespace SpartaDungeon
                     return false;
                 }
 
+                acceptedQuests.Remove(questId);
+                completedQuests.Add(questId);
 
-                if (quest.Status == QuestStatus.Completed)
-                {
-                    if (completedQuests.Contains(questId))
-                    {
-                        Console.WriteLine($"[오류] 해당 퀘스트(ID: {questId})는 이미 완료되었습니다.");
-                        return false;
-                    }
+                quest.IsCompleted = true;
+                quest.IsAccepted = false;
 
-                    acceptedQuests.Remove(questId);
-                    completedQuests.Add(questId);
+                player.gold += quest.RewardGold;
+                player.exp += quest.RewardExp;
 
-                    player.gold += quest.RewardGold;
-                    player.exp += quest.RewardExp;
+                Console.WriteLine($"[보상 지급] 골드: {quest.RewardGold}, 경험치: {quest.RewardExp}");
+                Console.WriteLine($"퀘스트 {quest.Title} 완료 처리됨.");
+                return true;
 
-                    Console.WriteLine($"[보상 지급] 골드: {quest.RewardGold}, 경험치: {quest.RewardExp}");
-                    Console.WriteLine($"퀘스트 {quest.Title} 완료 처리됨.");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine($"[오류] 퀘스트(ID: {questId})는 아직 완료되지 않았습니다.");
-                    return false;
-                }
+
             }
-
-            Console.WriteLine($"[오류] 존재하지 않는 퀘스트 (ID: {questId})");
             return false;
         }
     }

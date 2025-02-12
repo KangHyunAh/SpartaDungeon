@@ -334,7 +334,7 @@ namespace SpartaDungeon
             Dictionary<int, Quest> questDict = questData.ToObject<Dictionary<int, Quest>>();
 
             // where로 꺼내올 퀘스트 담을 인스턴스
-            Quest tempQuest = new Quest(5555, " ", " ", 1, 1, 1);
+            Quest tempQuest = new Quest(5555, " ", " ", " ",1, 1, 1);
 
             foreach (KeyValuePair<int, Quest> quest in questDict)
             {
