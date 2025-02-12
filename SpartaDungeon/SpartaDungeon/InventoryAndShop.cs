@@ -115,7 +115,11 @@ namespace SpartaDungeon
 
                 Console.WriteLine();
                 Console.WriteLine("목록바꾸기");
-                Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발   106.소모품");
+                for(int i = 0; i < Enum.GetValues(typeof(EquipType)).Length; i++)
+                {
+                    Utility.ColorText(ListItemType == i + 101 ? ConsoleColor.White : ConsoleColor.Gray, $"{i + 101}.{(EquipType)i}", Text.Write); Console.Write("    ");
+                }
+                Utility.ColorText(ListItemType == 106 ? ConsoleColor.White : ConsoleColor.Gray, "106.소모품");
                 Console.WriteLine("0. 뒤로가기");
                 Console.WriteLine();
                 //소모품일경우 장착슬롯 10 입력불가
@@ -297,7 +301,11 @@ namespace SpartaDungeon
 
                     Console.WriteLine();
                     Console.WriteLine("목록바꾸기");
-                    Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발   106.소모품");
+                    for (int i = 0; i < Enum.GetValues(typeof(EquipType)).Length; i++)
+                    {
+                        Utility.ColorText(ListItemType == i + 101 ? ConsoleColor.White : ConsoleColor.Gray, $"{i + 101}.{(EquipType)i}", Text.Write); Console.Write("    ");
+                    }
+                    Utility.ColorText(ListItemType == 106 ? ConsoleColor.White : ConsoleColor.Gray, "106.소모품");
                     Console.WriteLine("0. 뒤로가기");
                     Console.WriteLine();
                     //소모품일경우 장착슬롯 10 입력불가
@@ -408,7 +416,11 @@ namespace SpartaDungeon
 
                     Console.WriteLine();
                     Console.WriteLine("목록바꾸기");
-                    Console.WriteLine("101. 무기    102.보조무기  103.머리  104.몸   105.신발   106.소모품");
+                    for (int i = 0; i < Enum.GetValues(typeof(EquipType)).Length; i++)
+                    {
+                        Utility.ColorText(ListItemType == i + 101 ? ConsoleColor.White : ConsoleColor.Gray, $"{i + 101}.{(EquipType)i}", Text.Write); Console.Write("    ");
+                    }
+                    Utility.ColorText(ListItemType == 106 ? ConsoleColor.White : ConsoleColor.Gray, "106.소모품");
                     Console.WriteLine("0. 뒤로가기");
                     Console.WriteLine();
 
