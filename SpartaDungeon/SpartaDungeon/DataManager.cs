@@ -18,13 +18,13 @@ namespace SpartaDungeon
     internal class DataManager
     {
         private readonly string folderPath = "./Save";            // 세이브파일이 존재할 폴더의 위치
-        //private readonly string filePath = "./Save/SaveData.json";     // 세이브파일의 위치
         private readonly string filePath = "./Save/testSaveData.json";     // 세이브파일의 위치
 
-        private readonly string decrypteFolderPath = "./Decrypt"; // 복호화 시 필요한 파일들이 존재할 폴더의 위치
+        private readonly string decryptionFolderPath = "./Decrypt"; // 복호화 시 필요한 파일들이 존재할 폴더의 위치
         private readonly string keyPath = "./Decrypt/Key.bin";     // Key파일의 위치
         private readonly string ivPath = "./Decrypt/IV.bin";     // IV파일의 위치
 
+        private int selectNum = 0;
 
         // 캐릭터 생성
         private Player CreateCharacter()
@@ -50,7 +50,7 @@ namespace SpartaDungeon
                     Console.WriteLine($"1. 저장");
                     Console.WriteLine($"2. 다시 설정");
 
-                    int selectNum = Utility.GetInput(1, 2);
+                    selectNum = Utility.GetInput(1, 2);
 
                     switch (selectNum)
                     {
@@ -81,19 +81,19 @@ namespace SpartaDungeon
             // 폴더 주소 설정
             DirectoryInfo folder = new DirectoryInfo(folderPath);
 
-            DirectoryInfo decrypteFolder = new DirectoryInfo(decrypteFolderPath);
+            DirectoryInfo decryptionFolder = new DirectoryInfo(decryptionFolderPath);
 
             // 폴더가 존재하지 않는다면 생성
             if (!folder.Exists)
                 folder.Create();
 
             // 복호화 파일들 보관할 폴더 생성/숨김 처리
-            if (!decrypteFolder.Exists)
+            if (!decryptionFolder.Exists)
             {
-                decrypteFolder.Create();
+                decryptionFolder.Create();
 
                 // |= : 파일 시스템에 속성을 추가 할 때 사용 |  &= : 파일 시스템에 속성을 제거 할 때 사용
-                decrypteFolder.Attributes |= FileAttributes.Hidden;
+                decryptionFolder.Attributes |= FileAttributes.Hidden;
             }
 
             string playerDataString = string.Empty;
@@ -179,10 +179,10 @@ namespace SpartaDungeon
                 jsonArr.Add(completeQuestJson);
 
             // 데이터를 저장한 배열 암호화
-            string encodingJson = Aes256Encrypt(jsonArr.ToString());
+            string encryptJson = Aes256Encrypt(jsonArr.ToString());
 
             // 암호화 한 데이터를 기반으로 파일 생성
-            File.WriteAllText(filePath, encodingJson);
+            File.WriteAllText(filePath, encryptJson);
         }
 
         // 불러오기
@@ -201,9 +201,9 @@ namespace SpartaDungeon
                 Console.WriteLine("2. 처음부터 시작");
                 Console.WriteLine();
 
-                int selectNumber = Utility.GetInput(1, 2);
+                selectNum = Utility.GetInput(1, 2);
 
-                switch (selectNumber)
+                switch (selectNum)
                 {
                     case 1:
                         DataParsing(loadCharacterData, gm);
@@ -374,26 +374,24 @@ namespace SpartaDungeon
 
         }
 
-
-
         // AES-256 암호화
-        private string Aes256Encrypt(string text)
+        private string Aes256Encrypt(string data)
         {
             byte[] encrypted;
 
             // Aes 클래스는 IDisposable 인터페이스를 구현하고 있기 때문에 사용이 끝나면 반드시 리소스를 해제 해주어야 함
             using (Aes aes = Aes.Create())
             {
-                // 키 사이즈 설정(128, 192, 256비트) 키 사이즈가 클수록 더 높은 보안
+                // 키 사이즈 설정(128, 192, 256비트) 키 사이즈가 클수록 더 높은 보안 (기본값 : 256)
                 aes.KeySize = 256;
 
-                // 블록 사이즈 설정(128이 표준이기 때문에 항상 128로 사용)
+                // 블록 사이즈 설정(128이 표준이기 때문에 항상 128로 사용) (기본값 : 128)
                 aes.BlockSize = 128;
 
-                // 암호화 모드 설정 (ECB, CBC, CFB, OFB, CTR, GCM) 일반적으로 CBC,CTR 사용 / 최근 GCM 사용량 증가
+                // 암호화 모드 설정 (ECB, CBC, CFB, OFB, CTR, GCM) 일반적으로 CBC, CTR, GCM 사용 (기본값 : CBC)
                 aes.Mode = CipherMode.CBC;
 
-                // 패딩 모드 설정 (PKCS7, ZeroPadding, ANSI X.923, ISO 10126) PKCS7이 가장 많이 사용됨
+                // 패딩 모드 설정 (PKCS7, ZeroPadding, ANSI X.923, ISO 10126) PKCS7이 가장 많이 사용됨 (기본값 : PKCS7)
                 aes.Padding = PaddingMode.PKCS7;
 
                 // 복호화 시 필요한 Key, IV(Initialize Vector) 생성
@@ -444,7 +442,7 @@ namespace SpartaDungeon
                         {
                             // 문자열을 StreamWriter를 통해 CryptoStream에 쓰면,
                             // CryptoStream이 암호화하여 MemoryStream에 저장함
-                            sw.Write(text);
+                            sw.Write(data);
                         }
                         // ms에 암호화 된 데이터 byte[]로 변환
                         encrypted = ms.ToArray();
@@ -464,13 +462,7 @@ namespace SpartaDungeon
 
             using (Aes aes = Aes.Create())
             {
-                aes.KeySize = 256;
-
-                aes.BlockSize = 128;
-
-                aes.Mode = CipherMode.CBC;
-
-                aes.Padding = PaddingMode.PKCS7;
+                // Aes 기본 설정 사용 (키 사이즈 256, 블록 사이즈 128, 암호화 모드 CBC, 패딩모드 PKCS7)
 
                 try
                 {
