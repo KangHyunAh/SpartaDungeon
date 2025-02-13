@@ -297,81 +297,90 @@ namespace SpartaDungeon
             EquipItem tempItem = new EquipItem("", EquipType.무기, 1, 1, 1, "", new string[] { }, 1, false);
             ConsumableItem tempConsumable = new ConsumableItem("", PotionType.Health, 1, "", 1);
 
-            foreach (KeyValuePair<string, int[]> item in itemDict)
+            try
             {
-                string name = item.Key;
-
-                // 포션이라면 갯수 불러온 후 다음 루프로 이동
-                if (name.Contains("HP") || name.Contains("MP"))
+                foreach (KeyValuePair<string, int[]> item in itemDict)
                 {
-                    tempConsumable = gm.consumableItemsList.Where(i => i.Name == item.Key).OfType<ConsumableItem>().FirstOrDefault();
-                    tempConsumable.ItemCount = item.Value[0];
-                    continue;
+                    string name = item.Key;
+
+                    // 포션이라면 갯수 불러온 후 다음 루프로 이동
+                    if (name.Contains("HP") || name.Contains("MP"))
+                    {
+                        tempConsumable = gm.consumableItemsList.Where(i => i.Name == item.Key).OfType<ConsumableItem>().FirstOrDefault();
+                        tempConsumable.ItemCount = item.Value[0];
+                        continue;
+                    }
+
+                    // equipItemList 안에서 item의 키값(아이템 이름)과 일치하는 아이템을 찾아 참조 및 값 변경
+                    // 일치하는 아이템이 없다면 null 반환
+                    tempItem = gm.equipItemList.Where(i => i.Name == item.Key).OfType<EquipItem>().FirstOrDefault();
+
+                    // 일치하는 아이템 없을 시 다음 루프로
+                    if (tempItem == null)
+                        continue;
+
+                    tempItem.ItemCount = item.Value[0];
+                    tempItem.isEquip = Convert.ToBoolean(item.Value[1]);
+
+                    // 장착 중이라면 해당 아이템의 능력치 적용
+                    if (tempItem.isEquip)
+                    {
+                        user.equipStrikePower += tempItem.Atk;
+                        user.equipDefensivePower += tempItem.Def;
+                        user.equipMaxhealthPoint += tempItem.MaxHp;
+                    }
                 }
 
-                // equipItemList 안에서 item의 키값(아이템 이름)과 일치하는 아이템을 찾아 참조 및 값 변경
-                // 일치하는 아이템이 없다면 null 반환
-                tempItem = gm.equipItemList.Where(i => i.Name == item.Key).OfType<EquipItem>().FirstOrDefault();
+                // 퀘스트 불러오기
+                // JObject => Dictionary<int, Quest> 변환
+                Dictionary<int, Quest> questDict = questData.ToObject<Dictionary<int, Quest>>();
 
-                // 일치하는 아이템 없을 시 다음 루프로
-                if (tempItem == null)
-                    continue;
+                // where로 꺼내올 퀘스트 담을 인스턴스
+                Quest tempQuest = new Quest(5555, " ", " ", " ", 1, 1, 1);
 
-                tempItem.ItemCount = item.Value[0];
-                tempItem.isEquip = Convert.ToBoolean(item.Value[1]);
-
-                // 장착 중이라면 해당 아이템의 능력치 적용
-                if (tempItem.isEquip)
+                foreach (KeyValuePair<int, Quest> quest in questDict)
                 {
-                    user.equipStrikePower += tempItem.Atk;
-                    user.equipDefensivePower += tempItem.Def;
-                    user.equipMaxhealthPoint += tempItem.MaxHp;
+                    tempQuest = gm.questManager.quests.Where(i => i.Key == quest.Key).Select(i => i.Value as Quest).FirstOrDefault();
+
+                    if (tempQuest == null)
+                        continue;
+
+                    // JObject에 담겨있던 카운트와 완료여부 저장
+                    tempQuest.CurrentProgress = quest.Value.CurrentProgress;
+                    tempQuest.IsCompleted = quest.Value.IsCompleted;
+                    tempQuest.IsAccepted = quest.Value.IsAccepted;
+                    tempQuest.Status = quest.Value.Status;
+                }
+
+                // JArray => HashSet<int> 변환(수락한 퀘스트 목록)
+                HashSet<int> acceptList = acceptQuestData.ToObject<HashSet<int>>();
+
+                if (acceptList != null)
+                {
+                    foreach (var i in acceptList)
+                    {
+                        gm.questManager.acceptedQuests.Add(i);
+                    }
+                }
+
+                // JArray => HashSet<int> 변환(클리어한 퀘스트 목록)
+                HashSet<int> clearList = clearQuestData.ToObject<HashSet<int>>();
+
+                if (clearList != null)
+                {
+                    foreach (var i in clearList)
+                    {
+                        gm.questManager.completedQuests.Add(i);
+                    }
                 }
             }
-
-            // 퀘스트 불러오기
-            // JObject => Dictionary<int, Quest> 변환
-            Dictionary<int, Quest> questDict = questData.ToObject<Dictionary<int, Quest>>();
-
-            // where로 꺼내올 퀘스트 담을 인스턴스
-            Quest tempQuest = new Quest(5555, " ", " ", " ",1, 1, 1);
-
-            foreach (KeyValuePair<int, Quest> quest in questDict)
+            catch (Exception ex)
             {
-                tempQuest = gm.questManager.quests.Where(i => i.Key == quest.Key).Select(i => i.Value as Quest).FirstOrDefault();
-
-                if (tempQuest == null)
-                    continue;
-
-                // JObject에 담겨있던 카운트와 완료여부 저장
-                tempQuest.CurrentProgress = quest.Value.CurrentProgress;
-                tempQuest.IsCompleted = quest.Value.IsCompleted;
-                tempQuest.IsAccepted = quest.Value.IsAccepted;
-                tempQuest.Status = quest.Value.Status;
+                Utility.ColorText(ConsoleColor.Red, $"세이브 데이터를 불러오는 중 오류가 발생했습니다.");
+                Console.WriteLine($"캐릭터 생성으로 이동합니다.");
+                Thread.Sleep(1000);
+                user = CreateCharacter();
             }
-
-            // JArray => HashSet<int> 변환(수락한 퀘스트 목록)
-            HashSet<int> acceptList = acceptQuestData.ToObject<HashSet<int>>();
-
-            if (acceptList != null)
-            {
-                foreach (var i in acceptList)
-                {
-                    gm.questManager.acceptedQuests.Add(i);
-                }
-            }
-
-            // JArray => HashSet<int> 변환(클리어한 퀘스트 목록)
-            HashSet<int> clearList = clearQuestData.ToObject<HashSet<int>>();
-
-            if (clearList != null)
-            {
-                foreach (var i in clearList)
-                {
-                    gm.questManager.completedQuests.Add(i);
-                }
-            }
-
         }
 
         // AES-256 암호화
