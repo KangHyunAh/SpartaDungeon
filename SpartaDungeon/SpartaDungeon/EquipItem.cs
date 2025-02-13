@@ -31,7 +31,11 @@ namespace SpartaDungeon
         public int MaxHp { get; }
         public int Cost { get; }
         private int _itemCount;
-        public int ItemCount { get { return _itemCount; } set { if (value < 0) _itemCount = 0; else _itemCount = value; } }
+        public int ItemCount
+        { 
+            get { return _itemCount; } 
+            set { if (value < 0) _itemCount = 0; else _itemCount = value; } 
+        }
         public bool isEquip { get; set; }
         public bool IsBossItem { get; set; }
 
@@ -104,13 +108,17 @@ namespace SpartaDungeon
         {
             Console.Clear();
             Console.WriteLine("이 아이템을 판매합니까?\n");
-            Console.Write($"{Name}  판매가 "); Utility.ColorText(ConsoleColor.White, $"{Cost / 2}G",Text.Write); Console.WriteLine($"    | 소지금 {gm.player.gold}G");
+            Console.Write($"{Name}  판매가 ");
+            Utility.ColorText(ConsoleColor.White, $"{Cost / 2}G",Text.Write);
+            Console.WriteLine($"    | 소지금 {gm.player.gold}G");
             Console.WriteLine("\n1.판매     0.취소");
             if(Utility.GetInput(0, 1) == 1)
             {
                 ItemCount--;
                 gm.player.gold += Cost / 2;
-                Console.Write("판매완료  소지금 "); Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold,5}G ", Text.Write); Utility.ColorText(ConsoleColor.Green, $"+{Cost / 2}");
+                Console.Write("판매완료  소지금 ");
+                Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold,5}G ", Text.Write);
+                Utility.ColorText(ConsoleColor.Green, $"+{Cost / 2}");
                 Console.Write("아무키입력"); Console.ReadLine();
             }
         }
@@ -234,7 +242,7 @@ namespace SpartaDungeon
                 bool useSuccess=false;
                 Console.Clear();
                 Console.WriteLine($"{Name}을(를) 사용하시겠습니까?");
-                player.DisplayHpBar();
+                player.DisplayHpBar(Type == PotionType.Health ? EffectAmount : 0);
                 if (Type == PotionType.Health)
                 {
                     Utility.ColorText(ConsoleColor.Green, $"{EffectAmount:+0;-0;}", Text.Write);
@@ -242,10 +250,10 @@ namespace SpartaDungeon
 
                 Console.WriteLine();
 
-                player.DisplayMpBar();
+                player.DisplayMpBar(Type == PotionType.Mana ? EffectAmount : 0);
                 if (Type == PotionType.Mana)
                 {
-                    Utility.ColorText(ConsoleColor.Green, $"{EffectAmount:+0;-0;}", Text.Write);
+                    Utility.ColorText(ConsoleColor.Cyan, $"{EffectAmount:+0;-0;}", Text.Write);
                 }
                 Console.WriteLine("\n1.사용     0.취소");
 

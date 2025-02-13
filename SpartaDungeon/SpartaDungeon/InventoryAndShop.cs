@@ -222,6 +222,7 @@ namespace SpartaDungeon
                         case 2: SaleScreen(); break;
                     }
             }
+            
             void SaleScreen()
             {
                 int ListItemType = 101;
@@ -328,7 +329,9 @@ namespace SpartaDungeon
                             if (Utility.GetInput(0, 1) == 1)
                             {
                                 equipedItem.isEquip = false; gm.player.gold += (equipedItem.Cost / 2);
-                                Console.Write("판매완료  소지금 "); Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold,5}G ", Text.Write); Utility.ColorText(ConsoleColor.Green, $"+{equipedItem.Cost / 2}");
+                                Console.Write("판매완료  소지금 "); 
+                                Utility.ColorText(ConsoleColor.Yellow, $"{gm.player.gold,5}G ", Text.Write);
+                                Utility.ColorText(ConsoleColor.Green, $"+{equipedItem.Cost / 2}");
                                 Console.Write("아무키입력"); Console.ReadLine();
                             }
                         }

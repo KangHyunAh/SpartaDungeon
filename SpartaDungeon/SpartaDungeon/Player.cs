@@ -57,21 +57,23 @@ namespace SpartaDungeon
                 }
             }
         }
-        public void DisplayHpBar()    //체력 막대 표시
+        public void DisplayHpBar(int heal = 0)    //체력 막대 표시
         {
             Console.Write($"HP {healthPoint,4}/{(maxhealthPoint + equipMaxhealthPoint),4}({maxhealthPoint}+{equipMaxhealthPoint})\n");
             for (int i = 0; i < 10; i++)
             {
                 if (i < (float)healthPoint / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Red, "■", Text.Write);
+                else if (i < (float)(healthPoint + heal) / (maxhealthPoint + equipMaxhealthPoint) * 10) Utility.ColorText(ConsoleColor.Green, "■", Text.Write);
                 else Console.Write("□");
             }
         }
-        public void DisplayMpBar()    //마나 막대 표시
+        public void DisplayMpBar(int heal = 0)    //마나 막대 표시
         {
             Console.Write($"MP {manaPoint,4}/{maxManaPoint,4} \n");
             for (int i = 0; i < 10; i++)
             {
                 if (i < (float)manaPoint / maxManaPoint * 10) Utility.ColorText(ConsoleColor.Blue, "■", Text.Write);
+                else if (i < (float)(manaPoint + heal) / maxManaPoint * 10) Utility.ColorText(ConsoleColor.Cyan, "■", Text.Write);
                 else Console.Write("□");
             }
         }
